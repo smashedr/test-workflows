@@ -23,7 +23,7 @@ jobs:
 
       - name: "Update Version Tags"
         id: tags
-        uses: cssnr/update-version-tags-action@master
+        uses: cssnr/update-version-tags-action@output
 
       - name: "Echo Tags"
         run: |
