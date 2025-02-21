@@ -6,8 +6,8 @@ on:
     types: [published]
 
 jobs:
-  tags:
-    name: "Tags"
+  release:
+    name: "Release"
     runs-on: ubuntu-latest
     timeout-minutes: 5
     permissions:
@@ -23,7 +23,7 @@ jobs:
 
       - name: "Update Version Tags"
         id: tags
-        uses: cssnr/update-version-tags-action@v1
+        uses: cssnr/update-version-tags-action@master
 
       - name: "Echo Tags"
         run: |
