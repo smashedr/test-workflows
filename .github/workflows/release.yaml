@@ -1,0 +1,43 @@
+name: "Release"
+
+on:
+  workflow_dispatch:
+  release:
+    types: [published]
+
+jobs:
+  tags:
+    name: "Tags"
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: write
+
+    steps:
+      - name: "Checkout"
+        uses: actions/checkout@v4
+
+      - name: "Debug event.json"
+        run: |
+          cat "${GITHUB_EVENT_PATH}"
+
+      - name: "Update Version Tags"
+        id: tags
+        uses: cssnr/update-version-tags-action@v1
+
+      - name: "Echo Tags"
+        run: |
+          echo "tags: ${{ steps.tags.outputs.tags }}"
+
+      - name: "Upload to Release"
+        if: ${{ github.event_name == 'release' }}
+        uses: svenstaro/upload-release-action@v2
+        with:
+          overwrite: true
+          file_glob: true
+          file: .github/workflows/*
+
+      - name: "VirusTotal"
+        uses: cssnr/virustotal-action@release
+        with:
+          vt_api_key: ${{ secrets.VT_API_KEY }}
