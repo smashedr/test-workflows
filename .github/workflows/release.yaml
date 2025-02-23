@@ -21,6 +21,21 @@ jobs:
         run: |
           cat "${GITHUB_EVENT_PATH}"
 
+      - name: "Docker Metadata"
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: "ghcr.io/${{ github.repository }}"
+          #flavor: |
+          #  latest=auto
+          #  prefix=v,onlatest=false
+
+      - name: "Echo Metadata"
+        run: |
+          echo "tags: ${{ steps.meta.outputs.tags }}"
+          echo "labels: ${{ steps.meta.outputs.labels }}"
+          echo "annotations: ${{ steps.meta.outputs.annotations }}"
+
       - name: "Update Version Tags"
         id: tags
         uses: cssnr/update-version-tags-action@output
