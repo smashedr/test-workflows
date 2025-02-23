@@ -17,3 +17,6 @@ jobs:
       - name: "Debug event.json"
         run: |
           cat "${GITHUB_EVENT_PATH}"
+
+      - name: "Docker Test Action"
+        uses: smashedr/docker-test-action@v1
