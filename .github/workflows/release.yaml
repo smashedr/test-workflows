@@ -38,21 +38,21 @@ jobs:
 
       - name: "Update Version Tags"
         id: tags
-        uses: cssnr/update-version-tags-action@output
+        uses: cssnr/update-version-tags-action@master
 
       - name: "Echo Tags"
         run: |
           echo "tags: ${{ steps.tags.outputs.tags }}"
 
-      - name: "Upload to Release"
-        if: ${{ github.event_name == 'release' }}
-        uses: svenstaro/upload-release-action@v2
-        with:
-          overwrite: true
-          file_glob: true
-          file: .github/workflows/*
+      #- name: "Upload to Release"
+      #  if: ${{ github.event_name == 'release' }}
+      #  uses: svenstaro/upload-release-action@v2
+      #  with:
+      #    overwrite: true
+      #    file_glob: true
+      #    file: .github/workflows/*
 
-      - name: "VirusTotal"
-        uses: cssnr/virustotal-action@release
-        with:
-          vt_api_key: ${{ secrets.VT_API_KEY }}
+      #- name: "VirusTotal"
+      #  uses: cssnr/virustotal-action@master
+      #  with:
+      #    vt_api_key: ${{ secrets.VT_API_KEY }}
