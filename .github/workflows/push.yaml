@@ -22,3 +22,10 @@ jobs:
 
       - name: "Docker Test Action"
         uses: smashedr/docker-test-action@v1
+
+      - name: "Test Summary"
+        run: |
+          ls -lAh workflows
+          results='```text\n\n'"$(ls -lAh workflows)"'\n```'
+          echo -e "${results}"
+          echo "${results}" >> $GITHUB_STEP_SUMMARY
