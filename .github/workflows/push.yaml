@@ -16,6 +16,10 @@ jobs:
       - name: "Checkout"
         uses: actions/checkout@v4
 
+      - name: "Debug"
+        run: |
+          ls -lAh .
+
       - name: "Debug event.json"
         run: |
           cat "${GITHUB_EVENT_PATH}"
@@ -25,7 +29,7 @@ jobs:
 
       - name: "Test Summary"
         run: |
-          ls -lAh workflows
-          results='```text\n\n'"$(ls -lAh workflows)"'\n```'
+          ls -lAh .github/workflows
+          results='```text\n\n'"$(ls -lAh .github/workflows)"'\n```'
           echo -e "${results}"
           echo "${results}" >> $GITHUB_STEP_SUMMARY
