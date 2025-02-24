@@ -30,6 +30,8 @@ jobs:
       - name: "Test Summary"
         run: |
           ls -lAh .github/workflows
-          results='```text\n\n'"$(ls -lAh .github/workflows)"'\n```'
-          echo -e "${results}"
-          echo "${results}" >> $GITHUB_STEP_SUMMARY
+
+          results="$(ls -lh . | awk '{print $9" - "$5}')"
+          markdown='```text\n\n'"${results}"'\n```'
+          echo -e "${markdown}"
+          echo -e "${markdown}" >> $GITHUB_STEP_SUMMARY
