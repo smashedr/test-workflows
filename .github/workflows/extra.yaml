@@ -21,7 +21,8 @@ jobs:
       - name: "Test"
         id: test
         run: |
-          exit $((RANDOM % 2))
+          #exit $((RANDOM % 2))
+          exit 1
 
       - name: "Always"
         if: ${{ always() }}
