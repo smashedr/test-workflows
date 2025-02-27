@@ -1,12 +1,12 @@
-name: "Push"
+name: "Extra"
 
 on:
   workflow_dispatch:
   push:
 
 jobs:
-  push:
-    name: "Push"
+  extra:
+    name: "Extra"
     runs-on: ubuntu-latest
     timeout-minutes: 5
     permissions:
@@ -26,6 +26,6 @@ jobs:
           exit $((RANDOM % 2))
 
       - name: "Always"
-        if: ${{ always() }}
+        if: ${{ always() && github.event_name == 'push' && steps.random.outcome == 'failure' }}
         run: |
           echo steps.random.outcome: ${{ steps.random.outcome }}
