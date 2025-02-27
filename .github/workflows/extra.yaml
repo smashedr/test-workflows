@@ -2,6 +2,8 @@ name: "Extra"
 
 on:
   workflow_dispatch:
+  schedule:
+    - cron: "*/5 * * * *"
   push:
 
 jobs:
@@ -16,16 +18,24 @@ jobs:
       - name: "Checkout"
         uses: actions/checkout@v4
 
-      - name: "Success"
-        run: |
-          echo github.event_name: ${{ github.event_name }}
-
-      - name: "Random"
-        id: random
+      - name: "Test"
+        id: test
         run: |
           exit $((RANDOM % 2))
 
       - name: "Always"
-        if: ${{ always() && github.event_name == 'push' && steps.random.outcome == 'failure' }}
+        if: ${{ always() }}
         run: |
-          echo steps.random.outcome: ${{ steps.random.outcome }}
+          echo github.event_name: ${{ github.event_name }}
+          echo steps.test.outcome: ${{ steps.test.outcome }}
+
+      - name: "Schedule"
+        if: ${{ always() && github.event_name == 'schedule' }}
+        run: |
+          echo steps.test.outcome: ${{ steps.test.outcome }}
+
+      - name: "Discord Notification"
+        uses: sarisia/actions-status-discord@v1
+        if: ${{ always() && github.event_name == 'schedule' && steps.test.outcome == 'failure' }}
+        with:
+          webhook: ${{ secrets.DISCORD_WEBHOOK }}
