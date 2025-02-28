@@ -3,7 +3,7 @@ name: "Extra"
 on:
   workflow_dispatch:
   schedule:
-    - cron: "0 2 * * 5"
+    - cron: "24 2 * * 5"
   push:
 
 jobs:
@@ -37,6 +37,11 @@ jobs:
 
       - name: "Discord Notification"
         uses: sarisia/actions-status-discord@v1
-        if: ${{ always() && github.event_name == 'schedule' && steps.test.outcome == 'failure' }}
+        if: ${{ always() && steps.test.outcome == 'failure' }}
         with:
           webhook: ${{ secrets.DISCORD_WEBHOOK }}
+
+      - name: "Confirm Schedule Run"
+        if: ${{ always() && github.event_name == 'schedule' && steps.test.outcome == 'failure' }}
+        run: |
+          echo yes
