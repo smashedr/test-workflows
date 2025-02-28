@@ -20,29 +20,35 @@ jobs:
 
       - name: "Test"
         id: test
+        continue-on-error: true
         run: |
           #exit $((RANDOM % 2))
           exit 1
 
-      - name: "Always"
-        if: ${{ always() }}
+      - name: "After Error"
         run: |
           echo github.event_name: ${{ github.event_name }}
           echo steps.test.outcome: ${{ steps.test.outcome }}
 
-      - name: "Schedule"
-        if: ${{ always() && github.event_name == 'schedule' }}
-        run: |
-          echo steps.test.outcome: ${{ steps.test.outcome }}
+      #- name: "Always"
+      #  if: ${{ always() }}
+      #  run: |
+      #    echo github.event_name: ${{ github.event_name }}
+      #    echo steps.test.outcome: ${{ steps.test.outcome }}
 
-      - name: "Schedule and Failure"
-        if: ${{ always() && github.event_name == 'schedule' && steps.test.outcome == 'failure' }}
-        run: |
-          echo yes
+      #- name: "Schedule"
+      #  if: ${{ always() && github.event_name == 'schedule' }}
+      #  run: |
+      #    echo steps.test.outcome: ${{ steps.test.outcome }}
 
-      - name: "Discord Notification"
-        uses: sarisia/actions-status-discord@v1
-        #if: ${{ always() && steps.test.outcome == 'failure' }}
-        if: ${{ always() && github.event_name == 'schedule' && steps.test.outcome == 'failure' }}
-        with:
-          webhook: ${{ secrets.DISCORD_WEBHOOK }}
+      #- name: "Schedule and Failure"
+      #  if: ${{ always() && github.event_name == 'schedule' && steps.test.outcome == 'failure' }}
+      #  run: |
+      #    echo yes
+
+      #- name: "Discord Notification"
+      #  uses: sarisia/actions-status-discord@v1
+      #  #if: ${{ always() && steps.test.outcome == 'failure' }}
+      #  if: ${{ always() && github.event_name == 'schedule' && steps.test.outcome == 'failure' }}
+      #  with:
+      #    webhook: ${{ secrets.DISCORD_WEBHOOK }}
