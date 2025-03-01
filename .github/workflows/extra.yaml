@@ -55,7 +55,7 @@ jobs:
       #    echo yes
 
       - name: "Deploy"
-        if: ${{ github.event_name == 'push' && true || inputs.build }}
+        if: ${{ github.event_name == 'push' && true || inputs.deploy }}
         run: |
           echo yes
 
