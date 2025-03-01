@@ -25,6 +25,10 @@ on:
 
   push:
 
+env:
+  build: ${{ github.event_name == 'push' && true || inputs.build }}
+  deploy: ${{ github.event_name == 'push' && true || inputs.deploy }}
+
 jobs:
   extra:
     name: "Extra"
@@ -45,7 +49,7 @@ jobs:
           echo inputs.env: ${{ inputs.env }}
 
       - name: "Build"
-        if: ${{ github.event_name == 'push' && true || inputs.build }}
+        if: ${{ env.build }}
         run: |
           echo yes
 
@@ -55,7 +59,7 @@ jobs:
       #    echo yes
 
       - name: "Deploy"
-        if: ${{ github.event_name == 'push' && true || inputs.deploy }}
+        if: ${{ env.deploy }}
         run: |
           echo yes
 
