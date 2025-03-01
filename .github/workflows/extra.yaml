@@ -49,20 +49,20 @@ jobs:
         run: |
           echo yes
 
-      - name: "Build 2"
-        if: ${{ inputs.build != '' && inputs.build || true }}
-        run: |
-          echo yes
+      #- name: "Build 2"
+      #  if: ${{ inputs.build != '' && inputs.build || true }}
+      #  run: |
+      #    echo yes
 
       - name: "Deploy"
-        if: ${{ github.event_name == 'workflow_dispatch' && inputs.deploy || true }}
+        if: ${{ github.event_name == 'push' && true || inputs.build }}
         run: |
           echo yes
 
-      - name: "Deploy 2"
-        if: ${{ inputs.deploy != '' && inputs.deploy || true }}
-        run: |
-          echo yes
+      #- name: "Deploy 2"
+      #  if: ${{ inputs.deploy != '' && inputs.deploy || true }}
+      #  run: |
+      #    echo yes
 
       #- name: "Test"
       #  id: test
