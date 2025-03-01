@@ -6,11 +6,15 @@ on:
       build:
         description: "Run Build"
         type: boolean
-        default: false
+        default: true
       deploy:
         description: "Run Deploy"
         type: boolean
-        default: false
+        default: true
+      cleanup:
+        description: "Run Cleanup"
+        type: boolean
+        default: true
       env:
         description: "Environment to Deploy"
         required: true
