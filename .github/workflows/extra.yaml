@@ -2,8 +2,27 @@ name: "Extra"
 
 on:
   workflow_dispatch:
+    inputs:
+      build:
+        description: "Run Build"
+        type: boolean
+        default: false
+      deploy:
+        description: "Run Deploy"
+        type: boolean
+        default: false
+      env:
+        description: "Environment to Deploy"
+        required: true
+        default: "dev"
+        type: choice
+        options:
+          - dev
+          - prod
+
   #schedule:
   #  - cron: "*/10 * * * *"
+
   push:
 
 jobs:
@@ -18,31 +37,58 @@ jobs:
       - name: "Checkout"
         uses: actions/checkout@v4
 
-      - name: "Test"
-        id: test
-        run: |
-          #exit $((RANDOM % 2))
-          exit 1
-
-      - name: "Always"
-        if: ${{ always() }}
+      - name: "Debug"
         run: |
           echo github.event_name: ${{ github.event_name }}
-          echo steps.test.outcome: ${{ steps.test.outcome }}
+          echo inputs.build: ${{ inputs.build }}
+          echo inputs.deploy: ${{ inputs.deploy }}
+          echo inputs.env: ${{ inputs.env }}
 
-      - name: "Schedule"
-        if: ${{ always() && github.event_name == 'schedule' }}
-        run: |
-          echo steps.test.outcome: ${{ steps.test.outcome }}
-
-      - name: "Schedule and Failure"
-        if: ${{ always() && github.event_name == 'schedule' && steps.test.outcome == 'failure' }}
+      - name: "Build"
+        if: ${{ github.event_name == 'push' && true || inputs.build }}
         run: |
           echo yes
 
-      - name: "Discord Notification"
-        uses: sarisia/actions-status-discord@v1
-        #if: ${{ always() && steps.test.outcome == 'failure' }}
-        if: ${{ always() && github.event_name == 'schedule' && steps.test.outcome == 'failure' }}
-        with:
-          webhook: ${{ secrets.DISCORD_WEBHOOK }}
+      - name: "Build 2"
+        if: ${{ inputs.build != '' && inputs.build || true }}
+        run: |
+          echo yes
+
+      - name: "Deploy"
+        if: ${{ github.event_name == 'workflow_dispatch' && inputs.deploy || false }}
+        run: |
+          echo yes
+
+      - name: "Deploy 2"
+        if: ${{ inputs.deploy != '' && inputs.deploy || true }}
+        run: |
+          echo yes
+
+      #- name: "Test"
+      #  id: test
+      #  run: |
+      #    #exit $((RANDOM % 2))
+      #    exit 1
+
+      #- name: "Always"
+      #  if: ${{ always() }}
+      #  run: |
+      #    echo github.event_name: ${{ github.event_name }}
+      #    echo steps.test.outcome: ${{ steps.test.outcome }}
+
+      #- name: "Schedule"
+      #  if: ${{ always() && github.event_name == 'schedule' }}
+      #  run: |
+      #    echo steps.test.outcome: ${{ steps.test.outcome }}
+
+      #- name: "Schedule and Failure"
+      #  if: ${{ always() && github.event_name == 'schedule' && steps.test.outcome == 'failure' }}
+      #  run: |
+      #    echo yes
+
+      #- name: "Discord Notification"
+      #  uses: sarisia/actions-status-discord@v1
+      #  #if: ${{ always() && steps.test.outcome == 'failure' }}
+      #  if: ${{ always() && github.event_name == 'schedule' && steps.test.outcome == 'failure' }}
+      #  with:
+      #    webhook: ${{ secrets.DISCORD_WEBHOOK }}
