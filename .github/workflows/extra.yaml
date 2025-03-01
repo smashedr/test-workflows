@@ -53,7 +53,7 @@ jobs:
           echo inputs.env: ${{ inputs.env }}
 
       - name: "Build"
-        if: ${{ env.build }}
+        if: ${{ env.build == 'true' }}
         run: |
           echo yes
 
@@ -63,7 +63,7 @@ jobs:
       #    echo yes
 
       - name: "Deploy"
-        if: ${{ env.deploy }}
+        if: ${{ env.deploy == 'true' }}
         run: |
           echo yes
 
