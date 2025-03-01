@@ -44,8 +44,12 @@ jobs:
       - name: "Debug"
         run: |
           echo github.event_name: ${{ github.event_name }}
+
           echo inputs.build: ${{ inputs.build }}
+          echo env.build: ${{ env.build }}
           echo inputs.deploy: ${{ inputs.deploy }}
+          echo env.deploy: ${{ env.deploy }}
+
           echo inputs.env: ${{ inputs.env }}
 
       - name: "Build"
