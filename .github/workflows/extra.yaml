@@ -70,12 +70,12 @@ jobs:
         id: test
         run: |
           #exit $((RANDOM % 2))
-          exit 1
+          exit 0
 
       - name: "Always"
         if: ${{ always() && failure() }}
         run: |
-          YOU FUCKED UP CHUCK!
+          echo YOU FUCKED UP CHUCK!
 
       #- name: "Always"
       #  if: ${{ always() }}
