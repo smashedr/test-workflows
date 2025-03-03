@@ -66,16 +66,16 @@ jobs:
         run: |
           echo yes
 
-      - name: "Test"
-        id: test
-        run: |
-          #exit $((RANDOM % 2))
-          exit 1
+      #- name: "Test"
+      #  id: test
+      #  run: |
+      #    #exit $((RANDOM % 2))
+      #    exit 1
 
-      - name: "Always"
-        if: ${{ always() && failure() && github.event_name == 'schedule' }}
-        run: |
-          echo YOU FUCKED UP CHUCK!
+      #- name: "Always"
+      #  if: ${{ always() && failure() && github.event_name == 'schedule' }}
+      #  run: |
+      #    echo YOU FUCKED UP CHUCK!
 
       #- name: "Always"
       #  if: ${{ always() }}

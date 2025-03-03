@@ -4,7 +4,11 @@ on:
   repository_dispatch:
     types:
       - webhook
-      - test_workflow
+    inputs:
+      version:
+        description: "Version"
+        required: false
+        default: "0"
 
 jobs:
   hook:
@@ -13,11 +17,10 @@ jobs:
     timeout-minutes: 5
 
     steps:
-      - name: "Debug event.json"
-        run: |
-          cat "${GITHUB_EVENT_PATH}"
-
       - name: "Debug"
         run: |
+          cat "${GITHUB_EVENT_PATH}"
           echo github.event_name: "${{ github.event_name }}"
+          echo github.event.client_payload: ${{ github.event.client_payload }}
+          echo github.event.client_payload: ${{ toJSON(github.event.client_payload) }}
           echo -e github:\n"${{ toJSON(github.event) }}"
