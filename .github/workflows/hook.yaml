@@ -13,6 +13,11 @@ jobs:
     timeout-minutes: 5
 
     steps:
+      - name: "Debug event.json"
+        run: |
+          cat "${GITHUB_EVENT_PATH}"
+
       - name: "Debug"
         run: |
-          echo github.event_name: ${{ github.event_name }}
+          echo github.event_name: "${{ github.event_name }}"
+          echo -e github:\n"${{ toJSON(github.event) }}"
