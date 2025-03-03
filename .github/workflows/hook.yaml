@@ -1,0 +1,18 @@
+name: "Hook"
+
+on:
+  repository_dispatch:
+    types:
+      - webhook
+      - test_workflow
+
+jobs:
+  hook:
+    name: "Hook"
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: "Debug"
+        run: |
+          echo github.event_name: ${{ github.event_name }}
