@@ -28,7 +28,7 @@ jobs:
         uses: smashedr/docker-test-action@v1
 
       - name: "Docker Test Action"
-        uses: cssnr/cloudflare-purge-cache-action@output
+        uses: cssnr/cloudflare-purge-cache-action@v2
         with:
           domains: example.com,cssnr.com
           dry_run: true
