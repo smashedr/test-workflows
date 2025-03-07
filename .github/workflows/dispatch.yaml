@@ -27,6 +27,8 @@ on:
 env:
   build: ${{ github.event_name == 'push' && true || inputs.build }}
   deploy: ${{ github.event_name == 'push' && true || inputs.deploy }}
+  name: cssnr
+  url: https://cssnr.com
 
 jobs:
   dispatch:
@@ -36,8 +38,8 @@ jobs:
     permissions:
       contents: write
     environment:
-      name: cssnr
-      url: https://cssnr.com
+      name: ${{ env.name }}
+      url: ${{ env.url }}
 
     steps:
       - name: "Checkout"
@@ -50,6 +52,8 @@ jobs:
         run: |
           echo job.environment.name: ${ENV_NAME}
           echo job.environment.url: ${ENV_URL}
+          echo env.name: ${{ env.name }}
+          echo env.url: ${{ env.url }}
 
           echo github.event_name: ${{ github.event_name }}
           echo github.ref_name : ${{ github.ref_name  }}
