@@ -26,7 +26,7 @@ on:
         options:
           - dev
           - prod
-  push:
+  #push:
 
 env:
   build: ${{ github.event_name == 'push' && true || inputs.build }}

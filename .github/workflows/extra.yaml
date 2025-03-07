@@ -1,6 +1,9 @@
 name: "Extra"
 
 on:
+  push:
+  #schedule:
+  #  - cron: "*/10 * * * *"
   workflow_dispatch:
     inputs:
       build:
@@ -23,11 +26,6 @@ on:
         options:
           - dev
           - prod
-
-  #schedule:
-  #  - cron: "*/10 * * * *"
-
-  push:
 
 env:
   build: ${{ github.event_name == 'push' && true || inputs.build }}
@@ -56,21 +54,35 @@ jobs:
 
           echo inputs.env: ${{ inputs.env }}
 
-      - name: "Build"
-        if: ${{ env.build == 'true' }}
-        run: |
-          echo yes
-
-      - name: "Deploy"
-        if: ${{ env.deploy == 'true' }}
-        run: |
-          echo yes
-
-      #- name: "Test"
-      #  id: test
+      #- name: "Build"
+      #  if: ${{ env.build == 'true' }}
       #  run: |
-      #    #exit $((RANDOM % 2))
-      #    exit 1
+      #    echo yes
+
+      #- name: "Deploy"
+      #  if: ${{ env.deploy == 'true' }}
+      #  run: |
+      #    echo yes
+
+      - name: "SSH Key"
+        run: |
+          set -e
+          echo "Adding SSH Key to SSH Agent"
+          SSH_DIR="/root/.ssh"
+          mkdir -p "${SSH_DIR}" ~/.ssh
+          chmod 0700 "${SSH_DIR}" ~/.ssh
+          ssh-keyscan -p "22" -H "github.com" >> "${SSH_DIR}/known_hosts"
+          echo "${{ secrets.SSH_KEY }}" > "${SSH_DIR}/id_rsa"
+          chmod 0600 "${SSH_DIR}/id_rsa"
+          eval "$(ssh-agent -s)"
+          ssh-add "${SSH_DIR}/id_rsa"
+
+      - name: "Test"
+        id: test
+        run: |
+          set -e
+          git clone git@github.com:smashedr/test-private.git
+          ls -lah test-private
 
       #- name: "Always"
       #  if: ${{ always() && failure() && github.event_name == 'schedule' }}
