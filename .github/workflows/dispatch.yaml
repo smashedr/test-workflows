@@ -3,6 +3,9 @@ name: "Dispatch"
 on:
   workflow_dispatch:
     inputs:
+      string:
+        description: "String Input"
+        type: string
       build:
         description: "Run Build"
         type: boolean
@@ -23,6 +26,7 @@ on:
         options:
           - dev
           - prod
+  push:
 
 env:
   build: ${{ github.event_name == 'push' && true || inputs.build }}
@@ -37,26 +41,27 @@ jobs:
     timeout-minutes: 5
     permissions:
       contents: write
-    environment:
-      name: ${{ env.name }}
-      url: ${{ env.url }}
+    #environment:
+    #  name: ${{ env.name }}
+    #  url: ${{ env.url }}
 
     steps:
       - name: "Checkout"
         uses: actions/checkout@v4
 
       - name: "Debug"
-        env:
-          ENV_NAME: ${{ job.environment.name }}
-          ENV_URL: ${{ job.environment.url }}
         run: |
-          echo job.environment.name: ${ENV_NAME}
-          echo job.environment.url: ${ENV_URL}
-          echo env.name: ${{ env.name }}
-          echo env.url: ${{ env.url }}
+          echo inputs.string: ${{ inputs.string }}
+          echo inputs.build: ${{ inputs.build }}
+          echo inputs.string: ${{ inputs.string }}
 
           echo github.event_name: ${{ github.event_name }}
           echo github.ref_name : ${{ github.ref_name  }}
+
+      - name: "String"
+        if: ${{ inputs.string == undefined }}
+        run: |
+          echo inputs.string: ${{ inputs.string }}
 
       #- name: "Latest"
       #  id: latest
