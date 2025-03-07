@@ -44,12 +44,15 @@ jobs:
         uses: actions/checkout@v4
 
       - name: "Debug"
+        env:
+          ENV_NAME: ${{ job.environment.name }}
+          ENV_URL: ${{ job.environment.url }}
         run: |
+          echo job.environment.name: ${ENV_NAME}
+          echo job.environment.url: ${ENV_URL}
+
           echo github.event_name: ${{ github.event_name }}
           echo github.ref_name : ${{ github.ref_name  }}
-
-          echo job.environment.name: ${{ job.environment.name }}
-          echo job.environment.url: ${{ job.environment.url }}
 
       #- name: "Latest"
       #  id: latest
