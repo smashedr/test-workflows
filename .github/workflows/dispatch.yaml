@@ -19,7 +19,7 @@ on:
 env:
   name: cssnr
   url: https://cssnr.com
-  string: ${{ inputs.string == '' && 'true' || 'false' }}
+  string: ${{ inputs.string == '' && true || false }}
 
 jobs:
   dispatch:
@@ -38,10 +38,14 @@ jobs:
 
       - name: "Debug"
         run: |
-          echo github.event_name: ${{ github.event_name }}
-          echo github.ref_name : ${{ github.ref_name  }}
+          #echo github.event_name: ${{ github.event_name }}
+          #echo github.ref_name : ${{ github.ref_name  }}
+
           echo inputs.string: ${{ inputs.string }}
           echo env.string: ${{ env.string }}
+          if [ "${{ env.string }}" == "test" ];then
+            ECHO YES TEST
+          fi
 
       - name: "String"
         if: ${{ env.string }}
