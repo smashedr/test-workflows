@@ -71,3 +71,4 @@ jobs:
         run: |
           echo steps.release.outputs.tag_name: ${{ steps.release.outputs.tag_name }}
           ls -lAh .
+          ls -lAh dist/
