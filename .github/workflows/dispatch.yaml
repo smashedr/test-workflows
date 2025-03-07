@@ -47,6 +47,8 @@ jobs:
 
       - name: "Latest"
         id: latest
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           release=$(gh release list --exclude-pre-releases --exclude-drafts --limit 1 --json tagName)
           tag_name=$(echo "${release}" | jq -r '.[0].tagName')
