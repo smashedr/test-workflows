@@ -2,6 +2,7 @@ name: "Extra"
 
 on:
   push:
+  #  branches-ignore: [master]
   #schedule:
   #  - cron: "*/10 * * * *"
   workflow_dispatch:
@@ -43,16 +44,16 @@ jobs:
       - name: "Checkout"
         uses: actions/checkout@v4
 
-      #- name: "Debug"
-      #  run: |
-      #    echo github.event_name: ${{ github.event_name }}
-      #
-      #    echo inputs.build: ${{ inputs.build }}
-      #    echo env.build: ${{ env.build }}
-      #    echo inputs.deploy: ${{ inputs.deploy }}
-      #    echo env.deploy: ${{ env.deploy }}
-      #
-      #    echo inputs.env: ${{ inputs.env }}
+      - name: "Debug"
+        run: |
+          echo github.event_name: ${{ github.event_name }}
+
+          echo inputs.build: ${{ inputs.build }}
+          echo env.build: ${{ env.build }}
+          echo inputs.deploy: ${{ inputs.deploy }}
+          echo env.deploy: ${{ env.deploy }}
+
+          echo inputs.env: ${{ inputs.env }}
 
       #- name: "Build"
       #  if: ${{ env.build == 'true' }}
@@ -77,12 +78,12 @@ jobs:
       #    eval "$(ssh-agent -s)"
       #    ssh-add "${SSH_DIR}/id_rsa"
 
-      - name: "Debug"
-        run: |
-          SSH_DIR=~/.ssh
-          echo ~/.ssh
-          echo "SSH_DIR: ${SSH_DIR}"
-          echo "HOME: ${HOME}"
+      #- name: "Debug"
+      #  run: |
+      #    SSH_DIR=~/.ssh
+      #    echo ~/.ssh
+      #    echo "SSH_DIR: ${SSH_DIR}"
+      #    echo "HOME: ${HOME}"
 
       #- name: "Add SSH Key"
       #  run: |
@@ -96,16 +97,16 @@ jobs:
       #    eval "$(ssh-agent -s)"
       #    ssh-add "${SSH_DIR}/id_rsa"
 
-      - name: "Add SSH Key"
-        uses: webfactory/ssh-agent@v0.9.0
-        with:
-          ssh-private-key: ${{ secrets.SSH_KEY }}
+      #- name: "Add SSH Key"
+      #  uses: webfactory/ssh-agent@v0.9.0
+      #  with:
+      #    ssh-private-key: ${{ secrets.SSH_KEY }}
 
-      - name: "Test"
-        run: |
-          set -e
-          git clone git@github.com:smashedr/test-private.git
-          ls -lah test-private
+      #- name: "Test"
+      #  run: |
+      #    set -e
+      #    git clone git@github.com:smashedr/test-private.git
+      #    ls -lah test-private
 
       #- name: "Always"
       #  if: ${{ always() && failure() && github.event_name == 'schedule' }}

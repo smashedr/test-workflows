@@ -1,23 +1,12 @@
 name: "Dispatch"
 
 on:
+  push:
   workflow_dispatch:
     inputs:
       string:
         description: "String Input"
         type: string
-      build:
-        description: "Run Build"
-        type: boolean
-        default: true
-      deploy:
-        description: "Run Deploy"
-        type: boolean
-        default: true
-      cleanup:
-        description: "Run Cleanup"
-        type: boolean
-        default: true
       env:
         description: "Environment to Deploy"
         required: true
@@ -26,13 +15,11 @@ on:
         options:
           - dev
           - prod
-  #push:
 
 env:
-  build: ${{ github.event_name == 'push' && true || inputs.build }}
-  deploy: ${{ github.event_name == 'push' && true || inputs.deploy }}
   name: cssnr
   url: https://cssnr.com
+  string: ${{ inputs.string == '' && 'true' || 'false' }}
 
 jobs:
   dispatch:
@@ -51,17 +38,13 @@ jobs:
 
       - name: "Debug"
         run: |
-          echo inputs.string: ${{ inputs.string }}
-          echo inputs.string:bool: ${{ inputs.string == '' && true || false }}
-
-          echo inputs.build: ${{ inputs.build }}
-          echo inputs.string: ${{ inputs.string }}
-
           echo github.event_name: ${{ github.event_name }}
           echo github.ref_name : ${{ github.ref_name  }}
+          echo inputs.string: ${{ inputs.string }}
+          echo env.string: ${{ env.string }}
 
       - name: "String"
-        if: ${{ inputs.string == '' && true || false }}
+        if: ${{ env.string }}
         run: |
           echo inputs.string: ${{ inputs.string }}
 
@@ -78,17 +61,17 @@ jobs:
       #  run: |
       #    echo steps.latest.outputs.tag: ${{ steps.latest.outputs.tag }}
 
-      - name: "Download Release"
-        uses: robinraju/release-downloader@v1
-        id: release
-        with:
-          #tag: ${{ steps.latest.outputs.tag }}
-          fileName: "*"
-          latest: true
-          out-file-path: "dist"
+      #- name: "Download Release"
+      #  uses: robinraju/release-downloader@v1
+      #  id: release
+      #  with:
+      #    #tag: ${{ steps.latest.outputs.tag }}
+      #    fileName: "*"
+      #    latest: true
+      #    out-file-path: "dist"
 
-      - name: "Debug Release"
-        run: |
-          echo steps.release.outputs.tag_name: ${{ steps.release.outputs.tag_name }}
-          ls -lAh .
-          ls -lAh dist/
+      #- name: "Debug Release"
+      #  run: |
+      #    echo steps.release.outputs.tag_name: ${{ steps.release.outputs.tag_name }}
+      #    ls -lAh .
+      #    ls -lAh dist/

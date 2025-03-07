@@ -17,8 +17,9 @@ jobs:
         uses: actions/checkout@v4
 
       - name: "Debug"
+        continue-on-error: true
         run: |
-          ls -lAh .
+          /usr/bin/xcodebuild -version
 
       - name: "Debug event.json"
         run: |
