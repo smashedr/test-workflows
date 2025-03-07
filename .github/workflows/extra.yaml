@@ -67,10 +67,10 @@ jobs:
       - name: "SSH Key"
         run: |
           set -e
-          echo "Adding SSH Key to SSH Agent"
-          SSH_DIR="/root/.ssh"
-          mkdir -p "${SSH_DIR}" ~/.ssh
-          chmod 0700 "${SSH_DIR}" ~/.ssh
+          SSH_DIR=~/.ssh
+          echo "SSH_DIR: ${SSH_DIR}"
+          mkdir -p "${SSH_DIR}"
+          chmod 0700 "${SSH_DIR}"
           ssh-keyscan -p "22" -H "github.com" >> "${SSH_DIR}/known_hosts"
           echo "${{ secrets.SSH_KEY }}" > "${SSH_DIR}/id_rsa"
           chmod 0600 "${SSH_DIR}/id_rsa"
