@@ -36,7 +36,7 @@ jobs:
 
       - name: "Before ${{ steps.test.outputs.tag }}"
         run: |
-          echo hello
+          echo ${{ steps.test.outputs.tag }}
 
       - name: "Failure"
         if: ${{ failure() }}
