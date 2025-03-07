@@ -65,6 +65,7 @@ jobs:
           #tag: ${{ steps.latest.outputs.tag }}
           fileName: "*"
           latest: true
+          out-file-path: "dist"
 
       - name: "Debug Release"
         run: |
