@@ -45,24 +45,28 @@ jobs:
           echo github.event_name: ${{ github.event_name }}
           echo github.ref_name : ${{ github.ref_name  }}
 
-      - name: "Latest"
-        id: latest
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          release=$(gh release list --exclude-pre-releases --exclude-drafts --limit 1 --json tagName)
-          tag_name=$(echo "${release}" | jq -r '.[0].tagName')
-          echo "tag=${tag_name}" >> "$GITHUB_OUTPUT"
+      #- name: "Latest"
+      #  id: latest
+      #  env:
+      #    GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #  run: |
+      #    latest=$(gh release list --exclude-pre-releases --exclude-drafts --limit 1 --json tagName)
+      #    tag_name=$(echo "${latest}" | jq -r '.[0].tagName')
+      #    echo "tag=${tag_name}" >> "$GITHUB_OUTPUT"
 
-      - name: "Debug Latest"
-        run: |
-          echo steps.latest.outputs.tag: ${{ steps.latest.outputs.tag }}
+      #- name: "Debug Latest"
+      #  run: |
+      #    echo steps.latest.outputs.tag: ${{ steps.latest.outputs.tag }}
 
       - name: "Download Release"
         uses: robinraju/release-downloader@v1
+        id: release
         with:
-          tag: ${{ steps.latest.outputs.tag }}
+          #tag: ${{ steps.latest.outputs.tag }}
+          fileName: "*"
+          latest: true
 
-      - name: "List Files"
+      - name: "Debug Release"
         run: |
+          echo steps.release.outputs.tag_name: ${{ steps.release.outputs.tag_name }}
           ls -lAh .
