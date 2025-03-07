@@ -84,17 +84,22 @@ jobs:
           echo "SSH_DIR: ${SSH_DIR}"
           echo "HOME: ${HOME}"
 
-      - name: "Add SSH Key"
-        run: |
-          set -e
-          SSH_DIR="${HOME}/.ssh"
-          mkdir -p "${SSH_DIR}"
-          chmod 0700 "${SSH_DIR}"
-          ssh-keyscan -p "22" -H "github.com" >> "${SSH_DIR}/known_hosts"
-          echo "${{ secrets.SSH_KEY }}" > "${SSH_DIR}/id_rsa"
-          chmod 0600 "${SSH_DIR}/id_rsa"
-          eval "$(ssh-agent -s)"
-          ssh-add "${SSH_DIR}/id_rsa"
+      #- name: "Add SSH Key"
+      #  run: |
+      #    set -e
+      #    SSH_DIR="${HOME}/.ssh"
+      #    mkdir -p "${SSH_DIR}"
+      #    chmod 0700 "${SSH_DIR}"
+      #    ssh-keyscan -p "22" -H "github.com" >> "${SSH_DIR}/known_hosts"
+      #    echo "${{ secrets.SSH_KEY }}" > "${SSH_DIR}/id_rsa"
+      #    chmod 0600 "${SSH_DIR}/id_rsa"
+      #    eval "$(ssh-agent -s)"
+      #    ssh-add "${SSH_DIR}/id_rsa"
+
+      - name: "AGENT"
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
       - name: "Test"
         run: |
