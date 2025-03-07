@@ -52,6 +52,8 @@ jobs:
       - name: "Debug"
         run: |
           echo inputs.string: ${{ inputs.string }}
+          echo inputs.string:bool: ${{ inputs.string == '' && true || false }}
+
           echo inputs.build: ${{ inputs.build }}
           echo inputs.string: ${{ inputs.string }}
 
@@ -59,7 +61,7 @@ jobs:
           echo github.ref_name : ${{ github.ref_name  }}
 
       - name: "String"
-        if: ${{ inputs.string == undefined }}
+        if: ${{ inputs.string == '' && true || false }}
         run: |
           echo inputs.string: ${{ inputs.string }}
 
