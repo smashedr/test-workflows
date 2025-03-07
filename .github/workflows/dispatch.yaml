@@ -35,6 +35,9 @@ jobs:
     timeout-minutes: 5
     permissions:
       contents: write
+    environment:
+      name: cssnr
+      url: https://cssnr.com
 
     steps:
       - name: "Checkout"
@@ -44,6 +47,9 @@ jobs:
         run: |
           echo github.event_name: ${{ github.event_name }}
           echo github.ref_name : ${{ github.ref_name  }}
+
+          echo job.environment.name: ${{ job.environment.name }}
+          echo job.environment.url: ${{ job.environment.url }}
 
       #- name: "Latest"
       #  id: latest
