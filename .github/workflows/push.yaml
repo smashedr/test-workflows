@@ -31,9 +31,10 @@ jobs:
         id: test
         run: |
           #exit $((RANDOM % 2))
-          exit 1
+          exit 0
+          echo "tag=WINNING" >> "$GITHUB_OUTPUT"
 
-      - name: "Before"
+      - name: "Before ${{ steps.test.outputs.tag }}"
         run: |
           echo hello
 
