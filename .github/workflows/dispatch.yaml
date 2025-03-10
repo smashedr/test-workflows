@@ -19,7 +19,7 @@ on:
 env:
   name: cssnr
   url: https://cssnr.com
-  string: ${{ inputs.string == '' && true || false }}
+  string: ${{ inputs.string == '' && 'true' || 'false' }}
 
 jobs:
   dispatch:
