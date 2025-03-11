@@ -1,0 +1,50 @@
+name: "Pull"
+
+on:
+  workflow_dispatch:
+  #pull_request_target:
+  #  branches: [master]
+  pull_request:
+
+jobs:
+  pull:
+    name: "Pull"
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      pull-requests: write
+
+    steps:
+      - name: "Checkout"
+        uses: actions/checkout@v4
+
+      - name: "Debug event.json"
+        run: |
+          cat "${GITHUB_EVENT_PATH}"
+
+      - name: "Debug"
+        run: |
+          echo github.event_name: ${{ github.event_name }}
+          echo github.ref_name: ${{ github.ref_name }}
+
+          echo "github.actor: ${{ github.actor }}"
+          echo "github.triggering_actor: ${{ github.triggering_actor }}"
+          echo "github.event.pull_request.head.user.login: ${{ github.event.pull_request.head.user.login }}"
+
+          echo "github.event.number: ${{ github.event.number }}"
+          echo "github.event.pull_request.number: ${{ github.event.pull_request.number }}"
+
+          echo "github.event.repository: ${{ github.event.repository }}"
+          echo "github.event.repository.owner: ${{ github.event.repository.owner }}"
+          echo "github.event.repository.owner.login: ${{ github.event.repository.owner.login }}"
+
+      - name: "GH CLI"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          body=$(gh pr view ${{ github.event.number }} --json body --jq '.body')
+          tail=$(cat .github/templates/pr_owner.md)
+          body="${body}${tail}"
+          echo "body:"
+          echo "${body}"
+          gh pr edit ${{ github.event.number }} --body "${body}"
