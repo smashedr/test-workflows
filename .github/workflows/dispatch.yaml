@@ -2,6 +2,7 @@ name: "Dispatch"
 
 on:
   push:
+    branches: ["**"]
   workflow_dispatch:
     inputs:
       string:

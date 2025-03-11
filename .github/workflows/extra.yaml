@@ -2,6 +2,7 @@ name: "Extra"
 
 on:
   push:
+    branches: ["**"]
   #  branches-ignore: [master]
   #schedule:
   #  - cron: "*/10 * * * *"
