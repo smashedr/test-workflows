@@ -44,29 +44,37 @@ jobs:
         run: |
           echo "tags: ${{ steps.tags.outputs.tags }}"
 
-      - name: "Update Release Notes"
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          echo tags: ${{ steps.tags.outputs.tags }}
+      - name: "Update Release Notes Action"
+        uses: smashedr/update-release-notes-action@master
+        with:
+          tags: "v1,v1.0"
+          #delimiter: "--"
+          #remove: true
+          location: tail
 
-          body=$(gh release view --json body --jq '.body')
-          echo "body:"
-          echo "${body}"
-
-          if [[ body == *"----"* ]];then
-            head=$(echo "${body}" | awk "/----/{exit} {print}")
-            tail=$(echo "${body}" | sed -n '/----/,$p')
-          else
-            head=""
-            tail="${body}"
-          fi
-
-          echo "head:"
-          echo "${head}"
-
-          echo "tail:"
-          echo "${tail}"
+      #- name: "Update Release Notes"
+      #  env:
+      #    GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #  run: |
+      #    echo tags: ${{ steps.tags.outputs.tags }}
+      #
+      #    body=$(gh release view --json body --jq '.body')
+      #    echo "body:"
+      #    echo "${body}"
+      #
+      #    if [[ body == *"----"* ]];then
+      #      head=$(echo "${body}" | awk "/----/{exit} {print}")
+      #      tail=$(echo "${body}" | sed -n '/----/,$p')
+      #    else
+      #      head=""
+      #      tail="${body}"
+      #    fi
+      #
+      #    echo "head:"
+      #    echo "${head}"
+      #
+      #    echo "tail:"
+      #    echo "${tail}"
 
       #- name: "Upload to Release"
       #  if: ${{ github.event_name == 'release' }}
