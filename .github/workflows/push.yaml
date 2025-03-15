@@ -37,14 +37,15 @@ jobs:
       #    #exit $((RANDOM % 2))
       #    echo "number=$(echo $((50 + ${{ github.run_number }})))" >> "$GITHUB_OUTPUT"
 
-      #- name: "Debug"
-      #  run: |
-      #    echo ${{ steps.run.outputs.number }}
-      #    exit 1
+      - name: "Debug"
+        run: |
+          pwd
+          ls -lah .
 
       - name: "Anne O. Tate"
         if: ${{ !cancelled() }}
         run: |
+          echo "Uhh..."
           echo "::warning file=push.yaml,line=48,endLine=48,title=Up Chuck::Whats Up Chuck?"
 
 #
