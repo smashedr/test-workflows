@@ -42,6 +42,8 @@ jobs:
           echo "GITHUB_WORKFLOW_REF: ${GITHUB_WORKFLOW_REF}"
           #pwd
           #ls -lah .
+          asdf
+          exit 0
 
       - name: "Anne O. Tate"
         if: ${{ !cancelled() }}
