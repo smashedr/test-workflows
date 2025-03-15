@@ -30,23 +30,25 @@ jobs:
       #
       #      - name: "Docker Test Action"
       #        uses: smashedr/docker-test-action@v1
-      #
-      - name: "Run Number"
-        id: run
-        run: |
-          #exit $((RANDOM % 2))
-          echo "number=$(echo $((50 + ${{ github.run_number }})))" >> "$GITHUB_OUTPUT"
 
-      - name: "Debug"
-        run: |
-          echo ${{ steps.run.outputs.number }}
-          exit 1
+      #- name: "Run Number"
+      #  id: run
+      #  run: |
+      #    #exit $((RANDOM % 2))
+      #    echo "number=$(echo $((50 + ${{ github.run_number }})))" >> "$GITHUB_OUTPUT"
 
-      - name: "Not Cancelled"
+      #- name: "Debug"
+      #  run: |
+      #    echo ${{ steps.run.outputs.number }}
+      #    exit 1
+
+      - name: "Anne O. Tate"
         if: ${{ !cancelled() }}
         run: |
-          echo YOU FUCKED UP CHUCK!
+          echo "::warning file=push.yaml,line=48,endLine=48,title=Up Chuck::Whats Up Chuck?"
 
+#
+#
 #- name: "Purge Cache Action"
 #  uses: cssnr/cloudflare-purge-cache-action@v2
 #  with:
