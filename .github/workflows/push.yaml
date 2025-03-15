@@ -39,8 +39,9 @@ jobs:
 
       - name: "Debug"
         run: |
-          pwd
-          ls -lah .
+          echo "GITHUB_WORKFLOW_REF: ${GITHUB_WORKFLOW_REF}"
+          #pwd
+          #ls -lah .
 
       - name: "Anne O. Tate"
         if: ${{ !cancelled() }}
