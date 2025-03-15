@@ -38,13 +38,13 @@ jobs:
           echo "github.event.repository.owner: ${{ github.event.repository.owner }}"
           echo "github.event.repository.owner.login: ${{ github.event.repository.owner.login }}"
 
-      - name: "GH CLI"
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          body=$(gh pr view ${{ github.event.number }} --json body --jq '.body')
-          tail=$(cat .github/templates/pr_owner.md)
-          body="${body}${tail}"
-          echo "body:"
-          echo "${body}"
-          gh pr edit ${{ github.event.number }} --body "${body}"
+      #- name: "GH CLI"
+      #  env:
+      #    GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #  run: |
+      #    body=$(gh pr view ${{ github.event.number }} --json body --jq '.body')
+      #    tail=$(cat .github/templates/pr_owner.md)
+      #    body="${body}${tail}"
+      #    echo "body:"
+      #    echo "${body}"
+      #    gh pr edit ${{ github.event.number }} --body "${body}"
