@@ -46,7 +46,8 @@ jobs:
         if: ${{ !cancelled() }}
         run: |
           echo "Uhh..."
-          echo "::warning file=push.yaml,line=48,endLine=48,title=Up Chuck::Whats Up Chuck?"
+          echo "::error file=.github/workflows/push.yaml,line=48,col=17,title=Up Chuck::Whats Up Chuck?"
+          #echo "::error file=src/main.py,line=10,col=5::Syntax error detected"
 
 #
 #
