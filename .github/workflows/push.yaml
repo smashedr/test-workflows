@@ -45,7 +45,7 @@ jobs:
       - name: "Anne O. Tate"
         if: ${{ !cancelled() }}
         run: |
-          name=".github/workflows/test.yaml"
+          name=".github/workflows/push.yaml"
           path="$(readlink -f "${name}")"
           echo "path: ${path}"
           root=$(git rev-parse --show-toplevel)
