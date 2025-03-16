@@ -40,10 +40,20 @@ jobs:
       - name: "Debug"
         run: |
           echo "GITHUB_WORKFLOW_REF: ${GITHUB_WORKFLOW_REF}"
-          #pwd
-          #ls -lah .
-          asdf
-          exit 0
+
+          echo "github.event_name: ${{ github.event_name }}"
+          echo "github.workflow: ${{ github.workflow }}"
+          echo "github.ref_name: ${{ github.ref_name }}"
+          echo "github.ref: ${{ github.ref }}"
+          echo "pull_request.number: ${{ github.event.pull_request.number }}"
+
+          echo "::group::env"
+          env
+          echo "::endgroup::"
+
+          echo "::group::set"
+          set -o
+          echo "::endgroup::"
 
       - name: "Anne O. Tate"
         if: ${{ !cancelled() }}
