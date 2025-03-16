@@ -37,15 +37,35 @@ jobs:
       #    #exit $((RANDOM % 2))
       #    echo "number=$(echo $((50 + ${{ github.run_number }})))" >> "$GITHUB_OUTPUT"
 
-      #- name: "Debug"
-      #  run: |
-      #    echo ${{ steps.run.outputs.number }}
-      #    exit 1
+      - name: "Debug"
+        run: |
+          echo "GITHUB_WORKFLOW_REF: ${GITHUB_WORKFLOW_REF}"
+
+          echo "github.event_name: ${{ github.event_name }}"
+          echo "github.workflow: ${{ github.workflow }}"
+          echo "github.ref_name: ${{ github.ref_name }}"
+          echo "github.ref: ${{ github.ref }}"
+          echo "pull_request.number: ${{ github.event.pull_request.number }}"
+
+          echo "::group::env"
+          env
+          echo "::endgroup::"
+
+          echo "::group::set"
+          set -o
+          echo "::endgroup::"
 
       - name: "Anne O. Tate"
         if: ${{ !cancelled() }}
         run: |
-          echo "::warning file=push.yaml,line=48,endLine=48,title=Up Chuck::Whats Up Chuck?"
+          name=".github/workflows/push.yaml"
+          path="$(readlink -f "${name}")"
+          echo "path: ${path}"
+          root=$(git rev-parse --show-toplevel)
+          echo "root: ${root}"
+          file="$(realpath --relative-to="${root}" ${path})"
+          echo "file: ${file}"
+          echo "::warning file=${file},line=55::You Fucked Up Chuck"
 
 #
 #
