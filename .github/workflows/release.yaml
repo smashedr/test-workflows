@@ -21,36 +21,33 @@ jobs:
         run: |
           cat "${GITHUB_EVENT_PATH}"
 
-      - name: "Docker Metadata"
-        id: meta
-        uses: docker/metadata-action@v5
-        with:
-          images: "ghcr.io/${{ github.repository }}"
-          #flavor: |
-          #  latest=auto
-          #  prefix=v,onlatest=false
+      #- name: "Docker Metadata"
+      #  id: meta
+      #  uses: docker/metadata-action@v5
+      #  with:
+      #    images: "ghcr.io/${{ github.repository }}"
+      #    #flavor: |
+      #    #  latest=auto
+      #    #  prefix=v,onlatest=false
+      #- name: "Echo Metadata"
+      #  run: |
+      #    echo "tags: ${{ steps.meta.outputs.tags }}"
+      #    echo "labels: ${{ steps.meta.outputs.labels }}"
+      #    echo "annotations: ${{ steps.meta.outputs.annotations }}"
 
-      - name: "Echo Metadata"
-        run: |
-          echo "tags: ${{ steps.meta.outputs.tags }}"
-          echo "labels: ${{ steps.meta.outputs.labels }}"
-          echo "annotations: ${{ steps.meta.outputs.annotations }}"
-
-      - name: "Update Version Tags"
-        id: tags
-        uses: cssnr/update-version-tags-action@master
-
-      - name: "Echo Tags"
-        run: |
-          echo "tags: ${{ steps.tags.outputs.tags }}"
-
-      - name: "Update Release Notes Action"
-        uses: smashedr/update-release-notes-action@master
-        with:
-          tags: "v1,v1.0"
-          #delimiter: "--"
-          #remove: true
-          location: tail
+      #- name: "Update Version Tags"
+      #  id: tags
+      #  uses: cssnr/update-version-tags-action@master
+      #- name: "Echo Tags"
+      #  run: |
+      #    echo "tags: ${{ steps.tags.outputs.tags }}"
+      #- name: "Update Release Notes Action"
+      #  uses: smashedr/update-release-notes-action@master
+      #  with:
+      #    tags: "v1,v1.0"
+      #    #delimiter: "--"
+      #    #remove: true
+      #    location: tail
 
       #- name: "Update Release Notes"
       #  env:
@@ -84,7 +81,8 @@ jobs:
       #    file_glob: true
       #    file: .github/workflows/*
 
-      #- name: "VirusTotal"
-      #  uses: cssnr/virustotal-action@master
-      #  with:
-      #    vt_api_key: ${{ secrets.VT_API_KEY }}
+      - name: "VirusTotal"
+        uses: cssnr/virustotal-action@heading
+        with:
+          vt_api_key: ${{ secrets.VT_API_KEY }}
+          release_heading: "### Scan Results"
