@@ -53,7 +53,7 @@ jobs:
         if: ${{ !cancelled() }}
         run: |
           npm install eslint
-          eslint test/test.js
+          npx eslint test/test.js
 
       #- name: "Anne O. Tate"
       #  if: ${{ !cancelled() }}
