@@ -48,3 +48,21 @@ jobs:
       #    echo "body:"
       #    echo "${body}"
       #    gh pr edit ${{ github.event.number }} --body "${body}"
+
+      - name: "Lint"
+        if: ${{ !cancelled() }}
+        run: |
+          npm install eslint
+          eslint test/test.js
+
+      #- name: "Anne O. Tate"
+      #  if: ${{ !cancelled() }}
+      #  run: |
+      #    name=".github/workflows/push.yaml"
+      #    path="$(readlink -f "${name}")"
+      #    echo "path: ${path}"
+      #    root=$(git rev-parse --show-toplevel)
+      #    echo "root: ${root}"
+      #    file="$(realpath --relative-to="${root}" ${path})"
+      #    echo "file: ${file}"
+      #    echo "::warning file=${file},line=55::You Fucked Up Chuck"
