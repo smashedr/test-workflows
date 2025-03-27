@@ -21,6 +21,14 @@ jobs:
         run: |
           cat "${GITHUB_EVENT_PATH}"
 
+      - name: "Debug"
+        if: ${{ !github.event.act }}
+        continue-on-error: true
+        run: |
+          cat "${GITHUB_EVENT_PATH}"
+          versionCode: ${{ github.run_number }}
+          versionName: ${{ github.ref }}
+
       #- name: "Docker Metadata"
       #  id: meta
       #  uses: docker/metadata-action@v5
