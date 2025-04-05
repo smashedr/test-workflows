@@ -1,9 +1,11 @@
 import zoneinfo
+from pprint import pprint
 
 TIMEZONE_CHOICES = zip(
     sorted(zoneinfo.available_timezones()), sorted(zoneinfo.available_timezones()), strict=False
 )
 
-print(zoneinfo.available_timezones())
+# print(zoneinfo.available_timezones())
 print('-'*40)
-print(dict(TIMEZONE_CHOICES))
+pprint(sorted(zoneinfo.available_timezones()))
+print('-'*40)
