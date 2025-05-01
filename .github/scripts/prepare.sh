@@ -18,14 +18,13 @@ SOURCE_DIR="${SCRIPT_DIR}/../highlightjs"
 echo "SOURCE_DIR: ${SOURCE_DIR}"
 TARGET_DIR="${SCRIPT_DIR}/../../app/src/main/assets/preview/dist"
 echo "TARGET_DIR: ${TARGET_DIR}"
-
-#if [ ! -d "${SOURCE_DIR}" ];then
-    git clone https://github.com/highlightjs/highlight.js.git "${SOURCE_DIR}"
-    cd "${SOURCE_DIR}"
-    git checkout "${HLJS_VERSION}"
-#else
-#    cd "${SOURCE_DIR}"
-#fi
+if [ ! -d "${SOURCE_DIR}" ];then
+    echo "Removing: ${SOURCE_DIR}"
+    rm -rf "${SOURCE_DIR}"
+fi
+git clone https://github.com/highlightjs/highlight.js.git "${SOURCE_DIR}"
+cd "${SOURCE_DIR}"
+git checkout "${HLJS_VERSION}"
 
 npm install
 node tools/build.js :common
