@@ -22,12 +22,39 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: "Debug"
-        continue-on-error: true
+      - name: "Setup Node 22"
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: "Checkout highlight.js"
+        uses: actions/checkout@v4
+        with:
+          repository: "highlightjs/highlight.js"
+          ref: "11.11.1"
+          path: "${{ runner.temp }}/highlightjs"
+
+      - name: "Build highlight.js"
+        working-directory: "${{ runner.temp }}/highlightjs"
+        env:
+          destination: "${{ github.workspace }}/app/src/main/assets/preview/dist"
         run: |
-          #/usr/bin/xcodebuild -version
-          python -V
-          python tst.py
+          ls -lAh .
+          npm install
+          node tools/build.js :common
+          ls -lAh build
+          mkdir -p ${{ env.destination }}
+          cp build/highlight.min.js ${{ env.destination }}
+          cp src/styles/stackoverflow-dark.css ${{ env.destination }}
+          cp src/styles/stackoverflow-light.css ${{ env.destination }}
+          ls -lAh ${{ env.destination }}
+
+      #- name: "Debug"
+      #  continue-on-error: true
+      #  run: |
+      #    #/usr/bin/xcodebuild -version
+      #    python -V
+      #    python tst.py
 
       #      - name: "Debug event.json"
       #        run: |
