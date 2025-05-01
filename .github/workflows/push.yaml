@@ -27,12 +27,12 @@ jobs:
         with:
           node-version: 22
 
-      - name: "Checkout highlight.js"
-        uses: actions/checkout@v4
-        with:
-          repository: "highlightjs/highlight.js"
-          ref: "11.11.1"
-          path: ".github/highlightjs"
+      #- name: "Checkout highlight.js"
+      #  uses: actions/checkout@v4
+      #  with:
+      #    repository: "highlightjs/highlight.js"
+      #    ref: "11.11.1"
+      #    path: ".github/highlightjs"
 
       - name: "Build highlight.js"
         working-directory: ".github/scripts"
