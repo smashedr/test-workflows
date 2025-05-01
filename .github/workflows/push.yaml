@@ -17,10 +17,10 @@ jobs:
       - name: "Checkout"
         uses: actions/checkout@v4
 
-      - name: "Setup Python 3.12"
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.12"
+      #- name: "Setup Python 3.12"
+      #  uses: actions/setup-python@v5
+      #  with:
+      #    python-version: "3.12"
 
       - name: "Setup Node 22"
         uses: actions/setup-node@v4
@@ -32,10 +32,10 @@ jobs:
         with:
           repository: "highlightjs/highlight.js"
           ref: "11.11.1"
-          path: "${{ runner.temp }}/highlightjs"
+          path: "highlightjs"
 
       - name: "Build highlight.js"
-        working-directory: "${{ runner.temp }}/highlightjs"
+        working-directory: "highlightjs"
         env:
           destination: "${{ github.workspace }}/app/src/main/assets/preview/dist"
         run: |
@@ -48,6 +48,12 @@ jobs:
           cp src/styles/stackoverflow-dark.css ${{ env.destination }}
           cp src/styles/stackoverflow-light.css ${{ env.destination }}
           ls -lAh ${{ env.destination }}
+
+      - name: "Debug All"
+        continue-on-error: true
+        run: |
+          ls -lAh .
+          ls -lAhR app
 
       #- name: "Debug"
       #  continue-on-error: true
