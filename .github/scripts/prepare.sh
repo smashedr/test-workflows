@@ -16,12 +16,11 @@ echo "Processing highlight.js: ${HLJS_VERSION}"
 
 SOURCE_DIR="${SCRIPT_DIR}/../highlightjs"
 echo "SOURCE_DIR: ${SOURCE_DIR}"
-TARGET_DIR="${SCRIPT_DIR}/../../app/src/main/assets/preview/dist"
-echo "TARGET_DIR: ${TARGET_DIR}"
-if [ ! -d "${SOURCE_DIR}" ];then
+if [ -d "${SOURCE_DIR}" ];then
     echo "Removing: ${SOURCE_DIR}"
     rm -rf "${SOURCE_DIR}"
 fi
+
 git clone https://github.com/highlightjs/highlight.js.git "${SOURCE_DIR}"
 cd "${SOURCE_DIR}"
 git checkout "${HLJS_VERSION}"
@@ -29,7 +28,10 @@ git checkout "${HLJS_VERSION}"
 npm install
 node tools/build.js :common
 
+TARGET_DIR="${SCRIPT_DIR}/../../app/src/main/assets/preview/dist"
+echo "TARGET_DIR: ${TARGET_DIR}"
 mkdir -p "${TARGET_DIR}"
+
 cp build/highlight.min.js "${TARGET_DIR}"
 cp src/styles/stackoverflow-dark.css "${TARGET_DIR}"
 cp src/styles/stackoverflow-light.css "${TARGET_DIR}"
