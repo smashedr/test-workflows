@@ -39,7 +39,7 @@ jobs:
         #env:
         #  destination: "${{ github.workspace }}/app/src/main/assets/preview/dist"
         run: |
-          bash scripts/prepare.sh
+          bash .github/scripts/prepare.sh
 
       - name: "Debug"
         continue-on-error: true
