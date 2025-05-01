@@ -32,35 +32,19 @@ jobs:
         with:
           repository: "highlightjs/highlight.js"
           ref: "11.11.1"
-          path: "highlightjs"
+          path: ".github/highlightjs"
 
       - name: "Build highlight.js"
-        working-directory: "highlightjs"
-        env:
-          destination: "${{ github.workspace }}/app/src/main/assets/preview/dist"
+        #working-directory: ".github/highlightjs"
+        #env:
+        #  destination: "${{ github.workspace }}/app/src/main/assets/preview/dist"
         run: |
-          ls -lAh .
-          npm install
-          node tools/build.js :common
-          ls -lAh build
-          mkdir -p ${{ env.destination }}
-          cp build/highlight.min.js ${{ env.destination }}
-          cp src/styles/stackoverflow-dark.css ${{ env.destination }}
-          cp src/styles/stackoverflow-light.css ${{ env.destination }}
-          ls -lAh ${{ env.destination }}
+          bash scripts/prepare.sh
 
-      - name: "Debug All"
+      - name: "Debug"
         continue-on-error: true
         run: |
-          ls -lAh .
-          ls -lAhR app
-
-      #- name: "Debug"
-      #  continue-on-error: true
-      #  run: |
-      #    #/usr/bin/xcodebuild -version
-      #    python -V
-      #    python tst.py
+          ls -lAh app
 
       #      - name: "Debug event.json"
       #        run: |
