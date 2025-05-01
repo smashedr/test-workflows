@@ -35,11 +35,11 @@ jobs:
           path: ".github/highlightjs"
 
       - name: "Build highlight.js"
-        #working-directory: ".github/highlightjs"
-        #env:
-        #  destination: "${{ github.workspace }}/app/src/main/assets/preview/dist"
+        working-directory: ".github/scripts"
+        env:
+          destination: "${{ github.workspace }}/app/src/main/assets/preview/dist"
         run: |
-          bash .github/scripts/prepare.sh
+          bash prepare.sh
 
       - name: "Debug"
         continue-on-error: true
