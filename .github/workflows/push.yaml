@@ -17,15 +17,60 @@ jobs:
       - name: "Checkout"
         uses: actions/checkout@v4
 
+      - name: "1 - Docker Tags"
+        id: tags
+        uses: cssnr/docker-tags-action@v1
+        continue-on-error: true
+        with:
+          tags: |
+            "0.0.1-bad1"
+            ${{ true && 'pre' || '' }}
+
+      - name: "1 - Debug Docker Tags"
+        continue-on-error: true
+        run: |
+          echo -e "tags:\n${{ steps.tags.outputs.tags }}"
+          echo -e "labels:\n${{ steps.tags.outputs.labels }}"
+
+      - name: "2 - Docker Tags"
+        id: tags
+        uses: cssnr/docker-tags-action@v1
+        continue-on-error: true
+        with:
+          tags: |
+            "0.0.1"
+            ${{ false && 'pre' || '' }}
+
+      - name: "2 - Debug Docker Tags"
+        continue-on-error: true
+        run: |
+          echo -e "tags:\n${{ steps.tags.outputs.tags }}"
+          echo -e "labels:\n${{ steps.tags.outputs.labels }}"
+
+      - name: "3 - Docker Tags"
+        id: tags
+        uses: cssnr/docker-tags-action@v1
+        continue-on-error: true
+        with:
+          tags: |
+            "0.0.2-rip1"
+            ""
+
+      - name: "3 - Debug Docker Tags"
+        continue-on-error: true
+        run: |
+          echo -e "tags:\n${{ steps.tags.outputs.tags }}"
+          echo -e "labels:\n${{ steps.tags.outputs.labels }}"
+
       #- name: "Setup Python 3.12"
       #  uses: actions/setup-python@v5
       #  with:
       #    python-version: "3.12"
 
-      - name: "Setup Node 22"
-        uses: actions/setup-node@v4
-        with:
-          node-version: 22
+      #- name: "Setup Node 22"
+      #  uses: actions/setup-node@v4
+      #  with:
+      #    node-version: 22
 
       #- name: "Checkout highlight.js"
       #  uses: actions/checkout@v4
@@ -34,19 +79,19 @@ jobs:
       #    ref: "11.11.1"
       #    path: ".github/highlightjs"
 
-      - name: "Build highlight.js"
-        working-directory: ".github/scripts"
-        env:
-          destination: "${{ github.workspace }}/app/src/main/assets/preview/dist"
-        run: |
-          bash prepare.sh
-
-      - name: "Debug"
-        continue-on-error: true
-        run: |
-          ls -lAh ../
-          ls -lAh .
-          ls -lAhR app
+      #- name: "Build highlight.js"
+      #  working-directory: ".github/scripts"
+      #  env:
+      #    destination: "${{ github.workspace }}/app/src/main/assets/preview/dist"
+      #  run: |
+      #    bash prepare.sh
+      #
+      #- name: "Debug"
+      #  continue-on-error: true
+      #  run: |
+      #    ls -lAh ../
+      #    ls -lAh .
+      #    ls -lAhR app
 
       #      - name: "Debug event.json"
       #        run: |
