@@ -19,7 +19,7 @@ jobs:
 
       - name: "1 - Docker Tags"
         id: tags
-        uses: cssnr/docker-tags-action@v1
+        uses: cssnr/docker-tags-action@updates
         continue-on-error: true
         with:
           tags: |
@@ -34,7 +34,7 @@ jobs:
 
       - name: "2 - Docker Tags"
         id: tags2
-        uses: cssnr/docker-tags-action@v1
+        uses: cssnr/docker-tags-action@updates
         continue-on-error: true
         with:
           tags: |
@@ -49,7 +49,7 @@ jobs:
 
       - name: "3 - Docker Tags"
         id: tags3
-        uses: cssnr/docker-tags-action@v1
+        uses: cssnr/docker-tags-action@updates
         continue-on-error: true
         with:
           tags: |
