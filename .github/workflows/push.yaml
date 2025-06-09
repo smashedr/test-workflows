@@ -19,15 +19,26 @@ jobs:
 
       - name: "DO IT 1"
         id: tags
-        if: ${{ secrets.MY_SECRET != '' }}
         run: |
           echo "notq"
 
-      - name: "DO IT 2"
+  second:
+    name: "Second"
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    needs: [push]
+    permissions:
+      contents: write
+
+    steps:
+      - name: "Checkout"
+        uses: actions/checkout@v4
+
+      - name: "DO IT 1"
         id: tags
-        if: ${{ secrets.MY_SECRET == '' }}
+        if: ${{ needs.push.result == 'success'  }}
         run: |
-          echo "eq"
+          echo "success"
 
       #- name: "1 - Docker Tags"
       #  id: tags
