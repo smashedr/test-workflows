@@ -36,7 +36,7 @@ jobs:
 
       - name: "DO IT 1"
         id: tags
-        if: ${{ needs.push.result != 'success' || needs.push.result != 'success2'  }}
+        if: ${{ needs.push.result == 'success' || needs.push.result != 'success2'  }}
         run: |
           echo "success"
 
