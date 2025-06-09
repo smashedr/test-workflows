@@ -17,50 +17,62 @@ jobs:
       - name: "Checkout"
         uses: actions/checkout@v4
 
-      - name: "1 - Docker Tags"
+      - name: "DO IT 1"
         id: tags
-        uses: cssnr/docker-tags-action@updates
-        continue-on-error: true
-        with:
-          tags: |
-            "0.0.1-bad1"
-            ${{ true && 'pre' || '' }}
-
-      - name: "1 - Debug Docker Tags"
-        continue-on-error: true
+        if: ${{ secrets.MY_SECRET != '' }}
         run: |
-          echo -e "tags:\n${{ steps.tags.outputs.tags }}"
-          echo -e "labels:\n${{ steps.tags.outputs.labels }}"
+          echo "notq"
 
-      - name: "2 - Docker Tags"
-        id: tags2
-        uses: cssnr/docker-tags-action@updates
-        continue-on-error: true
-        with:
-          tags: |
-            "0.0.1"
-            ${{ false && 'pre' || '' }}
-
-      - name: "2 - Debug Docker Tags"
-        continue-on-error: true
+      - name: "DO IT 2"
+        id: tags
+        if: ${{ secrets.MY_SECRET == '' }}
         run: |
-          echo -e "tags:\n${{ steps.tags2.outputs.tags }}"
-          echo -e "labels:\n${{ steps.tags2.outputs.labels }}"
+          echo "eq"
 
-      - name: "3 - Docker Tags"
-        id: tags3
-        uses: cssnr/docker-tags-action@updates
-        continue-on-error: true
-        with:
-          tags: |
-            "0.0.2-rip1"
-            ""
-
-      - name: "3 - Debug Docker Tags"
-        continue-on-error: true
-        run: |
-          echo -e "tags:\n${{ steps.tags3.outputs.tags }}"
-          echo -e "labels:\n${{ steps.tags3.outputs.labels }}"
+      #- name: "1 - Docker Tags"
+      #  id: tags
+      #  uses: cssnr/docker-tags-action@master
+      #  continue-on-error: true
+      #  with:
+      #    tags: |
+      #      "0.0.1-bad1"
+      #      ${{ true && 'pre' || '' }}
+      #
+      #- name: "1 - Debug Docker Tags"
+      #  continue-on-error: true
+      #  run: |
+      #    echo -e "tags:\n${{ steps.tags.outputs.tags }}"
+      #    echo -e "labels:\n${{ steps.tags.outputs.labels }}"
+      #
+      #- name: "2 - Docker Tags"
+      #  id: tags2
+      #  uses: cssnr/docker-tags-action@master
+      #  continue-on-error: true
+      #  with:
+      #    tags: |
+      #      "0.0.1"
+      #      ${{ false && 'pre' || '' }}
+      #
+      #- name: "2 - Debug Docker Tags"
+      #  continue-on-error: true
+      #  run: |
+      #    echo -e "tags:\n${{ steps.tags2.outputs.tags }}"
+      #    echo -e "labels:\n${{ steps.tags2.outputs.labels }}"
+      #
+      #- name: "3 - Docker Tags"
+      #  id: tags3
+      #  uses: cssnr/docker-tags-action@master
+      #  continue-on-error: true
+      #  with:
+      #    tags: |
+      #      "0.0.2-rip1"
+      #      ""
+      #
+      #- name: "3 - Debug Docker Tags"
+      #  continue-on-error: true
+      #  run: |
+      #    echo -e "tags:\n${{ steps.tags3.outputs.tags }}"
+      #    echo -e "labels:\n${{ steps.tags3.outputs.labels }}"
 
       #- name: "Setup Python 3.12"
       #  uses: actions/setup-python@v5
