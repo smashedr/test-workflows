@@ -1,13 +1,17 @@
-name: "Draft"
+name: "Draft Release"
 
 on:
   workflow_dispatch:
-  release:
-    types: [unpublished]
+  push:
+    branches: ["master"]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   draft:
-    name: "Draft"
+    name: "Draft Release"
     runs-on: ubuntu-latest
     timeout-minutes: 5
     permissions:
@@ -17,59 +21,12 @@ jobs:
       - name: "Checkout"
         uses: actions/checkout@v4
 
-      - name: "Debug event.json"
-        run: |
-          cat "${GITHUB_EVENT_PATH}"
-
-      - name: "Debug"
-        run: |
-          echo github.event_name: ${{ github.event_name }}
-          echo github.ref_name: ${{ github.ref_name }}
-
-      - name: "Generate Docker Tags"
-        id: tags
-        uses: smashedr/docker-tags-action@master
+      - name: "Draft Release Action"
+        id: draft
+        uses: cssnr/draft-release-action@master
         with:
-          images: "ghcr.io/${{ github.repository }}"
+          semver: patch
 
-      - name: "Echo Tags"
+      - name: "Process Release Draft URL"
         run: |
-          echo tags:\n'${{ steps.tags.outputs.tags }}'
-          echo labels:\n'${{ steps.tags.outputs.labels }}'
-          echo annotations:\n'${{ steps.tags.outputs.annotations }}'
-
-      - name: "Docker Metadata"
-        id: meta
-        uses: docker/metadata-action@v5
-        with:
-          images: "ghcr.io/${{ github.repository }}"
-          #flavor: |
-          #  latest=auto
-          #  prefix=v,onlatest=false
-
-      - name: "Echo Metadata"
-        run: |
-          echo "tags: ${{ steps.meta.outputs.tags }}"
-          echo "labels: ${{ steps.meta.outputs.labels }}"
-          echo "annotations: ${{ steps.meta.outputs.annotations }}"
-
-      #- name: "Update Version Tags"
-      #  id: tags
-      #  uses: cssnr/update-version-tags-action@master
-
-      #- name: "Echo Tags"
-      #  run: |
-      #    echo "tags: ${{ steps.tags.outputs.tags }}"
-
-      #- name: "Upload to Release"
-      #  if: ${{ github.event_name == 'release' }}
-      #  uses: svenstaro/upload-release-action@v2
-      #  with:
-      #    overwrite: true
-      #    file_glob: true
-      #    file: .github/workflows/*
-
-      #- name: "VirusTotal"
-      #  uses: cssnr/virustotal-action@master
-      #  with:
-      #    vt_api_key: ${{ secrets.VT_API_KEY }}
+          echo "url: ${{ steps.draft.outputs.url }}"
