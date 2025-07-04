@@ -108,3 +108,13 @@ jobs:
 
       - name: "Use summary"
         run: echo "${{ steps.extract.outputs.summary }}"
+
+      - name: "Generate Whats New"
+        if: ${{ github.event_name == 'release' }}
+        env:
+          SUMMARY: ${{ steps.notes.outputs.summary != '' && steps.notes.outputs.summary || 'GitHub Actions' }}
+        run: |
+          echo "${{ env.SUMMARY }}"
+          mkdir -p whatsNew
+          echo "${{ steps.notes.outputs.summary }}" > whatsNew/whatsnew-en-US
+          cat whatsNew/whatsnew-en-US
