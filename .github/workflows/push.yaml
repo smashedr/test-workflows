@@ -17,148 +17,152 @@ jobs:
       - name: "Checkout"
         uses: actions/checkout@v4
 
-      - name: "DO IT 1"
-        id: tags
-        run: |
-          echo "notq"
+      - name: "Algolia Start Crawl"
+        continue-on-error: true
+        uses: cssnr/web-request-action@v1
+        env:
+          CRAWLER_ID: af2f517b-d6f4-4a68-ad9e-93803cdd9ea6
+        with:
+          url: https://crawler.algolia.com/api/1/crawlers/${{ env.CRAWLER_ID }}/reindex
+          username: ${{ secrets.CRAWLER_USER_ID }}
+          password: ${{ secrets.CRAWLER_API_KEY }}
 
-  second:
-    name: "Second"
-    runs-on: ubuntu-latest
-    timeout-minutes: 5
-    needs: [push]
-    permissions:
-      contents: write
+  #second:
+  #  name: "Second"
+  #  runs-on: ubuntu-latest
+  #  timeout-minutes: 5
+  #  needs: [push]
+  #  permissions:
+  #    contents: write
+  #
+  #  steps:
+  #    - name: "Checkout"
+  #      uses: actions/checkout@v4
+  #
+  #    - name: "DO IT 1"
+  #      id: tags
+  #      if: ${{ needs.push.result == 'success' || needs.push.result != 'success2'  }}
+  #      run: |
+  #        echo "success"
 
-    steps:
-      - name: "Checkout"
-        uses: actions/checkout@v4
+  #- name: "1 - Docker Tags"
+  #  id: tags
+  #  uses: cssnr/docker-tags-action@master
+  #  continue-on-error: true
+  #  with:
+  #    tags: |
+  #      "0.0.1-bad1"
+  #      ${{ true && 'pre' || '' }}
+  #
+  #- name: "1 - Debug Docker Tags"
+  #  continue-on-error: true
+  #  run: |
+  #    echo -e "tags:\n${{ steps.tags.outputs.tags }}"
+  #    echo -e "labels:\n${{ steps.tags.outputs.labels }}"
+  #
+  #- name: "2 - Docker Tags"
+  #  id: tags2
+  #  uses: cssnr/docker-tags-action@master
+  #  continue-on-error: true
+  #  with:
+  #    tags: |
+  #      "0.0.1"
+  #      ${{ false && 'pre' || '' }}
+  #
+  #- name: "2 - Debug Docker Tags"
+  #  continue-on-error: true
+  #  run: |
+  #    echo -e "tags:\n${{ steps.tags2.outputs.tags }}"
+  #    echo -e "labels:\n${{ steps.tags2.outputs.labels }}"
+  #
+  #- name: "3 - Docker Tags"
+  #  id: tags3
+  #  uses: cssnr/docker-tags-action@master
+  #  continue-on-error: true
+  #  with:
+  #    tags: |
+  #      "0.0.2-rip1"
+  #      ""
+  #
+  #- name: "3 - Debug Docker Tags"
+  #  continue-on-error: true
+  #  run: |
+  #    echo -e "tags:\n${{ steps.tags3.outputs.tags }}"
+  #    echo -e "labels:\n${{ steps.tags3.outputs.labels }}"
 
-      - name: "DO IT 1"
-        id: tags
-        if: ${{ needs.push.result == 'success' || needs.push.result != 'success2'  }}
-        run: |
-          echo "success"
+  #- name: "Setup Python 3.12"
+  #  uses: actions/setup-python@v5
+  #  with:
+  #    python-version: "3.12"
 
-      #- name: "1 - Docker Tags"
-      #  id: tags
-      #  uses: cssnr/docker-tags-action@master
-      #  continue-on-error: true
-      #  with:
-      #    tags: |
-      #      "0.0.1-bad1"
-      #      ${{ true && 'pre' || '' }}
-      #
-      #- name: "1 - Debug Docker Tags"
-      #  continue-on-error: true
-      #  run: |
-      #    echo -e "tags:\n${{ steps.tags.outputs.tags }}"
-      #    echo -e "labels:\n${{ steps.tags.outputs.labels }}"
-      #
-      #- name: "2 - Docker Tags"
-      #  id: tags2
-      #  uses: cssnr/docker-tags-action@master
-      #  continue-on-error: true
-      #  with:
-      #    tags: |
-      #      "0.0.1"
-      #      ${{ false && 'pre' || '' }}
-      #
-      #- name: "2 - Debug Docker Tags"
-      #  continue-on-error: true
-      #  run: |
-      #    echo -e "tags:\n${{ steps.tags2.outputs.tags }}"
-      #    echo -e "labels:\n${{ steps.tags2.outputs.labels }}"
-      #
-      #- name: "3 - Docker Tags"
-      #  id: tags3
-      #  uses: cssnr/docker-tags-action@master
-      #  continue-on-error: true
-      #  with:
-      #    tags: |
-      #      "0.0.2-rip1"
-      #      ""
-      #
-      #- name: "3 - Debug Docker Tags"
-      #  continue-on-error: true
-      #  run: |
-      #    echo -e "tags:\n${{ steps.tags3.outputs.tags }}"
-      #    echo -e "labels:\n${{ steps.tags3.outputs.labels }}"
+  #- name: "Setup Node 22"
+  #  uses: actions/setup-node@v4
+  #  with:
+  #    node-version: 22
 
-      #- name: "Setup Python 3.12"
-      #  uses: actions/setup-python@v5
-      #  with:
-      #    python-version: "3.12"
+  #- name: "Checkout highlight.js"
+  #  uses: actions/checkout@v4
+  #  with:
+  #    repository: "highlightjs/highlight.js"
+  #    ref: "11.11.1"
+  #    path: ".github/highlightjs"
 
-      #- name: "Setup Node 22"
-      #  uses: actions/setup-node@v4
-      #  with:
-      #    node-version: 22
+  #- name: "Build highlight.js"
+  #  working-directory: ".github/scripts"
+  #  env:
+  #    destination: "${{ github.workspace }}/app/src/main/assets/preview/dist"
+  #  run: |
+  #    bash prepare.sh
+  #
+  #- name: "Debug"
+  #  continue-on-error: true
+  #  run: |
+  #    ls -lAh ../
+  #    ls -lAh .
+  #    ls -lAhR app
 
-      #- name: "Checkout highlight.js"
-      #  uses: actions/checkout@v4
-      #  with:
-      #    repository: "highlightjs/highlight.js"
-      #    ref: "11.11.1"
-      #    path: ".github/highlightjs"
+  #      - name: "Debug event.json"
+  #        run: |
+  #          cat "${GITHUB_EVENT_PATH}"
+  #
+  #      - name: "Docker Test Action"
+  #        uses: smashedr/docker-test-action@v1
 
-      #- name: "Build highlight.js"
-      #  working-directory: ".github/scripts"
-      #  env:
-      #    destination: "${{ github.workspace }}/app/src/main/assets/preview/dist"
-      #  run: |
-      #    bash prepare.sh
-      #
-      #- name: "Debug"
-      #  continue-on-error: true
-      #  run: |
-      #    ls -lAh ../
-      #    ls -lAh .
-      #    ls -lAhR app
+  #- name: "Run Number"
+  #  id: run
+  #  run: |
+  #    #exit $((RANDOM % 2))
+  #    echo "number=$(echo $((50 + ${{ github.run_number }})))" >> "$GITHUB_OUTPUT"
 
-      #      - name: "Debug event.json"
-      #        run: |
-      #          cat "${GITHUB_EVENT_PATH}"
-      #
-      #      - name: "Docker Test Action"
-      #        uses: smashedr/docker-test-action@v1
+  #- name: "Debug"
+  #  run: |
+  #    echo "GITHUB_WORKFLOW_REF: ${GITHUB_WORKFLOW_REF}"
 
-      #- name: "Run Number"
-      #  id: run
-      #  run: |
-      #    #exit $((RANDOM % 2))
-      #    echo "number=$(echo $((50 + ${{ github.run_number }})))" >> "$GITHUB_OUTPUT"
+  #    echo "github.event_name: ${{ github.event_name }}"
+  #    echo "github.workflow: ${{ github.workflow }}"
+  #    echo "github.ref_name: ${{ github.ref_name }}"
+  #    echo "github.ref: ${{ github.ref }}"
+  #    echo "pull_request.number: ${{ github.event.pull_request.number }}"
 
-      #- name: "Debug"
-      #  run: |
-      #    echo "GITHUB_WORKFLOW_REF: ${GITHUB_WORKFLOW_REF}"
+  #    echo "::group::env"
+  #    env
+  #    echo "::endgroup::"
 
-      #    echo "github.event_name: ${{ github.event_name }}"
-      #    echo "github.workflow: ${{ github.workflow }}"
-      #    echo "github.ref_name: ${{ github.ref_name }}"
-      #    echo "github.ref: ${{ github.ref }}"
-      #    echo "pull_request.number: ${{ github.event.pull_request.number }}"
+  #    echo "::group::set"
+  #    set -o
+  #    echo "::endgroup::"
 
-      #    echo "::group::env"
-      #    env
-      #    echo "::endgroup::"
-
-      #    echo "::group::set"
-      #    set -o
-      #    echo "::endgroup::"
-
-      #- name: "Anne O. Tate"
-      #  if: ${{ !cancelled() }}
-      #  run: |
-      #    name=".github/workflows/push.yaml"
-      #    path="$(readlink -f "${name}")"
-      #    echo "path: ${path}"
-      #    root=$(git rev-parse --show-toplevel)
-      #    echo "root: ${root}"
-      #    file="$(realpath --relative-to="${root}" ${path})"
-      #    echo "file: ${file}"
-      #    echo "::warning file=${file},line=55::You Fucked Up Chuck"
-
+  #- name: "Anne O. Tate"
+  #  if: ${{ !cancelled() }}
+  #  run: |
+  #    name=".github/workflows/push.yaml"
+  #    path="$(readlink -f "${name}")"
+  #    echo "path: ${path}"
+  #    root=$(git rev-parse --show-toplevel)
+  #    echo "root: ${root}"
+  #    file="$(realpath --relative-to="${root}" ${path})"
+  #    echo "file: ${file}"
+  #    echo "::warning file=${file},line=55::You Fucked Up Chuck"
 #
 #
 #- name: "Purge Cache Action"
