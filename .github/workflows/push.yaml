@@ -17,15 +17,15 @@ jobs:
       - name: "Checkout"
         uses: actions/checkout@v4
 
-      - name: "Algolia Start Crawl"
-        continue-on-error: true
-        uses: cssnr/web-request-action@v1
-        env:
-          CRAWLER_ID: af2f517b-d6f4-4a68-ad9e-93803cdd9ea6
-        with:
-          url: https://crawler.algolia.com/api/1/crawlers/${{ env.CRAWLER_ID }}/reindex
-          username: ${{ secrets.CRAWLER_USER_ID }}
-          password: ${{ secrets.CRAWLER_API_KEY }}
+      #- name: "Algolia Start Crawl"
+      #  continue-on-error: true
+      #  uses: cssnr/web-request-action@v1
+      #  env:
+      #    CRAWLER_ID: af2f517b-d6f4-4a68-ad9e-93803cdd9ea6
+      #  with:
+      #    url: https://crawler.algolia.com/api/1/crawlers/${{ env.CRAWLER_ID }}/reindex
+      #    username: ${{ secrets.CRAWLER_USER_ID }}
+      #    password: ${{ secrets.CRAWLER_API_KEY }}
 
   #second:
   #  name: "Second"
