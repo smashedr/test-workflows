@@ -17,6 +17,13 @@ jobs:
       - name: "Checkout"
         uses: actions/checkout@v4
 
+      - name: "Algolia Crawler"
+        uses: cssnr/algolia-crawler-action@master
+        with:
+          crawler_id: af2f517b-d6f4-4a68-ad9e-93803cdd9ea6
+          crawler_user_id: ${{ secrets.CRAWLER_USER_ID }}
+          crawler_api_key: ${{ secrets.CRAWLER_API_KEY }}
+
       #- name: "Algolia Start Crawl"
       #  continue-on-error: true
       #  uses: cssnr/web-request-action@v1
