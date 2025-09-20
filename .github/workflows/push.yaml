@@ -33,6 +33,7 @@ jobs:
       - name: "Debug"
         continue-on-error: true
         run: |
+          ls -lah .
           ls -lah .config
 
       #- name: "Algolia Crawler"
