@@ -24,7 +24,7 @@ jobs:
         with:
           repository: cssnr/configs
           ref: master
-          #path: .configs
+          path: .configs
           sparse-checkout: |
             labels/**
           sparse-checkout-cone-mode: false
@@ -33,7 +33,8 @@ jobs:
         continue-on-error: true
         run: |
           ls -lah .
-          ls -lah labels
+          ls -lah .configs
+          ls -lah .configs/labels
 
       #- name: "Algolia Crawler"
       #  uses: cssnr/algolia-crawler-action@updates
