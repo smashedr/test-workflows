@@ -24,7 +24,7 @@ jobs:
         with:
           repository: cssnr/configs
           ref: master
-          path: .configs
+          #path: .configs
           sparse-checkout: |
             labels/labeler.yaml
             labels/labels.yaml
@@ -34,7 +34,7 @@ jobs:
         continue-on-error: true
         run: |
           ls -lah .
-          ls -lah .configs
+          ls -lah labels
 
       #- name: "Algolia Crawler"
       #  uses: cssnr/algolia-crawler-action@updates
