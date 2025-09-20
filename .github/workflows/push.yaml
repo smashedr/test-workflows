@@ -32,9 +32,13 @@ jobs:
       - name: "Debug"
         continue-on-error: true
         run: |
-          ls -lah .
-          ls -lah .configs
-          ls -lah .configs/labels
+          echo "::group::labels.yaml"
+          cat .configs/labels/labels.yaml
+          echo "::endgroup::"
+
+          echo "::group::labeler.yaml"
+          cat .configs/labels/labeler.yaml
+          echo "::endgroup::"
 
       #- name: "Algolia Crawler"
       #  uses: cssnr/algolia-crawler-action@updates
