@@ -45,7 +45,7 @@ jobs:
         with:
           file: ".github/labels.yaml"
           delete: true
-          dry-run: true
+          #dry-run: true
 
       #- name: "Algolia Crawler"
       #  uses: cssnr/algolia-crawler-action@updates
