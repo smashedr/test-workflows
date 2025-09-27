@@ -1,11 +1,15 @@
 name: "Push"
 
+# I am change
+
 on:
   workflow_dispatch:
+    inputs:
+      eslint:
+        description: "ESLint"
+        required: false
   push:
     branches: ["**"]
-
-# I am change
 
 jobs:
   push:
@@ -17,35 +21,44 @@ jobs:
       pull-requests: write
 
     steps:
-      #- name: "Checkout"
-      #  uses: actions/checkout@v4
-
-      - name: "Checkout Configs"
+      - name: "Checkout"
         uses: actions/checkout@v4
-        with:
-          repository: cssnr/configs
-          ref: master
-          path: .configs
-          sparse-checkout: |
-            labels/**
-          sparse-checkout-cone-mode: false
 
-      - name: "Debug"
+      - name: "Debug 1"
         continue-on-error: true
+        if: ${{ !cancelled() }}
         run: |
-          echo "::group::labels.yaml"
-          cat .configs/labels/labels.yaml
-          echo "::endgroup::"
-
-          echo "::group::labeler.yaml"
-          cat .configs/labels/labeler.yaml
-          echo "::endgroup::"
+          echo "inputs.eslint: ${{ inputs.eslint }}"
+          if [ -n "${{ inputs.eslint }}" ];then
+            echo "inputs.eslint IS NOT EMPTY"
+          fi
 
       - name: "Debug 2"
         continue-on-error: true
+        if: ${{ !cancelled() && inputs.eslint }}
         run: |
-          which prettier
-          prettier --check .
+          echo "SUCCESS"
+
+      #- name: "Checkout Configs"
+      #  uses: actions/checkout@v4
+      #  with:
+      #    repository: cssnr/configs
+      #    ref: master
+      #    path: .configs
+      #    sparse-checkout: |
+      #      labels/**
+      #    sparse-checkout-cone-mode: false
+
+      #- name: "Debug"
+      #  continue-on-error: true
+      #  run: |
+      #    echo "::group::labels.yaml"
+      #    cat .configs/labels/labels.yaml
+      #    echo "::endgroup::"
+      #
+      #    echo "::group::labeler.yaml"
+      #    cat .configs/labels/labeler.yaml
+      #    echo "::endgroup::"
 
       #- name: "Label Creator"
       #  uses: cssnr/label-creator-action@master
