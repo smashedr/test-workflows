@@ -25,19 +25,24 @@ jobs:
         uses: actions/checkout@v4
 
       - name: "Debug 1"
-        continue-on-error: true
-        if: ${{ !cancelled() }}
         run: |
-          echo "inputs.eslint: ${{ inputs.eslint }}"
-          if [ -n "${{ inputs.eslint }}" ];then
-            echo "inputs.eslint IS NOT EMPTY"
-          fi
+          which sshpass
+          sshpass -V
 
-      - name: "Debug 2"
-        continue-on-error: true
-        if: ${{ !cancelled() && inputs.eslint != 'false' }}
-        run: |
-          echo "SUCCESS"
+      #- name: "Debug 1"
+      #  continue-on-error: true
+      #  if: ${{ !cancelled() }}
+      #  run: |
+      #    echo "inputs.eslint: ${{ inputs.eslint }}"
+      #    if [ -n "${{ inputs.eslint }}" ];then
+      #      echo "inputs.eslint IS NOT EMPTY"
+      #    fi
+
+      #- name: "Debug 2"
+      #  continue-on-error: true
+      #  if: ${{ !cancelled() && inputs.eslint != 'false' }}
+      #  run: |
+      #    echo "SUCCESS"
 
       #- name: "Checkout Configs"
       #  uses: actions/checkout@v4
