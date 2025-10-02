@@ -66,10 +66,10 @@ jobs:
         uses: docker/metadata-action@v5
         with:
           images: "ghcr.io/${{ github.repository }}"
+          tags: ${{ steps.version.outputs.tags }}
           #flavor: |
           #  latest=auto
           #  prefix=v,onlatest=false
-          tags: ${{ steps.version.outputs.tags }}
 
       - name: "Debug Docker Metadata"
         run: |
