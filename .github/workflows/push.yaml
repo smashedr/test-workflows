@@ -22,12 +22,13 @@ jobs:
       - name: "Debug"
         continue-on-error: true
         run: |
-          echo vars.REDIRECTS: ${{ vars.REDIRECTS }}
+          echo vars.REDIRECTS - ${{ vars.REDIRECTS }}
+          echo toJson - ${{ toJson(vars.REDIRECTS) }}
 
-      - name: "Retard"
-        continue-on-error: true
-        run: |
-          echo: ${{ toJson(vars.REDIRECTS) }}
+      #- name: "Retard"
+      #  continue-on-error: true
+      #  run: |
+      #    echo ${{ toJson(vars.REDIRECTS) }}
 
       #- name: "Algolia Crawler"
       #  uses: cssnr/algolia-crawler-action@updates
