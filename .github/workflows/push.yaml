@@ -22,7 +22,7 @@ jobs:
       - name: "Debug"
         continue-on-error: true
         run: |
-          echo vars.REDIRECTS - ${{ vars.REDIRECTS }}
+          echo vars.REDIRECTS - '${{ vars.REDIRECTS }}' | od -c
 
       #- name: "Retard"
       #  continue-on-error: true
