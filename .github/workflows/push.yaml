@@ -19,6 +19,11 @@ jobs:
       - name: "Checkout"
         uses: actions/checkout@v4
 
+      - name: "Debug"
+        continue-on-error: true
+        run: |
+          toJson: ${{ toJson({ "REDIRECTS": secrets.REDIRECTS }) }}
+
       #- name: "Algolia Crawler"
       #  uses: cssnr/algolia-crawler-action@updates
       #  with:
@@ -172,6 +177,7 @@ jobs:
   #    file="$(realpath --relative-to="${root}" ${path})"
   #    echo "file: ${file}"
   #    echo "::warning file=${file},line=55::You Fucked Up Chuck"
+
 #
 #
 #- name: "Purge Cache Action"
