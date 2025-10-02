@@ -22,7 +22,7 @@ jobs:
       - name: "Debug"
         continue-on-error: true
         run: |
-          echo vars.REDIRECTS - '${{ vars.REDIRECTS }}'
+          echo vars.REDIRECTS - '${{ toJSON(vars.REDIRECTS) }}'
 
       #- name: "Retard"
       #  continue-on-error: true
