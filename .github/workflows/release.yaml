@@ -2,6 +2,10 @@ name: "Release"
 
 on:
   workflow_dispatch:
+    inputs:
+      tags:
+        description: "Extra Tags: comma,separated"
+        required: false
   release:
     types: [published]
 
@@ -25,16 +29,31 @@ jobs:
         if: ${{ !github.event.act }}
         continue-on-error: true
         run: |
-          echo versionCode: ${{ github.run_number }}
-          echo versionName: ${{ github.ref_name }}
+          echo github.ref_name: ${{ github.ref_name }}
+          echo inputs.tags: ${{ inputs.tags }}
 
-      - name: "Generate Tags"
+      - name: "Generate Version Tags"
+        id: version
+        uses: cssnr/update-version-tags-action@v1
+        with:
+          tags: ${{ inputs.tags }}
+          dry_run: true
+          prefix: ""
+
+      - name: "Debug Version Tags"
+        continue-on-error: true
+        run: |
+          echo "github.ref_name: ${{ github.ref_name }}"
+          echo "steps.version.outputs.tags: ${{ steps.version.outputs.tags }}"
+
+      - name: "Generate Docker Tags"
         id: tags
         uses: smashedr/docker-tags-action@v1
         with:
           images: "ghcr.io/${{ github.repository }}"
+          tags: ${{ steps.version.outputs.tags }}
 
-      - name: "Debug Tags"
+      - name: "Debug Docker Tags"
         continue-on-error: true
         run: |
           echo "github.ref_name: ${{ github.ref_name }}"
@@ -50,8 +69,9 @@ jobs:
           #flavor: |
           #  latest=auto
           #  prefix=v,onlatest=false
+          tags: ${{ steps.version.outputs.tags }}
 
-      - name: "Echo Metadata"
+      - name: "Debug Docker Metadata"
         run: |
           echo "github.ref_name: ${{ github.ref_name }}"
           echo "tags: ${{ steps.meta.outputs.tags }}"
