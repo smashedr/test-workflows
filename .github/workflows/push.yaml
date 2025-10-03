@@ -19,7 +19,7 @@ jobs:
         uses: actions/checkout@v5
 
       - name: "Debug"
-        continue-on-error: true
+        #continue-on-error: true
         run: |
           echo vars.REDIRECTS - '${{ toJSON(vars.REDIRECTS) }}'
           sleep 5
