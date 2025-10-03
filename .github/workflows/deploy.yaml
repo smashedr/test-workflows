@@ -3,11 +3,13 @@ name: "Deploy"
 on:
   workflow_dispatch:
   workflow_run:
-    workflows:
-      - "Push"
-      - "Release"
-    types:
-      - completed
+    workflows: ["Push"]
+    types: [completed]
+
+env:
+  stack-name: ${{ github.repository_owner }}-${{ github.event.repository.name }}
+  stack-file: docker-compose-swarm.yaml
+  traefik-host: badges.cssnr.com
 
 jobs:
   dispatch:
@@ -33,11 +35,19 @@ jobs:
           GITHUB_CTX: ${{ toJSON(github) }}
         run: echo "$GITHUB_CTX"
 
-      - name: "Dump github.event.workflow_run"
+      #- name: "Dump github.event.workflow_run"
+      #  continue-on-error: true
+      #  env:
+      #    GITHUB_CTX: ${{ toJSON(github.event.workflow_run) }}
+      #  run: echo "$GITHUB_CTX"
+
+      - name: "Debug Variables"
         continue-on-error: true
-        env:
-          GITHUB_CTX: ${{ toJSON(github.event.workflow_run) }}
-        run: echo "$GITHUB_CTX"
+        run: |
+          echo "VERSION: ${{ github.ref_name }}"
+          echo "stack-name: ${{ env.stack-name }}"
+          echo "stack-file: ${{ env.stack-file }}"
+          echo "traefik-host: ${{ env.traefik-host }}"
 
       - name: "Debug"
         continue-on-error: true
