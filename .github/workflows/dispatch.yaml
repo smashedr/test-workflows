@@ -25,14 +25,32 @@ jobs:
       - name: "Checkout"
         uses: actions/checkout@v5
 
+      - name: "Debug event.json"
+        continue-on-error: true
+        run: |
+          cat "${GITHUB_EVENT_PATH}"
+
+      - name: "Dump github"
+        continue-on-error: true
+        env:
+          GITHUB_CTX: ${{ toJSON(github) }}
+        run: echo "$GITHUB_CTX"
+
+      - name: "Dump github.event.workflow_run"
+        continue-on-error: true
+        env:
+          GITHUB_CTX: ${{ toJSON(github.event.workflow_run) }}
+        run: echo "$GITHUB_CTX"
+
       - name: "Debug"
+        continue-on-error: true
         run: |
           echo github.event_name: ${{ github.event_name }}
           echo github.ref_name : ${{ github.ref_name  }}
-          echo github.event.workflow_run - '${{ github.event.workflow_run }}'
           echo github.event.workflow_run.conclusion - '${{ github.event.workflow_run.conclusion }}'
 
       #- name: "Debug Release"
+      #  continue-on-error: true
       #  run: |
       #    echo steps.release.outputs.tag_name: ${{ steps.release.outputs.tag_name }}
       #    ls -lAh .
