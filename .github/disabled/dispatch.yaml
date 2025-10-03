@@ -1,0 +1,82 @@
+name: "Dispatch"
+
+on:
+  #push:
+  #  branches: ["**"]
+  workflow_dispatch:
+    inputs:
+      string:
+        description: "String Input"
+        type: string
+      env:
+        description: "Environment to Deploy"
+        required: true
+        default: "dev"
+        type: choice
+        options:
+          - dev
+          - prod
+
+env:
+  name: cssnr
+  url: https://cssnr.com
+  string: ${{ inputs.string == '' && 'true' || 'false' }}
+
+jobs:
+  dispatch:
+    name: "Dispatch"
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: write
+    #environment:
+    #  name: ${{ env.name }}
+    #  url: ${{ env.url }}
+
+    steps:
+      - name: "Checkout"
+        uses: actions/checkout@v4
+
+      - name: "Debug"
+        run: |
+          #echo github.event_name: ${{ github.event_name }}
+          #echo github.ref_name : ${{ github.ref_name  }}
+
+          echo inputs.string: ${{ inputs.string }}
+          echo env.string: ${{ env.string }}
+          if [ "${{ env.string }}" == "test" ];then
+            ECHO YES TEST
+          fi
+
+      - name: "String"
+        if: ${{ env.string }}
+        run: |
+          echo inputs.string: ${{ inputs.string }}
+
+      #- name: "Latest"
+      #  id: latest
+      #  env:
+      #    GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #  run: |
+      #    latest=$(gh release list --exclude-pre-releases --exclude-drafts --limit 1 --json tagName)
+      #    tag_name=$(echo "${latest}" | jq -r '.[0].tagName')
+      #    echo "tag=${tag_name}" >> "$GITHUB_OUTPUT"
+
+      #- name: "Debug Latest"
+      #  run: |
+      #    echo steps.latest.outputs.tag: ${{ steps.latest.outputs.tag }}
+
+      #- name: "Download Release"
+      #  uses: robinraju/release-downloader@v1
+      #  id: release
+      #  with:
+      #    #tag: ${{ steps.latest.outputs.tag }}
+      #    fileName: "*"
+      #    latest: true
+      #    out-file-path: "dist"
+
+      #- name: "Debug Release"
+      #  run: |
+      #    echo steps.release.outputs.tag_name: ${{ steps.release.outputs.tag_name }}
+      #    ls -lAh .
+      #    ls -lAh dist/
