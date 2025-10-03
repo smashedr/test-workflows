@@ -1,6 +1,7 @@
-name: "Dispatch"
+name: "Deploy"
 
 on:
+  workflow_dispatch:
   workflow_run:
     workflows:
       - "Push"
@@ -10,7 +11,7 @@ on:
 
 jobs:
   dispatch:
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    if: ${{ github.event_name == 'workflow_dispatch' || (github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.event == 'release') }}
     name: "Dispatch"
     runs-on: ubuntu-latest
     timeout-minutes: 5

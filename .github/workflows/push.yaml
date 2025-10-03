@@ -45,11 +45,6 @@ jobs:
           echo inputs.fail : ${{ inputs.fail }}
           exit 0
 
-      - name: "Fail"
-        if: ${{ inputs.fail }}
-        run: |
-          exit 1
-
       #- name: "Retard"
       #  continue-on-error: true
       #  run: |
@@ -71,6 +66,11 @@ jobs:
       #    url: https://crawler.algolia.com/api/1/crawlers/${{ env.CRAWLER_ID }}/reindex
       #    username: ${{ secrets.CRAWLER_USER_ID }}
       #    password: ${{ secrets.CRAWLER_API_KEY }}
+
+      - name: "Fail"
+        if: ${{ inputs.fail }}
+        run: |
+          exit 1
 
   #second:
   #  name: "Second"

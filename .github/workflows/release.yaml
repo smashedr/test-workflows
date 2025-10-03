@@ -6,6 +6,11 @@ on:
       tags:
         description: "Extra Tags: comma,separated"
         required: false
+      fail:
+        description: "Fail Job"
+        required: false
+        type: boolean
+        default: false
   release:
     types: [published]
 
@@ -155,3 +160,8 @@ jobs:
       #    mkdir -p whatsNew
       #    echo "${{ steps.notes.outputs.summary }}" > whatsNew/whatsnew-en-US
       #    cat whatsNew/whatsnew-en-US
+
+      - name: "Fail"
+        if: ${{ inputs.fail }}
+        run: |
+          exit 1
