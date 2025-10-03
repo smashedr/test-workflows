@@ -9,6 +9,7 @@ on:
 
 jobs:
   dispatch:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     name: "Dispatch"
     runs-on: ubuntu-latest
     timeout-minutes: 5
@@ -24,6 +25,8 @@ jobs:
         run: |
           echo github.event_name: ${{ github.event_name }}
           echo github.ref_name : ${{ github.ref_name  }}
+          echo github.event.workflow_run - '${{ github.event.workflow_run }}'
+          echo github.event.workflow_run.conclusion - '${{ github.event.workflow_run.conclusion }}'
 
       #- name: "Debug Release"
       #  run: |

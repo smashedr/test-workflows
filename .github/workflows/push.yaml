@@ -8,7 +8,6 @@ on:
 
 jobs:
   push:
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     name: "Push"
     runs-on: ubuntu-latest
     timeout-minutes: 5
@@ -23,9 +22,9 @@ jobs:
       - name: "Debug"
         #continue-on-error: true
         run: |
-          echo github.event.workflow_run - '${{ github.event.workflow_run }}'
-          echo github.event.workflow_run.conclusion - '${{ github.event.workflow_run.conclusion }}'
-          sleep 5
+          echo github.event_name: ${{ github.event_name }}
+          echo github.ref_name : ${{ github.ref_name  }}
+          sleep 10
           exit 1
 
       #- name: "Retard"
