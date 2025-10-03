@@ -24,6 +24,7 @@ jobs:
           echo vars.REDIRECTS - '${{ toJSON(vars.REDIRECTS) }}'
           sleep 5
           echo '{ "REDIRECTS": ${{ toJSON(vars.REDIRECTS) }} }'
+          exit 1
 
       #- name: "Retard"
       #  continue-on-error: true
