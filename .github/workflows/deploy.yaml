@@ -2,54 +2,46 @@ name: "Deploy"
 
 on:
   workflow_dispatch:
+    inputs:
+      version:
+        description: "Version Tag"
+        default: "latest"
+        required: false
   workflow_run:
-    workflows: ["Push"]
+    workflows: ["Push", "Release", "Build"]
     types: [completed]
 
 env:
   stack-name: ${{ github.repository_owner }}-${{ github.event.repository.name }}
   stack-file: docker-compose-swarm.yaml
   traefik-host: badges.cssnr.com
+  version: ${{ inputs.version || github.event.workflow_run.head_branch || github.ref_name }}
 
 jobs:
-  dispatch:
-    if: ${{ github.event_name == 'workflow_dispatch' || (github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.event == 'release') }}
-    name: "Dispatch"
+  deploy:
+    if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
+    name: "Deploy"
     runs-on: ubuntu-latest
     timeout-minutes: 5
-
-    permissions:
-      contents: write
 
     environment:
       name: cssnr
       url: https://www.cssnr.com/
 
     steps:
-      - name: "Checkout"
-        uses: actions/checkout@v5
-
-      - name: "Dump github"
+      - name: "Debug Event"
         continue-on-error: true
-        env:
-          GITHUB_CTX: ${{ toJSON(github) }}
-        run: echo "$GITHUB_CTX"
-
-      #- name: "Dump github.event.workflow_run"
-      #  continue-on-error: true
-      #  env:
-      #    GITHUB_CTX: ${{ toJSON(github.event.workflow_run) }}
-      #  run: echo "$GITHUB_CTX"
+        run: |
+          cat "${GITHUB_EVENT_PATH}"
 
       - name: "Debug Variables"
         continue-on-error: true
         run: |
-          echo "VERSION: ${{ github.ref_name }}"
-          echo "stack-name: ${{ env.stack-name }}"
-          echo "stack-file: ${{ env.stack-file }}"
-          echo "traefik-host: ${{ env.traefik-host }}"
+          echo "VERSION: ${{ env.version }}"
+          echo "STACK_NAME: ${{ env.stack-name }}"
+          echo "TRAEFIK_HOST: ${{ env.traefik-host }}"
 
-      - name: "Debug"
+      - name: "EXTRA Debug"
         continue-on-error: true
         run: |
           echo github.event_name: ${{ github.event_name }}
