@@ -1,6 +1,13 @@
 name: "Push"
 
 on:
+  workflow_dispatch:
+    inputs:
+      fail:
+        description: "Fail Job"
+        required: false
+        type: boolean
+        default: false
   push:
     branches: ["**"]
 
@@ -24,18 +31,24 @@ jobs:
         run: |
           cat "${GITHUB_EVENT_PATH}"
 
-      - name: "Dump github"
-        continue-on-error: true
-        env:
-          GITHUB_CTX: ${{ toJSON(github) }}
-        run: echo "$GITHUB_CTX"
+      #- name: "Dump object"
+      #  continue-on-error: true
+      #  env:
+      #    GITHUB_CTX: ${{ toJSON(github) }}
+      #  run: echo "$GITHUB_CTX"
 
       - name: "Debug"
         #continue-on-error: true
         run: |
           echo github.event_name: ${{ github.event_name }}
           echo github.ref_name : ${{ github.ref_name  }}
+          echo inputs.fail : ${{ inputs.fail }}
           exit 0
+
+      - name: "Fail"
+        if: ${{ inputs.fail }}
+        run: |
+          exit 1
 
       #- name: "Retard"
       #  continue-on-error: true

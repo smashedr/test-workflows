@@ -4,6 +4,7 @@ on:
   workflow_run:
     workflows:
       - "Push"
+      - "Release"
     types:
       - completed
 
@@ -24,11 +25,6 @@ jobs:
     steps:
       - name: "Checkout"
         uses: actions/checkout@v5
-
-      - name: "Debug event.json"
-        continue-on-error: true
-        run: |
-          cat "${GITHUB_EVENT_PATH}"
 
       - name: "Dump github"
         continue-on-error: true

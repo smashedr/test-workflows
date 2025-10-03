@@ -29,6 +29,7 @@ jobs:
         if: ${{ !github.event.act }}
         continue-on-error: true
         run: |
+          echo github.event_name: ${{ github.event_name }}
           echo github.ref_name: ${{ github.ref_name }}
           echo inputs.tags: ${{ inputs.tags }}
 
