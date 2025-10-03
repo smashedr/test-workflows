@@ -37,7 +37,7 @@ jobs:
       - name: "Debug Variables"
         continue-on-error: true
         run: |
-          echo "VERSION: ${{ env.version }}"
+          echo "VERSION: ${{ env.version == 'master' && 'latest' || env.version }}"
           echo "STACK_NAME: ${{ env.stack-name }}"
           echo "TRAEFIK_HOST: ${{ env.traefik-host }}"
 
