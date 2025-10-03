@@ -3,7 +3,7 @@ name: "Dispatch"
 on:
   workflow_run:
     workflows:
-      - "Build"
+      - "Push"
     types:
       - completed
 
