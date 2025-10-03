@@ -1,7 +1,6 @@
 name: "Push"
 
 on:
-  workflow_dispatch:
   push:
     branches: ["**"]
 
@@ -17,12 +16,13 @@ jobs:
 
     steps:
       - name: "Checkout"
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: "Debug"
         continue-on-error: true
         run: |
-          #echo vars.REDIRECTS - '${{ toJSON(vars.REDIRECTS) }}'
+          echo vars.REDIRECTS - '${{ toJSON(vars.REDIRECTS) }}'
+          sleep 5
           echo '{ "REDIRECTS": ${{ toJSON(vars.REDIRECTS) }} }'
 
       #- name: "Retard"
