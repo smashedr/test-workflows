@@ -31,15 +31,16 @@ jobs:
         run: |
           cat "${GITHUB_EVENT_PATH}"
 
-      #- name: "Dump object"
-      #  continue-on-error: true
-      #  env:
-      #    GITHUB_CTX: ${{ toJSON(github) }}
-      #  run: echo "$GITHUB_CTX"
+      - name: "Dump object"
+        continue-on-error: true
+        env:
+          GITHUB_CTX: ${{ toJSON(github) }}
+        run: echo "$GITHUB_CTX"
 
       - name: "Debug"
         #continue-on-error: true
         run: |
+          echo github.repository: ${{ github.repository }}
           echo github.event_name: ${{ github.event_name }}
           echo github.ref_name : ${{ github.ref_name  }}
           echo inputs.fail : ${{ inputs.fail }}
