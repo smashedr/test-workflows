@@ -1,13 +1,92 @@
 name: "Build"
 
 on:
-  push:
-    branches: ["**"]
+  workflow_dispatch:
+    inputs:
+      build:
+        description: "Run Build"
+        type: boolean
+        default: false
+      tags:
+        description: "Extra Tags: comma,separated"
+      deploy:
+        description: "Run Deploy"
+        type: boolean
+        default: true
+      tag:
+        description: "Deploy Tag"
+        default: "latest"
+  release:
+    types: [published]
+
+env:
+  traefik-host: badges.cssnr.com
+  stack-file: docker-compose-swarm.yaml
+  stack-name: ${{ github.repository_owner }}-${{ github.event.repository.name }}
+  version: ${{ inputs.tag || github.ref_name }} # TODO: Confirm this is not latest on release
 
 jobs:
   build:
-    runs-on: macos-latest
+    name: "Build"
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    permissions:
+      contents: write
+      packages: write
+
     steps:
-      - name: "Fastlane"
+      - name: "Checkout"
+        uses: actions/checkout@v5
+
+      - name: "Update Version Tags"
+        id: version
+        uses: cssnr/update-version-tags-action@v1
+        with:
+          tags: ${{ inputs.tags }}
+          prefix: ""
+          dry_run: true
+
+      - name: "Debug Version Tags"
+        continue-on-error: true
         run: |
-          which -a fastlane
+          echo "github.ref_name: ${{ github.ref_name }}"
+          echo "steps.version.outputs.tags: ${{ steps.version.outputs.tags }}"
+
+      - name: "Generate Docker Tags"
+        id: tags
+        uses: cssnr/docker-tags-action@v1
+        with:
+          images: "ghcr.io/${{ github.repository }}"
+          tags: ${{ steps.version.outputs.tags }}
+
+      - name: "Debug Docker Tags"
+        continue-on-error: true
+        run: |
+          echo "github.ref_name: ${{ github.ref_name }}"
+          echo "tags: ${{ steps.tags.outputs.tags }}"
+          echo "labels: ${{ steps.tags.outputs.labels }}"
+          echo "annotations: ${{ steps.tags.outputs.annotations }}"
+
+  deploy:
+    name: "Deploy"
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    needs: [build]
+
+    environment:
+      name: cssnr
+      url: https://www.cssnr.com/
+
+    steps:
+      - name: "Debug Event"
+        continue-on-error: true
+        run: |
+          cat "${GITHUB_EVENT_PATH}"
+
+      - name: "Debug Variables"
+        continue-on-error: true
+        run: |
+          echo "VERSION: ${{ env.version == 'master' && 'latest' || env.version }}"
+          echo "STACK_NAME: ${{ env.stack-name }}"
+          echo "TRAEFIK_HOST: ${{ env.traefik-host }}"
