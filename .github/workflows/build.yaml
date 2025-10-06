@@ -46,6 +46,7 @@ jobs:
           tag: ${{ inputs.tags }}
           prefix: ""
           dry_run: true
+          create: true
           #major: ${{ inputs.tags == '' }}
           #minor: ${{ inputs.tags == '' }}
 
