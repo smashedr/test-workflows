@@ -8,7 +8,7 @@ on:
         type: boolean
         default: false
       tags:
-        description: "Extra Tags: comma,separated"
+        description: "Build Tag"
       deploy:
         description: "Run Deploy"
         type: boolean
@@ -43,11 +43,11 @@ jobs:
         id: version
         uses: cssnr/update-version-tags-action@v1
         with:
-          tags: ${{ inputs.tags }}
+          tag: ${{ inputs.tags }}
           prefix: ""
           dry_run: true
-          major: ${{ inputs.tags == '' }}
-          minor: ${{ inputs.tags == '' }}
+          #major: ${{ inputs.tags == '' }}
+          #minor: ${{ inputs.tags == '' }}
 
       - name: "Debug Version Tags"
         continue-on-error: true
