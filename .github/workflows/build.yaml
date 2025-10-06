@@ -41,7 +41,7 @@ jobs:
 
       - name: "Update Version Tags"
         id: version
-        uses: cssnr/update-version-tags-action@v1
+        uses: cssnr/update-version-tags-action@create
         with:
           tag: ${{ inputs.tags }}
           prefix: ""
