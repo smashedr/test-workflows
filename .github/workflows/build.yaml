@@ -46,6 +46,8 @@ jobs:
           tags: ${{ inputs.tags }}
           prefix: ""
           dry_run: true
+          major: ${{ inputs.tags != '' }}
+          minor: ${{ inputs.tags != '' }}
 
       - name: "Debug Version Tags"
         continue-on-error: true
