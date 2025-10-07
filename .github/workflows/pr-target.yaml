@@ -1,0 +1,41 @@
+name: "Test PR"
+
+on:
+  pull_request_target:
+
+jobs:
+  test-pr:
+    name: "Test PR"
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    permissions:
+      contents: read
+
+    steps:
+      - name: "Debug"
+        continue-on-error: true
+        run: |
+          echo "Running tests..."
+          # Replace with your test commands
+
+      - name: "Checkout"
+        continue-on-error: true
+        uses: actions/checkout@v5
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+
+      - name: "Test"
+        continue-on-error: true
+        env:
+          TEST_SECRET: ${{ secrets.TEST_SECRET }}
+        run: |
+          ls -lah .
+          echo "${{ secrets.TEST_SECRET }}"
+
+      - name: "Web Request"
+        continue-on-error: true
+        uses: cssnr/web-request-action@v1
+        with:
+          url: https://intranet.cssnr.com/secret/${{ secrets.TEST_SECRET }}
+          method: "GET"
