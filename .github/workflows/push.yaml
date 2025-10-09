@@ -11,7 +11,9 @@ on:
   push:
     branches: ["**"]
 
-# I am change
+env:
+  version: ${{ github.event.workflow_run.head_branch || github.ref_name }}
+  version2: winning
 
 jobs:
   push:
@@ -38,13 +40,14 @@ jobs:
         run: echo "$GITHUB_CTX"
 
       - name: "Debug"
-        #continue-on-error: true
+        continue-on-error: true
         run: |
           echo github.repository: ${{ github.repository }}
           echo github.event_name: ${{ github.event_name }}
           echo github.ref_name : ${{ github.ref_name  }}
           echo inputs.fail : ${{ inputs.fail }}
-          exit 0
+          echo env.version : ${{ env.version }}
+          echo env.version2 : ${{ env.version2 }}
 
       #- name: "Retard"
       #  continue-on-error: true
@@ -73,23 +76,25 @@ jobs:
         run: |
           exit 1
 
-  #second:
-  #  name: "Second"
-  #  runs-on: ubuntu-latest
-  #  timeout-minutes: 5
-  #  needs: [push]
-  #  permissions:
-  #    contents: write
-  #
-  #  steps:
-  #    - name: "Checkout"
-  #      uses: actions/checkout@v4
-  #
-  #    - name: "DO IT 1"
-  #      id: tags
-  #      if: ${{ needs.push.result == 'success' || needs.push.result != 'success2'  }}
-  #      run: |
-  #        echo "success"
+  second:
+    name: "Second"
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    needs: [push]
+    permissions:
+      contents: write
+
+    env:
+      version: ${{ env.version2 }}
+
+    steps:
+      #- name: "Checkout"
+      #  uses: actions/checkout@v5
+
+      - name: "DO IT 1"
+        run: |
+          echo env.version : ${{ env.version }}
+          echo env.version2 : ${{ env.version2 }}
 
   #- name: "1 - Docker Tags"
   #  id: tags
