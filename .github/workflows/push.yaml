@@ -84,14 +84,13 @@ jobs:
     permissions:
       contents: write
 
-    env:
-      version: ${{ env.version2 }}
-
     steps:
       #- name: "Checkout"
       #  uses: actions/checkout@v5
 
       - name: "DO IT 1"
+        env:
+          version: ${{ env.version2 }}
         run: |
           echo env.version : ${{ env.version }}
           echo env.version2 : ${{ env.version2 }}
