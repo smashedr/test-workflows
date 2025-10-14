@@ -39,29 +39,16 @@ jobs:
       - name: "Checkout"
         uses: actions/checkout@v5
 
-      - uses: madhead/semver-utils@latest
-        id: semver
-        with:
-          version: 1.29.1
-
-      - name: "Debug Semver Utils"
-        run: |
-          echo "${{ steps.semver.outputs.release }}"
-          echo "${{ steps.semver.outputs.major }}"
-          echo "${{ steps.semver.outputs.minor }}"
-          echo "${{ steps.semver.outputs.patch }}"
-          echo "${{ steps.semver.outputs.build }}"
-          echo "${{ steps.semver.outputs.build-parts }}"
-          echo "${{ steps.semver.outputs.build-0 }}"
-          echo "${{ steps.semver.outputs.build-1 }}"
-
-      - name: "Generate Version Tags"
+      - name: "Update Version Tags"
         id: version
-        uses: cssnr/update-version-tags-action@v1
+        uses: cssnr/update-version-tags-action@create
         with:
+          tag: ${{ inputs.tags }}
           prefix: ""
-          #tags: ${{ inputs.tags }}
           dry_run: true
+          create: true
+          #major: ${{ inputs.tags == '' }}
+          #minor: ${{ inputs.tags == '' }}
 
       - name: "Debug Version Tags"
         continue-on-error: true
@@ -83,3 +70,26 @@ jobs:
           echo "tags: ${{ steps.tags.outputs.tags }}"
           echo "labels: ${{ steps.tags.outputs.labels }}"
           echo "annotations: ${{ steps.tags.outputs.annotations }}"
+
+  deploy:
+    name: "Deploy"
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    needs: [build]
+
+    environment:
+      name: cssnr
+      url: https://www.cssnr.com/
+
+    steps:
+      - name: "Debug Event"
+        continue-on-error: true
+        run: |
+          cat "${GITHUB_EVENT_PATH}"
+
+      - name: "Debug Variables"
+        continue-on-error: true
+        run: |
+          echo "VERSION: ${{ env.version == 'master' && 'latest' || env.version }}"
+          echo "STACK_NAME: ${{ env.stack-name }}"
+          echo "TRAEFIK_HOST: ${{ env.traefik-host }}"
