@@ -42,7 +42,7 @@ jobs:
       - uses: madhead/semver-utils@latest
         id: semver
         with:
-          version: 1.29.1
+          version: 1.29.1-release.1
 
       - name: "Debug Semver Utils"
         run: |
@@ -51,9 +51,6 @@ jobs:
           echo "${{ steps.semver.outputs.minor }}"
           echo "${{ steps.semver.outputs.patch }}"
           echo "${{ steps.semver.outputs.build }}"
-          echo "${{ steps.semver.outputs.build-parts }}"
-          echo "${{ steps.semver.outputs.build-0 }}"
-          echo "${{ steps.semver.outputs.build-1 }}"
 
       - name: "Generate Version Tags"
         id: version
