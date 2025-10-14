@@ -42,7 +42,7 @@ jobs:
       - uses: madhead/semver-utils@latest
         id: semver
         with:
-          version: 1.29.1-release.1
+          version: ${{ github.ref_name }}
 
       - name: "Debug Semver Utils"
         run: |
@@ -61,7 +61,7 @@ jobs:
           dry_run: true
           release: true
           #tag: ${{ steps.semver.outputs.release }}
-          tag: 1.29.1-release.1
+          #tag: 1.29.1-release.1
 
       - name: "Debug Version Tags"
         continue-on-error: true
