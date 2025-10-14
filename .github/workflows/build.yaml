@@ -59,6 +59,7 @@ jobs:
           prefix: ""
           #tags: ${{ inputs.tags }}
           dry_run: true
+          tag: ${{ steps.semver.outputs.release }}
 
       - name: "Debug Version Tags"
         continue-on-error: true
