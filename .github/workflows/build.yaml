@@ -48,7 +48,7 @@ jobs:
           prefix: ""
 
       - name: "Debug Version Tags"
-        if: ${{ inputs.dev != 'true' }}
+        if: ${{ inputs.dev != true }}
         continue-on-error: true
         run: |
           echo "github.ref_name: ${{ github.ref_name }}"
