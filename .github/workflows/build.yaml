@@ -67,7 +67,7 @@ jobs:
         uses: cssnr/docker-tags-action@v1
         with:
           images: "ghcr.io/${{ github.repository }}"
-          tags: ${{ steps.version.outputs.tags }}
+          tags: ${{ inputs.dev == true && 'dev' || steps.version.outputs.tags }}
 
       - name: "Debug Docker Tags"
         continue-on-error: true
