@@ -3,27 +3,15 @@ name: "Build"
 on:
   workflow_dispatch:
     inputs:
-      build:
-        description: "Run Build"
-        type: boolean
-        default: false
       tags:
-        description: "Build Tag"
-      deploy:
-        description: "Run Deploy"
+        description: "Extra Tags: comma,separated"
+        required: false
+      dev:
+        description: "Development Build"
         type: boolean
         default: true
-      tag:
-        description: "Deploy Tag"
-        default: "latest"
   release:
     types: [published]
-
-env:
-  traefik-host: badges.cssnr.com
-  stack-file: docker-compose-swarm.yaml
-  stack-name: ${{ github.repository_owner }}-${{ github.event.repository.name }}
-  version: ${{ inputs.tag || github.ref_name }} # TODO: Confirm this is not latest on release
 
 jobs:
   build:
@@ -39,31 +27,28 @@ jobs:
       - name: "Checkout"
         uses: actions/checkout@v5
 
-      - uses: madhead/semver-utils@latest
-        id: semver
-        with:
-          version: ${{ github.ref_name }}
-
-      - name: "Debug Semver Utils"
+      - name: "Debug 1"
+        continue-on-error: true
         run: |
-          echo "${{ steps.semver.outputs.release }}"
-          echo "${{ steps.semver.outputs.major }}"
-          echo "${{ steps.semver.outputs.minor }}"
-          echo "${{ steps.semver.outputs.patch }}"
-          echo "${{ steps.semver.outputs.build }}"
+          echo "inputs.dev: ${{ inputs.dev }}"
+          echo "inputs.tags: ${{ inputs.tags }}"
+          echo "github.ref_name: ${{ github.ref_name }}"
 
-      - name: "Generate Version Tags"
-        id: version
-        uses: cssnr/update-version-tags-action@release
+      - name: "Setup Buildx"
+        uses: docker/setup-buildx-action@v3
         with:
+          platforms: linux/amd64,linux/arm64
+
+      - name: "Update Version Tags"
+        if: ${{ inputs.dev != 'true' }}
+        id: version
+        uses: cssnr/update-version-tags-action@v1
+        with:
+          tags: ${{ inputs.tags }}
           prefix: ""
-          #tags: ${{ inputs.tags }}
-          dry_run: true
-          release: true
-          #tag: ${{ steps.semver.outputs.release }}
-          #tag: 1.29.1-release.1
 
       - name: "Debug Version Tags"
+        if: ${{ inputs.dev != 'true' }}
         continue-on-error: true
         run: |
           echo "github.ref_name: ${{ github.ref_name }}"
