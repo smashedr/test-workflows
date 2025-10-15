@@ -53,7 +53,7 @@ jobs:
           echo "inputs.dev: ${{ inputs.dev }}"
           echo "inputs.tags: ${{ inputs.tags }}"
           echo "github.ref_name: ${{ github.ref_name }}"
-          echo "tags: ${{ inputs.dev != true && 'dev' || steps.version.outputs.tags }}"
+          echo "tags: ${{ inputs.dev == true && 'dev' || steps.version.outputs.tags }}"
 
       - name: "Debug Version Tags"
         if: ${{ inputs.dev != true }}
