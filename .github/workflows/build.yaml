@@ -40,7 +40,7 @@ jobs:
           platforms: linux/amd64,linux/arm64
 
       - name: "Update Version Tags"
-        if: ${{ inputs.dev != 'true' }}
+        if: ${{ inputs.dev != true }}
         id: version
         uses: cssnr/update-version-tags-action@v1
         with:
