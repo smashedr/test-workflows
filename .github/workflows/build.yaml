@@ -24,10 +24,14 @@ jobs:
       packages: write
 
     steps:
-      - name: "Checkout"
-        uses: actions/checkout@v5
+      - name: "Debug CTX github"
+        if: ${{ !github.event.act }}
+        continue-on-error: true
+        env:
+          GITHUB_CTX: ${{ toJSON(github) }}
+        run: echo "$GITHUB_CTX"
 
-      - name: "Debug 1"
+      - name: "Debug"
         continue-on-error: true
         run: |
           echo "inputs.dev: ${{ inputs.dev }}"
@@ -47,27 +51,22 @@ jobs:
           tags: ${{ inputs.tags }}
           prefix: ""
 
-      - name: "Debug 2"
-        continue-on-error: true
-        run: |
-          echo "inputs.dev: ${{ inputs.dev }}"
-          echo "inputs.tags: ${{ inputs.tags }}"
-          echo "github.ref_name: ${{ github.ref_name }}"
-          echo "tags: ${{ inputs.dev == true && 'dev' || steps.version.outputs.tags }}"
-
       - name: "Debug Version Tags"
-        if: ${{ inputs.dev != true }}
         continue-on-error: true
         run: |
           echo "github.ref_name: ${{ github.ref_name }}"
           echo "steps.version.outputs.tags: ${{ steps.version.outputs.tags }}"
+          echo "tags1: ${{ inputs.dev != true && steps.version.outputs.tags || 'dev' }}"
+          echo "tags2: ${{ inputs.tags }}"
 
       - name: "Generate Docker Tags"
         id: tags
         uses: cssnr/docker-tags-action@v1
         with:
           images: "ghcr.io/${{ github.repository }}"
-          tags: ${{ inputs.dev == true && 'dev' || steps.version.outputs.tags }}
+          tags: |
+            ${{ inputs.dev != true && steps.version.outputs.tags || 'dev' }}
+            ${{ inputs.tags }}
 
       - name: "Debug Docker Tags"
         continue-on-error: true
