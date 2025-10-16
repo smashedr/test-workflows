@@ -8,13 +8,13 @@ on:
         default: "latest"
         required: false
   workflow_run:
-    workflows: ["Push", "Release", "Build"]
+    workflows: ["Build"]
     types: [completed]
 
 env:
-  stack-name: ${{ github.repository_owner }}-${{ github.event.repository.name }}
-  stack-file: docker-compose-swarm.yaml
   traefik-host: badges.cssnr.com
+  stack-file: docker-compose-swarm.yaml
+  stack-name: ${{ github.repository_owner }}-${{ github.event.repository.name }}
   version: ${{ inputs.version || github.event.workflow_run.head_branch || github.ref_name }}
 
 jobs:
@@ -29,10 +29,12 @@ jobs:
       url: https://www.cssnr.com/
 
     steps:
-      - name: "Debug Event"
+      - name: "Debug CTX github"
+        if: ${{ !github.event.act }}
         continue-on-error: true
-        run: |
-          cat "${GITHUB_EVENT_PATH}"
+        env:
+          GITHUB_CTX: ${{ toJSON(github) }}
+        run: echo "$GITHUB_CTX"
 
       - name: "Debug Variables"
         continue-on-error: true
@@ -41,17 +43,10 @@ jobs:
           echo "STACK_NAME: ${{ env.stack-name }}"
           echo "TRAEFIK_HOST: ${{ env.traefik-host }}"
 
-      - name: "EXTRA Debug"
+      - name: "Debug Environment"
         continue-on-error: true
+        env:
+          version: ${{ env.version == 'master' && 'latest' || env.version }}
         run: |
-          echo github.event_name: ${{ github.event_name }}
-          echo github.ref_name : ${{ github.ref_name  }}
-          echo github.event.workflow_run.conclusion - '${{ github.event.workflow_run.conclusion }}'
-          echo github.event.workflow_run.event - '${{ github.event.workflow_run.event }}'
-
-      #- name: "Debug Release"
-      #  continue-on-error: true
-      #  run: |
-      #    echo steps.release.outputs.tag_name: ${{ steps.release.outputs.tag_name }}
-      #    ls -lAh .
-      #    ls -lAh dist/
+          echo "env.version: ${{ env.version }}"
+          echo "ghcr.io/${{ github.repository }}:${{ env.version }}"
