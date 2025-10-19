@@ -28,8 +28,10 @@ jobs:
       url: https://portainer-o-us-east-1.hosted-domains.com/
 
     steps:
+      - name: "Checkout"
+        uses: actions/checkout@v5
+
       - name: "Debug CTX github"
-        if: ${{ !github.event.act }}
         continue-on-error: true
         env:
           GITHUB_CTX: ${{ toJSON(github) }}
@@ -45,3 +47,11 @@ jobs:
           echo "file: ${{ inputs.folder }}/${{ inputs.file }}"
           echo "name: ${{ inputs.env }}"
           echo "env_file: ${{ inputs.env == '' && '' || env.env-file }}"
+
+      - name: "Verify Variables"
+        run: |
+          test -d "${{ inputs.folder }}"
+          test -f "${{ inputs.folder }}/${{ inputs.file }}"
+          if [ -n "${{ inputs.env }}" ];then
+            test -f ${{ env.env-file }}
+          fi
