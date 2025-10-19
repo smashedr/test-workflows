@@ -3,29 +3,29 @@ name: "Deploy"
 on:
   workflow_dispatch:
     inputs:
-      version:
-        description: "Version Tag"
+      folder:
+        description: "Folder"
+        required: true
+      file:
+        description: "File"
+        required: true
+        default: "docker-compose-swarm.yaml"
+      env:
+        description: "Env File"
         required: false
-  workflow_run:
-    workflows: ["Build"]
-    types: [completed]
 
 env:
-  traefik-host: badges.cssnr.com
-  stack-file: docker-compose-swarm.yaml
-  stack-name: ${{ github.repository_owner }}-${{ github.event.repository.name }}
-  version: ${{ inputs.version || github.event.workflow_run.head_branch || github.ref_name }}
+  env-file: ${{ inputs.folder }}/${{ inputs.env }}
 
 jobs:
   deploy:
-    if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
     name: "Deploy"
     runs-on: ubuntu-latest
     timeout-minutes: 5
 
     environment:
-      name: cssnr
-      url: https://www.cssnr.com/
+      name: portainer
+      url: https://portainer-o-us-east-1.hosted-domains.com/
 
     steps:
       - name: "Debug CTX github"
@@ -37,22 +37,11 @@ jobs:
 
       - name: "Debug Variables"
         continue-on-error: true
-        env:
-          version: ${{ env.version == 'master' && 'latest' || env.version }}
         run: |
-          echo "inputs.version: ${{ inputs.version }}"
-          echo "github.event.workflow_run.head_branch: ${{ github.event.workflow_run.head_branch }}"
-          echo "github.ref_name: ${{ github.ref_name }}"
-          echo "env.version: ${{ env.version }}"
-
-          echo "VERSION: ${{ env.version == 'master' && 'latest' || env.version }}"
-          echo "STACK_NAME: ${{ env.stack-name }}"
-          echo "TRAEFIK_HOST: ${{ env.traefik-host }}"
-
-      - name: "Debug Environment"
-        continue-on-error: true
-        env:
-          version: ${{ env.version == 'master' && 'latest' || env.version }}
-        run: |
-          echo "env.version: ${{ env.version }}"
-          echo "ghcr.io/${{ github.repository }}:${{ env.version }}"
+          echo "inputs.folder: ${{ inputs.folder }}"
+          echo "inputs.file: ${{ inputs.file }}"
+          echo "inputs.env: ${{ inputs.env }}"
+          echo "----------"
+          echo "file: ${{ inputs.folder }}/${{ inputs.file }}"
+          echo "name: ${{ inputs.env }}"
+          echo "env_file: ${{ inputs.env == '' && '' || env.env-file }}"
