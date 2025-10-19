@@ -27,9 +27,6 @@ jobs:
       name: cssnr
       url: https://www.cssnr.com/
 
-    env:
-      version: ${{ env.version == 'master' && 'latest' || env.version }}
-
     steps:
       - name: "Debug CTX github"
         if: ${{ !github.event.act }}
@@ -40,6 +37,8 @@ jobs:
 
       - name: "Debug Variables"
         continue-on-error: true
+        env:
+          version: ${{ env.version == 'master' && 'latest' || env.version }}
         run: |
           echo "inputs.version: ${{ inputs.version }}"
           echo "github.event.workflow_run.head_branch: ${{ github.event.workflow_run.head_branch }}"
