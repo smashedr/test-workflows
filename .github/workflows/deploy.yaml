@@ -39,6 +39,11 @@ jobs:
       - name: "Debug Variables"
         continue-on-error: true
         run: |
+          echo "inputs.version: ${{ inputs.version }}"
+          echo "github.event.workflow_run.head_branch: ${{ github.event.workflow_run.head_branch }}"
+          echo "github.ref_name: ${{ github.ref_name }}"
+          echo "env.version: ${{ env.version }}"
+
           echo "VERSION: ${{ env.version == 'master' && 'latest' || env.version }}"
           echo "STACK_NAME: ${{ env.stack-name }}"
           echo "TRAEFIK_HOST: ${{ env.traefik-host }}"
