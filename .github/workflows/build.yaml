@@ -53,10 +53,13 @@ jobs:
       #    npm run docs:build
 
       - name: "Debug"
+        continue-on-error: true
         run: |
           echo "inputs.path: ${{ inputs.path }}"
           echo "inputs.name: ${{ inputs.name }}"
           ls -lAh .
+          echo "-----"
+          ls -lAh ${{ inputs.path }}
           echo "::group::tree"
           tree .
           echo "::endgroup::"
@@ -66,3 +69,5 @@ jobs:
         with:
           name: ${{ inputs.name }}
           path: ${{ inputs.path }}
+          if-no-files-found: "error"
+          include-hidden-files: true
