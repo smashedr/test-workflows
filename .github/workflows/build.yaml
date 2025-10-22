@@ -57,8 +57,9 @@ jobs:
         run: |
           echo "inputs.path: ${{ inputs.path }}"
           echo "inputs.name: ${{ inputs.name }}"
+          echo "----------"
           ls -lAh .
-          echo "-----"
+          echo "----------"
           ls -lAh ${{ inputs.path }}
           echo "::group::tree"
           tree .

@@ -10,7 +10,8 @@ jobs:
     permissions:
       contents: read
     with:
-      path: ./.github
+      name: "artifact"
+      path: ".github"
     #secrets:
     #  token: ${{ secrets.GITHUB_TOKEN }}
 
@@ -18,6 +19,12 @@ jobs:
     name: "Debug"
     runs-on: ubuntu-latest
     steps:
+      - name: "Debug CTX github"
+        continue-on-error: true
+        env:
+          GITHUB_CTX: ${{ toJSON(github) }}
+        run: echo "$GITHUB_CTX"
+
       - name: "Download Artifact"
         uses: actions/download-artifact@v5
         with:
