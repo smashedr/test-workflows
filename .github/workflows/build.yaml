@@ -51,13 +51,15 @@ jobs:
       #- name: "Build"
       #  run: |
       #    npm run docs:build
-      #
-      #- name: "Debug"
-      #  run: |
-      #    ls -lAh .
-      #    echo "::group::tree"
-      #    tree .
-      #    echo "::endgroup::"
+
+      - name: "Debug"
+        run: |
+          echo "inputs.path: ${{ inputs.path }}"
+          echo "inputs.name: ${{ inputs.name }}"
+          ls -lAh .
+          echo "::group::tree"
+          tree .
+          echo "::endgroup::"
 
       - name: "Upload Artifact"
         uses: actions/upload-artifact@v4
