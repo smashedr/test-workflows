@@ -10,7 +10,7 @@ jobs:
     permissions:
       contents: read
     with:
-      path: .github
+      path: .github/
     #secrets:
     #  token: ${{ secrets.GITHUB_TOKEN }}
 
