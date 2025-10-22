@@ -1,0 +1,31 @@
+name: Call a reusable workflow
+
+on:
+  push:
+
+jobs:
+  build:
+    name: "Build"
+    uses: ./.github/workflows/build.yaml
+    permissions:
+      contents: read
+    with:
+      path: .github
+    #secrets:
+    #  token: ${{ secrets.GITHUB_TOKEN }}
+
+  debug:
+    name: "Debug"
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Download Artifact"
+        uses: actions/download-artifact@v5
+        with:
+          name: "artifact"
+
+      - name: "Debug"
+        run: |
+          ls -lAh .
+          echo "::group::tree"
+          tree .
+          echo "::endgroup::"

@@ -1,17 +1,25 @@
 name: "Build"
 
 on:
-  workflow_dispatch:
+  workflow_call:
     inputs:
-      tags:
-        description: "Extra Tags: comma,separated"
-        required: false
-      dev:
-        description: "Development Build"
-        type: boolean
-        default: true
-  release:
-    types: [published]
+      path:
+        type: string
+        default: ".vitepress/dist"
+      name:
+        type: string
+        default: "artifact"
+    #secrets:
+    #  token:
+    #    required: true
+
+env:
+  path: ""
+  purge-domain: ""
+
+concurrency:
+  group: build
+  cancel-in-progress: true
 
 jobs:
   build:
@@ -19,61 +27,40 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
 
-    permissions:
-      contents: write
-      packages: write
-
     steps:
       - name: "Debug CTX github"
-        if: ${{ !github.event.act }}
         continue-on-error: true
         env:
           GITHUB_CTX: ${{ toJSON(github) }}
         run: echo "$GITHUB_CTX"
 
-      - name: "Debug"
-        continue-on-error: true
-        run: |
-          echo "inputs.dev: ${{ inputs.dev }}"
-          echo "inputs.tags: ${{ inputs.tags }}"
-          echo "github.ref_name: ${{ github.ref_name }}"
-
-      - name: "Setup Buildx"
-        uses: docker/setup-buildx-action@v3
+      - name: "Checkout"
+        uses: actions/checkout@v5
         with:
-          platforms: linux/amd64,linux/arm64
+          fetch-depth: 0
 
-      - name: "Update Version Tags"
-        if: ${{ inputs.dev != true }}
-        id: version
-        uses: cssnr/update-version-tags-action@v1
+      #- name: "Setup Node"
+      #  uses: actions/setup-node@v6
+      #  with:
+      #    node-version: 24
+      #
+      #- name: "Install"
+      #  run: |
+      #    npm ci
+      #
+      #- name: "Build"
+      #  run: |
+      #    npm run docs:build
+      #
+      #- name: "Debug"
+      #  run: |
+      #    ls -lAh .
+      #    echo "::group::tree"
+      #    tree .
+      #    echo "::endgroup::"
+
+      - name: "Upload Artifact"
+        uses: actions/upload-artifact@v4
         with:
-          prefix: ""
-          tags: |
-            ${{ inputs.tags }}
-
-      - name: "Debug Version Tags"
-        continue-on-error: true
-        run: |
-          echo "github.ref_name: ${{ github.ref_name }}"
-          echo "steps.version.outputs.tags: ${{ steps.version.outputs.tags }}"
-          echo "tags1: ${{ inputs.dev != true && steps.version.outputs.tags || 'dev' }}"
-          echo "tags2: ${{ inputs.tags }}"
-
-      - name: "Generate Docker Tags"
-        id: tags
-        uses: cssnr/docker-tags-action@v1
-        with:
-          images: "ghcr.io/${{ github.repository }}"
-          tags: |
-            ${{ inputs.dev == true && 'dev' || '' }}
-            ${{ steps.version.outputs.tags }}
-            ${{ inputs.tags }}
-
-      - name: "Debug Docker Tags"
-        continue-on-error: true
-        run: |
-          echo "github.ref_name: ${{ github.ref_name }}"
-          echo "tags: ${{ steps.tags.outputs.tags }}"
-          echo "labels: ${{ steps.tags.outputs.labels }}"
-          echo "annotations: ${{ steps.tags.outputs.annotations }}"
+          name: ${{ inputs.name }}
+          path: ${{ inputs.path }}
