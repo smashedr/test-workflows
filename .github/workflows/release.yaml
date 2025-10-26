@@ -42,6 +42,7 @@ jobs:
           echo inputs.tags: ${{ inputs.tags }}
 
       - name: "Generate Version Tags"
+        if: ${{ !(github.event.release.prerelease || inputs.fail) }} # TODO: delete
         id: version
         uses: cssnr/update-version-tags-action@v1
         with:
