@@ -8,8 +8,8 @@ on:
         required: false
         type: boolean
         default: false
-  #push:
-  #  branches: ["**"]
+  push:
+    branches: ["**"]
 
 env:
   version: ${{ github.event.workflow_run.head_branch || github.ref_name }}
