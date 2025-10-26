@@ -2,11 +2,14 @@ name: "Build"
 
 on:
   workflow_call:
+    inputs:
+      tags:
+        description: "Extra Tags: comma,separated"
+        type: string
   workflow_dispatch:
     inputs:
       tags:
         description: "Extra Tags: comma,separated"
-        required: false
       dev:
         description: "Development Build"
         type: boolean
@@ -36,3 +39,20 @@ jobs:
           echo "inputs.dev: ${{ inputs.dev }}"
           echo "inputs.tags: ${{ inputs.tags }}"
           echo "github.ref_name: ${{ github.ref_name }}"
+
+      - name: "Generate Docker Tags"
+        id: tags
+        uses: cssnr/docker-tags-action@v1
+        with:
+          images: "ghcr.io/${{ github.repository }}"
+          tags: |
+            ${{ inputs.dev == true && 'dev' || '' }}
+            ${{ inputs.tags }}
+
+      - name: "Debug Docker Tags"
+        continue-on-error: true
+        run: |
+          echo "github.ref_name: ${{ github.ref_name }}"
+          echo "tags: ${{ steps.tags.outputs.tags }}"
+          echo "labels: ${{ steps.tags.outputs.labels }}"
+          echo "annotations: ${{ steps.tags.outputs.annotations }}"

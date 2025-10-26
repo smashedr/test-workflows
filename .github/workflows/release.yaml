@@ -22,6 +22,9 @@ jobs:
     permissions:
       contents: write
 
+    outputs:
+      tags: ${{ steps.version.outputs.tags }}
+
     steps:
       - name: "Checkout"
         uses: actions/checkout@v4
@@ -43,6 +46,7 @@ jobs:
         uses: cssnr/update-version-tags-action@v1
         with:
           tags: ${{ inputs.tags }}
+          release: true
           dry_run: true
           prefix: ""
 
@@ -174,7 +178,6 @@ jobs:
     permissions:
       contents: write
       packages: write
-    #with:
-    #  build: "npm run docs:build"
-    #  path: ".vitepress/dist"
+    with:
+      tags: ${{ needs.release.outputs.tags }}
     secrets: inherit
