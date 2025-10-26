@@ -172,7 +172,8 @@ jobs:
     uses: ./.github/workflows/build.yaml
     needs: release
     permissions:
-      contents: read
+      contents: write
+      packages: write
     #with:
     #  build: "npm run docs:build"
     #  path: ".vitepress/dist"
