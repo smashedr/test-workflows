@@ -2,24 +2,15 @@ name: "Build"
 
 on:
   workflow_call:
+  workflow_dispatch:
     inputs:
-      path:
-        type: string
-        default: ".vitepress/dist"
-      name:
-        type: string
-        default: "artifact"
-    #secrets:
-    #  token:
-    #    required: true
-
-env:
-  path: ""
-  purge-domain: ""
-
-concurrency:
-  group: build
-  cancel-in-progress: true
+      tags:
+        description: "Extra Tags: comma,separated"
+        required: false
+      dev:
+        description: "Development Build"
+        type: boolean
+        default: true
 
 jobs:
   build:
@@ -27,48 +18,21 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
 
+    permissions:
+      contents: write
+      packages: write
+
     steps:
       - name: "Debug CTX github"
+        if: ${{ !github.event.act }}
         continue-on-error: true
         env:
           GITHUB_CTX: ${{ toJSON(github) }}
         run: echo "$GITHUB_CTX"
 
-      - name: "Checkout"
-        uses: actions/checkout@v5
-        with:
-          fetch-depth: 0
-
-      #- name: "Setup Node"
-      #  uses: actions/setup-node@v6
-      #  with:
-      #    node-version: 24
-      #
-      #- name: "Install"
-      #  run: |
-      #    npm ci
-      #
-      #- name: "Build"
-      #  run: |
-      #    npm run docs:build
-
       - name: "Debug"
         continue-on-error: true
         run: |
-          echo "inputs.path: ${{ inputs.path }}"
-          echo "inputs.name: ${{ inputs.name }}"
-          echo "----------"
-          ls -lAh .
-          echo "----------"
-          ls -lAh ${{ inputs.path }}
-          echo "::group::tree"
-          tree .
-          echo "::endgroup::"
-
-      - name: "Upload Artifact"
-        uses: actions/upload-artifact@v4
-        with:
-          name: ${{ inputs.name }}
-          path: ${{ inputs.path }}
-          if-no-files-found: "error"
-          include-hidden-files: true
+          echo "inputs.dev: ${{ inputs.dev }}"
+          echo "inputs.tags: ${{ inputs.tags }}"
+          echo "github.ref_name: ${{ github.ref_name }}"
