@@ -47,6 +47,24 @@ jobs:
           echo inputs.fail : ${{ inputs.fail }}
           echo env.version : ${{ env.version }}
 
+      # BEGIN CUSTOM
+
+      - name: "Generate Version Tags"
+        id: version
+        uses: cssnr/update-version-tags-action@v1
+        with:
+          tag: 1.0.3
+          dry_run: true
+          prefix: ""
+
+      - name: "Debug Version Tags"
+        continue-on-error: true
+        run: |
+          echo "github.ref_name: ${{ github.ref_name }}"
+          echo "steps.version.outputs.tags: ${{ steps.version.outputs.tags }}"
+
+      # END CUSTOM
+
       ## Optioanl Fail Job for Debugging
       - name: "Fail"
         if: ${{ inputs.fail }}
