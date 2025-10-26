@@ -178,6 +178,6 @@ jobs:
     permissions:
       contents: write
       packages: write
-    with:
-      tags: ${{ needs.release.outputs.tags }}
+    #with:
+    #  tags: ${{ needs.release.outputs.tags }}
     secrets: inherit
