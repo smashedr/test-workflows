@@ -47,6 +47,7 @@ jobs:
           images: "ghcr.io/${{ github.repository }}"
           tags: |
             ${{ inputs.dev == true && 'dev' || '' }}
+            ${{ github.event.release.prerelease && 'dev' || '' }}
             ${{ inputs.tags }}
 
       - name: "Debug Docker Tags"
