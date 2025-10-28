@@ -48,6 +48,8 @@ jobs:
           echo github.event_name: ${{ github.event_name }}
           echo github.ref_name : ${{ github.ref_name  }}
           echo inputs.fail : ${{ inputs.fail }}
+          echo inputs.fail : ${{ inputs.fail }}
+          echo inputs.version : ${{ inputs.version }}
           echo env.version : ${{ env.version }}
 
       # BEGIN CUSTOM
