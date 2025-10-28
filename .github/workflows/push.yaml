@@ -5,9 +5,12 @@ on:
     inputs:
       fail:
         description: "Fail Job"
-        required: false
         type: boolean
         default: false
+      version:
+        description: "Version Tag"
+        type: string
+        default: "OMFG WTF NO"
   push:
     branches: ["**"]
 
@@ -48,21 +51,6 @@ jobs:
           echo env.version : ${{ env.version }}
 
       # BEGIN CUSTOM
-
-      - name: "Generate Version Tags"
-        id: version
-        uses: cssnr/update-version-tags-action@v1
-        with:
-          tag: 1.0.3
-          dry_run: true
-          prefix: ""
-          release: true
-
-      - name: "Debug Version Tags"
-        continue-on-error: true
-        run: |
-          echo "github.ref_name: ${{ github.ref_name }}"
-          echo "steps.version.outputs.tags: ${{ steps.version.outputs.tags }}"
 
       # END CUSTOM
 
