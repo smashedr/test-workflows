@@ -10,7 +10,6 @@ on:
       version:
         description: "Version Tag"
         type: string
-        default: "OMFG WTF NO"
   push:
     branches: ["**"]
 
