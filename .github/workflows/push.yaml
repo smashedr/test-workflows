@@ -46,13 +46,19 @@ jobs:
         run: |
           echo github.repository: ${{ github.repository }}
           echo github.event_name: ${{ github.event_name }}
-          echo github.ref_name : ${{ github.ref_name  }}
-          echo inputs.fail : ${{ inputs.fail }}
-          echo inputs.fail : ${{ inputs.fail }}
-          echo inputs.version : ${{ inputs.version }}
-          echo env.version : ${{ env.version }}
+          echo github.ref_name: ${{ github.ref_name  }}
+          echo inputs.fail: ${{ inputs.fail }}
+          echo inputs.fail: ${{ inputs.fail }}
+          echo inputs.version: ${{ inputs.version }}
+          echo env.version: ${{ env.version }}
 
       # BEGIN CUSTOM
+
+      - name: "Input Version Present"
+        if: ${{ inputs.version }}
+        continue-on-error: true
+        run: |
+          echo github.repository: ${{ github.repository }}
 
       # END CUSTOM
 
