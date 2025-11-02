@@ -53,11 +53,15 @@ jobs:
 
       # BEGIN CUSTOM
 
-      - name: "Input Version Present"
-        if: ${{ inputs.version }}
+      - name: "Test 1"
         continue-on-error: true
         run: |
-          echo github.repository: ${{ github.repository }}
+          npm ls
+
+      - name: "Test 2"
+        continue-on-error: true
+        run: |
+          npm -g ls
 
       # END CUSTOM
 
