@@ -48,7 +48,7 @@ jobs:
         continue-on-error: true
         with:
           exclude: |
-            "actions/.*"
-            "cssnr/.*"
-            "docker/.*"
-            "smashedr/.*"
+            actions/.*
+            cssnr/.*
+            docker/.*
+            smashedr/.*
