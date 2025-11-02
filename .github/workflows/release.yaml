@@ -127,14 +127,14 @@ jobs:
       #    echo "tail:"
       #    echo "${tail}"
 
-      #- name: "Upload to Release"
-      #  if: ${{ github.event_name == 'release' }}
-      #  uses: svenstaro/upload-release-action@v2
-      #  with:
-      #    overwrite: true
-      #    #file_glob: true
-      #    #file: .github/workflows/*
-      #    file: README.md
+      - name: "Upload to Release"
+        if: ${{ github.event_name == 'release' }}
+        uses: svenstaro/upload-release-action@v2
+        with:
+          overwrite: true
+          #file_glob: true
+          #file: .github/workflows/*
+          file: README.md
 
       #- name: "VirusTotal"
       #  uses: cssnr/virustotal-action@updates
