@@ -33,6 +33,12 @@ jobs:
         run: |
           cat "${GITHUB_EVENT_PATH}"
 
+      - name: "Dump object"
+        continue-on-error: true
+        env:
+          GITHUB_CTX: ${{ toJSON(github) }}
+        run: echo "$GITHUB_CTX"
+
       - name: "Debug"
         if: ${{ !github.event.act }}
         continue-on-error: true
