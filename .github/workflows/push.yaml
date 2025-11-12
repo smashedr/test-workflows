@@ -53,15 +53,44 @@ jobs:
 
       # BEGIN CUSTOM
 
-      - name: "Test 1"
-        continue-on-error: true
-        run: |
-          npm ls
+      - name: "Setup Python 3.13"
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.13"
+          cache: "pip"
 
-      - name: "Test 2"
-        continue-on-error: true
+      - name: "Install"
+        id: install
         run: |
-          npm -g ls
+          python -m pip install -U pip zensical
+
+      - name: "Fake Build"
+        id: build
+        run: |
+          zensical --version
+          echo "version=$(zensical --version)" >> "$GITHUB_OUTPUT"
+
+      #- name: "Debug 1"
+      #  if: ${{ always() }}
+      #  continue-on-error: true
+      #  run: |
+      #    zensical --version
+
+      - name: "Summary"
+        if: ${{ always() }}
+        env:
+          version: ${{ steps.build.outputs.version }}
+        run: |
+          if [ "${{ steps.build.outcome }}" == "success" ];then
+            markdown="🚀 Build Success\n\n"
+            markdown+="zensical version: \`${version}\`\n\n"
+          else
+            markdown="⛔ Build Failure\n\n"
+          fi
+          markdown+="<details><summary>Build Contents</summary>\n\n\`\`\`text\n"
+          markdown+="$(tree .)"
+          markdown+="\`\`\`\n\n</details>\n\n"
+          echo -e "${markdown}" >> $GITHUB_STEP_SUMMARY
 
       # END CUSTOM
 
