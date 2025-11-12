@@ -87,7 +87,7 @@ jobs:
             markdown="⛔ Build Failure\n\n"
           fi
           markdown+="<details><summary>Build Contents</summary>\n\n\`\`\`text\n"
-          markdown+="$(tree .)"
+          markdown+="$(tree .)\n"
           markdown+="\`\`\`\n\n</details>\n\n"
           echo -e "${markdown}" >> $GITHUB_STEP_SUMMARY
 
