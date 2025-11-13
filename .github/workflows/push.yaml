@@ -78,6 +78,7 @@ jobs:
       - name: "Summary"
         if: ${{ always() }}
         env:
+          path: site
           version: ${{ steps.build.outputs.version || 'unknown' }}
         run: |
           if [ "${{ steps.build.outcome }}" == "success" ];then
@@ -86,9 +87,13 @@ jobs:
             markdown="⛔ Build Failure\n\n"
           fi
           markdown+="zensical version: \`${version}\`\n\n"
-          markdown+="<details><summary>Build Output</summary>\n\n\`\`\`text\n"
-          markdown+="$(tree AI-RETARDED 2>&1 ||:)\n"
-          markdown+="\`\`\`\n\n</details>\n\n"
+          if [ -d "${}" ];then
+            markdown+="<details><summary>Build Output</summary>\n\n\`\`\`text\n"
+            markdown+="$(tree ${path} 2>&1 ||:)\n"
+            markdown+="\`\`\`\n\n</details>\n\n"
+          else
+            markdown="⛔ Path Not Found: ${path}\n\n"
+          fi
           echo -e "${markdown}" >> $GITHUB_STEP_SUMMARY
 
       # END CUSTOM
