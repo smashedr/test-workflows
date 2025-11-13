@@ -24,6 +24,7 @@ jobs:
 
     permissions:
       contents: write
+      id-token: write # This is required for requesting the JWT
 
     steps:
       - name: "Checkout"
@@ -53,15 +54,15 @@ jobs:
 
       # BEGIN CUSTOM
 
-      - name: "Test 1"
+      - name: "Debug 1"
         continue-on-error: true
         run: |
-          npm ls
+          echo "ACTIONS_ID_TOKEN_REQUEST_TOKEN: $ACTIONS_ID_TOKEN_REQUEST_TOKEN" 
+          echo "ACTIONS_ID_TOKEN_REQUEST_URL: $ACTIONS_ID_TOKEN_REQUEST_URL"
 
-      - name: "Test 2"
-        continue-on-error: true
+      - name: "Test 1"
         run: |
-          npm -g ls
+          curl -H "Authorization: bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN" "$ACTIONS_ID_TOKEN_REQUEST_URL&audience=api://AzureADTokenExchange"
 
       # END CUSTOM
 
