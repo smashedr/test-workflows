@@ -78,16 +78,16 @@ jobs:
       - name: "Summary"
         if: ${{ always() }}
         env:
-          version: ${{ steps.build.outputs.version }}
+          version: ${{ steps.build.outputs.version || 'unknown' }}
         run: |
           if [ "${{ steps.build.outcome }}" == "success" ];then
             markdown="🚀 Build Success\n\n"
-            markdown+="zensical version: \`${version}\`\n\n"
           else
             markdown="⛔ Build Failure\n\n"
           fi
+          markdown+="zensical version: \`${version}\`\n\n"
           markdown+="<details><summary>Build Output</summary>\n\n\`\`\`text\n"
-          markdown+="$(tree .)\n"
+          markdown+="$(tree . 2>&1 ||:)\n"
           markdown+="\`\`\`\n\n</details>\n\n"
           echo -e "${markdown}" >> $GITHUB_STEP_SUMMARY
 
