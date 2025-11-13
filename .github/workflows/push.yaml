@@ -92,7 +92,7 @@ jobs:
             markdown+="$(tree ${path} || ls -lAhR ${path})\n"
             markdown+="\`\`\`\n\n</details>\n\n"
           else
-            markdown="⛔ Path Not Found: ${path}\n\n"
+            markdown+="⛔ Path Not Found: ${path}\n\n"
           fi
           echo -e "${markdown}" >> $GITHUB_STEP_SUMMARY
 
