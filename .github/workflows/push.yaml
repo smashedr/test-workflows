@@ -87,9 +87,9 @@ jobs:
             markdown="⛔ Build Failure\n\n"
           fi
           markdown+="zensical version: \`${version}\`\n\n"
-          if [ -d "${}" ];then
+          if [ -d "${path}" ];then
             markdown+="<details><summary>Build Output</summary>\n\n\`\`\`text\n"
-            markdown+="$(tree ${path} 2>&1 ||:)\n"
+            markdown+="$(tree ${path} || ls -lAhR ${path})\n"
             markdown+="\`\`\`\n\n</details>\n\n"
           else
             markdown="⛔ Path Not Found: ${path}\n\n"
