@@ -87,7 +87,7 @@ jobs:
           fi
           markdown+="zensical version: \`${version}\`\n\n"
           markdown+="<details><summary>Build Output</summary>\n\n\`\`\`text\n"
-          markdown+="$(tree . 2>&1 ||:)\n"
+          markdown+="$(tree AI-RETARDED 2>&1 ||:)\n"
           markdown+="\`\`\`\n\n</details>\n\n"
           echo -e "${markdown}" >> $GITHUB_STEP_SUMMARY
 
