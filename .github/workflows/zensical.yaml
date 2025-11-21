@@ -69,24 +69,31 @@ jobs:
           version: ${{ inputs.uv-version }}
           python-version: ${{ inputs.python-version }}
 
-      - name: "Debug 1"
-        if: ${{ always() }}
-        continue-on-error: true
+      - name: "Setup UV"
+        shell: bash
         run: |
-          set +e
           uv venv --no-project
-          uv run python -V
-          uv python dir
-          echo "::group::uv pip list"
-          uv pip list
-          echo "::endgroup::"
-          echo "::group::uv tree"
-          uv tree
-          echo "::endgroup::"
-          echo "::group::ls"
-          ls -lAh /home/runner/.local/share/uv/python
-          echo "::endgroup::"
-          uv pip install --system zensical
+          uv pip install zensical
+          uv run zensical --version
+
+      #- name: "Debug 1"
+      #  if: ${{ always() }}
+      #  continue-on-error: true
+      #  run: |
+      #    set +e
+      #    uv venv --no-project
+      #    uv run python -V
+      #    uv python dir
+      #    echo "::group::uv pip list"
+      #    uv pip list
+      #    echo "::endgroup::"
+      #    echo "::group::uv tree"
+      #    uv tree
+      #    echo "::endgroup::"
+      #    echo "::group::ls"
+      #    ls -lAh /home/runner/.local/share/uv/python
+      #    echo "::endgroup::"
+      #    uv pip install --system zensical
 
       #- name: "Install Zensical"
       #  id: install
