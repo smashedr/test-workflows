@@ -74,6 +74,7 @@ jobs:
         continue-on-error: true
         run: |
           set +e
+          uv venv --no-project
           uv run python -V
           uv python dir
           echo "::group::uv pip list"
