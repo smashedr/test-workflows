@@ -1,0 +1,122 @@
+name: "Zensical"
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Zensical Version"
+      python-version:
+        description: "Python Version"
+      uv-version:
+        description: "UV Version"
+      directory:
+        description: "Build Directory"
+        default: "."
+      path:
+        description: "Site Path"
+        default: "site"
+      checkout:
+        description: "Checkout Project"
+        default: "true"
+      upload:
+        description: "Upload: github-pages, artifact, false"
+        default: "github-pages"
+      name:
+        description: "Artifact Name"
+        default: "artifact"
+      deploy:
+        description: "Deploy to GitHub Pages"
+        default: "true"
+      summary:
+        description: "Add Job Summary"
+        default: "true"
+  push:
+    branches: ["**"]
+
+env:
+  version: ${{ github.event.workflow_run.head_branch || github.ref_name }}
+
+jobs:
+  zensical:
+    name: "Zensical"
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    permissions:
+      contents: write
+
+    steps:
+      - name: "Checkout"
+        uses: actions/checkout@v5
+
+      - name: "Debug event.json"
+        continue-on-error: true
+        run: cat "${GITHUB_EVENT_PATH}"
+
+      - name: "Debug CTX github"
+        continue-on-error: true
+        env:
+          GITHUB_CTX: ${{ toJSON(github) }}
+        run: echo "$GITHUB_CTX"
+
+      - name: "Debug Environment"
+        continue-on-error: true
+        run: env
+
+      - name: "Install UV"
+        uses: astral-sh/setup-uv@v6
+        with:
+          version: ${{ inputs.uv-version }}
+          python-version: ${{ inputs.python-version }}
+
+      - name: "Setup UV"
+        shell: bash
+        run: |
+          uv venv --no-project
+          uv pip install zensical
+          uv run zensical --version
+
+      #- name: "Debug 1"
+      #  if: ${{ always() }}
+      #  continue-on-error: true
+      #  run: |
+      #    set +e
+      #    uv venv --no-project
+      #    uv run python -V
+      #    uv python dir
+      #    echo "::group::uv pip list"
+      #    uv pip list
+      #    echo "::endgroup::"
+      #    echo "::group::uv tree"
+      #    uv tree
+      #    echo "::endgroup::"
+      #    echo "::group::ls"
+      #    ls -lAh /home/runner/.local/share/uv/python
+      #    echo "::endgroup::"
+      #    uv pip install --system zensical
+
+      #- name: "Install Zensical"
+      #  id: install
+      #  #shell: bash
+      #  run: |
+      #    if [ -n "${{ inputs.version }}" ]; then
+      #       uv pip install --system zensical==${{ inputs.version }}
+      #    else
+      #       uv pip install --system zensical
+      #    fi
+      #    echo "version=$(uv run zensical --version)" >> "$GITHUB_OUTPUT"
+
+      - name: "Debug 2"
+        if: ${{ always() }}
+        continue-on-error: true
+        run: |
+          set +e
+          which zensical
+          uv run zensical --version
+
+          uv run python -V
+          uv python dir
+
+          echo "::group::uv pip list"
+          uv pip list
+          echo "::endgroup::"
