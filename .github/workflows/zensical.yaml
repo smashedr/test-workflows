@@ -106,19 +106,17 @@ jobs:
       #    fi
       #    echo "version=$(uv run zensical --version)" >> "$GITHUB_OUTPUT"
 
-      #- name: "Debug 2"
-      #  if: ${{ always() }}
-      #  continue-on-error: true
-      #  run: |
-      #    set +e
-      #    which zensical
-      #    uv run zensical --version
-      #
-      #    uv run python -V
-      #    uv python dir
-      #    echo "::group::uv pip list"
-      #    uv pip list
-      #    echo "::endgroup::"
-      #    echo "::group::uv tree"
-      #    uv tree
-      #    echo "::endgroup::"
+      - name: "Debug 2"
+        if: ${{ always() }}
+        continue-on-error: true
+        run: |
+          set +e
+          which zensical
+          uv run zensical --version
+
+          uv run python -V
+          uv python dir
+
+          echo "::group::uv pip list"
+          uv pip list
+          echo "::endgroup::"
