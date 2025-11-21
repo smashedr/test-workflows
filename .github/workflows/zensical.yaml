@@ -52,7 +52,6 @@ jobs:
       - name: "Debug event.json"
         continue-on-error: true
         run: cat "${GITHUB_EVENT_PATH}"
-      - name: "Debug event.json"
 
       - name: "Debug CTX github"
         continue-on-error: true
