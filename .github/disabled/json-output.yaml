@@ -1,0 +1,9 @@
+- name: "Verify JSON"
+  run: |
+    echo 'json<<EOF' >> $GITHUB_ENV
+    cat "${{ env.file }}" >> $GITHUB_ENV
+    echo 'EOF' >> $GITHUB_ENV
+
+- name: "Verify JSON"
+  run: |
+    echo "${{ fromJson(env.json) }}"
