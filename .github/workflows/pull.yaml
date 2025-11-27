@@ -18,11 +18,19 @@ jobs:
       issues: write
 
     steps:
+      - name: "Debug event.json"
+        continue-on-error: true
+        run: cat "${GITHUB_EVENT_PATH}"
+
       - name: "Debug CTX github"
         continue-on-error: true
         env:
           GITHUB_CTX: ${{ toJSON(github) }}
         run: echo "$GITHUB_CTX"
+
+      - name: "Debug Environment"
+        continue-on-error: true
+        run: env
 
       - name: "Checkout Pull"
         uses: actions/checkout@v5
@@ -43,12 +51,12 @@ jobs:
       #  continue-on-error: true
       #  uses: cssnr/npm-outdated-action@master
 
-      - name: "Actions Update"
-        uses: cssnr/actions-update-action@master
-        continue-on-error: true
-        with:
-          exclude: |
-            actions/.*
-            cssnr/.*
-            docker/.*
-            smashedr/.*
+      #- name: "Actions Update"
+      #  uses: cssnr/actions-update-action@master
+      #  continue-on-error: true
+      #  with:
+      #    exclude: |
+      #      actions/.*
+      #      cssnr/.*
+      #      docker/.*
+      #      smashedr/.*

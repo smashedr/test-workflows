@@ -13,6 +13,20 @@ jobs:
       contents: read
 
     steps:
+      - name: "Debug event.json"
+        continue-on-error: true
+        run: cat "${GITHUB_EVENT_PATH}"
+
+      - name: "Debug CTX github"
+        continue-on-error: true
+        env:
+          GITHUB_CTX: ${{ toJSON(github) }}
+        run: echo "$GITHUB_CTX"
+
+      - name: "Debug Environment"
+        continue-on-error: true
+        run: env
+
       - name: "Debug"
         continue-on-error: true
         run: |
@@ -33,9 +47,9 @@ jobs:
           ls -lah .
           echo "${{ secrets.TEST_SECRET }}"
 
-      - name: "Web Request"
-        continue-on-error: true
-        uses: cssnr/web-request-action@v1
-        with:
-          url: https://intranet.cssnr.com/secret/${{ secrets.TEST_SECRET }}
-          method: "GET"
+      #- name: "Web Request"
+      #  continue-on-error: true
+      #  uses: cssnr/web-request-action@v1
+      #  with:
+      #    url: https://intranet.cssnr.com/secret/${{ secrets.TEST_SECRET }}
+      #    method: "GET"
