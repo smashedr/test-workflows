@@ -63,7 +63,7 @@ jobs:
 
       - name: "Get Commit Action"
         id: commit
-        uses: cssnr/get-commit-action@master
+        uses: cssnr/get-commit-action@updates
         with:
           selector: "commit.message"
 
