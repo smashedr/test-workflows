@@ -64,6 +64,8 @@ jobs:
       - name: "Get Commit Action"
         id: commit
         uses: cssnr/get-commit-action@master
+        with:
+          selector: "commit.message"
 
       - name: "Echo Output"
         env:
