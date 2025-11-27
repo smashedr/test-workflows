@@ -60,3 +60,16 @@ jobs:
       #      cssnr/.*
       #      docker/.*
       #      smashedr/.*
+
+      - name: "Get Commit Action"
+        id: commit
+        uses: cssnr/get-commit-action@master
+
+      - name: "Echo Output"
+        env:
+          COMMIT: ${{ steps.commit.outputs.commit }}
+          RESULT: ${{ steps.commit.outputs.result }}
+        run: |
+          echo "sha: ${{ steps.commit.outputs.sha }}"
+          echo "commit: ${COMMIT}"
+          echo "result: ${RESULT}"
