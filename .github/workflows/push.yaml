@@ -65,48 +65,67 @@ jobs:
           version: ${{ inputs.uv-version }}
           python-version: ${{ inputs.python-version }}
 
-      - name: "Test 1"
+      #- name: "Install Python"
+      #  continue-on-error: true
+      #  run: |
+      #    uv python install --default
+      #    echo "::group::uv python list"
+      #    uv python list
+      #    echo "::endgroup::"
+      #    echo "::group::uv python list jq"
+      #    uv python list --only-installed --output-format json | jq
+      #    echo "::endgroup::"
+
+      - name: "Setup UV"
         continue-on-error: true
         run: |
-          uv python install --default
+          uv venv "${{ runner.temp }}/.venv"
+          echo "--- debug 1 ---"
+
+      - name: "Debug UV"
+        continue-on-error: true
+        run: |
+          uv python dir
+          uv python dir --bin
           echo "::group::uv python list"
           uv python list
           echo "::endgroup::"
           echo "::group::uv python list jq"
           uv python list --only-installed --output-format json | jq
           echo "::endgroup::"
+
+      - name: "Test 1"
+        continue-on-error: true
+        run: |
           #path="$(uv python list --only-installed --output-format json | jq '.[0].path')"
-          path="/home/runner/.local/share/uv/python/cpython-3.14.1-linux-x86_64-gnu/bin"
-          echo "path: ${path}"
-          ls -lah "${path}"
+          #path="/home/runner/.local/share/uv/python/cpython-3.14.1-linux-x86_64-gnu/bin"
+          #echo "path: ${path}"
+          #ls -lah "${path}"
           echo "--- debug 1 ---"
-          uv python dir --bin
           echo "--- debug 2 ---"
-          uv python dir
           echo "--- debug 2 ---"
-          uv python dir --bin
           echo "--- debug 3 ---"
-          uv pip install --python "${path}" zensical
+          uv pip install zensical
           echo "--- debug 4 ---"
           uv run zensical --version
           echo "--- debug 5 ---"
 
-      - name: "Debug 1"
-        continue-on-error: true
-        run: |
-          ls -lAh /home/runner/.local/share/uv
-          echo '----------'
-          ls -lAh /home/runner/.local/share/uv/python
+      #- name: "Debug 1"
+      #  continue-on-error: true
+      #  run: |
+      #    ls -lAh /home/runner/.local/share/uv
+      #    echo '----------'
+      #    ls -lAh /home/runner/.local/share/uv/python
 
-      - name: "Debug 2"
-        continue-on-error: true
-        run: |
-          echo "::group::uv pip list"
-          uv pip list
-          echo "::endgroup::"
-          echo "::group::tree"
-          tree .
-          echo "::endgroup::"
+      #- name: "Debug 2"
+      #  continue-on-error: true
+      #  run: |
+      #    echo "::group::uv pip list"
+      #    uv pip list
+      #    echo "::endgroup::"
+      #    echo "::group::tree"
+      #    tree .
+      #    echo "::endgroup::"
 
       # END CUSTOM
 
