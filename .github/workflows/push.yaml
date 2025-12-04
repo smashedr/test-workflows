@@ -113,11 +113,11 @@ jobs:
           #ls -lah "${path}"
           #source "${{ runner.temp }}/.venv/bin/activate"
           echo "--- debug 1 ---"
-          echo "--- debug 2 ---"
           uv pip install zensical
           echo "--- debug 2 ---"
-          which zensical
+          source ".venv/bin/activate"
           echo "--- debug 3 ---"
+          which zensical
           echo "--- debug 4 ---"
           zensical --version
           echo "--- debug 5 ---"
