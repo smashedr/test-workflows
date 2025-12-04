@@ -72,9 +72,10 @@ jobs:
           echo "::group::uv python list"
           uv python list
           echo "::endgroup::"
-
+          uv python list --only-installed --output-format json | jq
           path="$(uv python list --only-installed --output-format json | jq '.[0].path')"
           echo "path: ${path}"
+          ls "${path}"
           echo "--- debug 1 ---"
           uv python dir --bin
           echo "--- debug 2 ---"
