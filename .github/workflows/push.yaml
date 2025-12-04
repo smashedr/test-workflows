@@ -72,10 +72,13 @@ jobs:
           echo "::group::uv python list"
           uv python list
           echo "::endgroup::"
+          echo "::group::uv python list jq"
           uv python list --only-installed --output-format json | jq
-          path="$(uv python list --only-installed --output-format json | jq '.[0].path')"
+          echo "::endgroup::"
+          #path="$(uv python list --only-installed --output-format json | jq '.[0].path')"
+          path="/home/runner/.local/share/uv/python/cpython-3.14.1-linux-x86_64-gnu/bin"
           echo "path: ${path}"
-          ls "${path}"
+          ls -lah "${path}"
           echo "--- debug 1 ---"
           uv python dir --bin
           echo "--- debug 2 ---"
