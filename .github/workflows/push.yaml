@@ -8,8 +8,11 @@ on:
         type: boolean
         default: false
       version:
-        description: "Version Tag"
-        type: string
+        description: "Zensical Version"
+      python-version:
+        description: "Python Version"
+      uv-version:
+        description: "UV Version"
   push:
     branches: ["**"]
 
@@ -56,15 +59,31 @@ jobs:
 
       # BEGIN CUSTOM
 
+      - name: "Install UV"
+        uses: astral-sh/setup-uv@v6
+        with:
+          version: ${{ inputs.uv-version }}
+          python-version: ${{ inputs.python-version }}
+
       - name: "Test 1"
         continue-on-error: true
         run: |
-          npm ls
+          uv pip install zensical
 
       - name: "Test 2"
         continue-on-error: true
         run: |
-          npm -g ls
+          uv run zensical --version
+
+      - name: "Debug"
+        continue-on-error: true
+        run: |
+          echo "::group::uv pip list"
+          uv pip list
+          echo "::endgroup::"
+          echo "::group::tree"
+          tree .
+          echo "::endgroup::"
 
       # END CUSTOM
 
