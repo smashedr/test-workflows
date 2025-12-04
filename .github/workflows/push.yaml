@@ -103,6 +103,7 @@ jobs:
           echo "::group::uv python list jq"
           uv python list --only-installed --output-format json | jq
           echo "::endgroup::"
+          source ".venv/bin/activate"
 
       - name: "Test 1"
         continue-on-error: true
@@ -115,7 +116,6 @@ jobs:
           echo "--- debug 1 ---"
           uv pip install zensical
           echo "--- debug 2 ---"
-          source ".venv/bin/activate"
           echo "--- debug 3 ---"
           which zensical
           echo "--- debug 4 ---"
