@@ -68,7 +68,9 @@ jobs:
       - name: "Test 1"
         continue-on-error: true
         run: |
+          uv python install --default
           uv pip install --system zensical
+          uv run zensical --version
 
       - name: "Test 2"
         continue-on-error: true
