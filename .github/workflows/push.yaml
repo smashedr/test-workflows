@@ -72,6 +72,9 @@ jobs:
           echo "::group::uv python list"
           uv python list
           echo "::endgroup::"
+
+          path="$(uv python list --only-installed --output-format json | jq '.[0].path')"
+          echo "path: ${path}"
           echo "--- debug 1 ---"
           uv python dir --bin
           echo "--- debug 2 ---"
@@ -79,7 +82,7 @@ jobs:
           echo "--- debug 2 ---"
           uv python dir --bin
           echo "--- debug 3 ---"
-          uv pip install --python "$(uv python dir --bin)" zensical
+          uv pip install --python "${path}" zensical
           echo "--- debug 4 ---"
           uv run zensical --version
           echo "--- debug 5 ---"
