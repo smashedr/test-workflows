@@ -74,7 +74,7 @@ jobs:
           echo "--- debug 2 ---"
           uv python dir
           echo "--- debug 3 ---"
-          uv pip install --python "/home/runner/.local/share/uv" zensical
+          uv pip install --python "/home/runner/.local/share/uv/python" zensical
           echo "--- debug 4 ---"
           uv run zensical --version
           echo "--- debug 5 ---"
@@ -82,7 +82,9 @@ jobs:
       - name: "Debug 1"
         continue-on-error: true
         run: |
-          tree /home/runner/.local/share/uv
+          ls -lAh /home/runner/.local/share/uv
+          echo '----------'
+          ls -lAh /home/runner/.local/share/uv/python
 
       - name: "Debug 2"
         continue-on-error: true
