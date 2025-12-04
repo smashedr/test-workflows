@@ -112,6 +112,7 @@ jobs:
           #path="/home/runner/.local/share/uv/python/cpython-3.14.1-linux-x86_64-gnu/bin"
           #echo "path: ${path}"
           #ls -lah "${path}"
+          source ".venv/bin/activate"
           #source "${{ runner.temp }}/.venv/bin/activate"
           echo "--- debug 1 ---"
           uv pip install zensical
