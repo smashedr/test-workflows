@@ -69,12 +69,17 @@ jobs:
         continue-on-error: true
         run: |
           uv python install --default
-          echo "--- debug 1 ---"
+          echo "::group::uv python list"
           uv python list
+          echo "::endgroup::"
+          echo "--- debug 1 ---"
+          uv python dir --bin
           echo "--- debug 2 ---"
           uv python dir
+          echo "--- debug 2 ---"
+          uv python dir --bin
           echo "--- debug 3 ---"
-          uv pip install --python "/home/runner/.local/share/uv/python" zensical
+          uv pip install --python "$(uv python dir --bin)" zensical
           echo "--- debug 4 ---"
           uv run zensical --version
           echo "--- debug 5 ---"
