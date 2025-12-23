@@ -69,7 +69,7 @@ jobs:
       #    content: |
       #      - version: ${{ inputs.version }}
 
-      - name: Set foobar to cool
+      - name: "Update Snap Version"
         uses: mikefarah/yq@master
         with:
           cmd: yq -i '.version = "${{ inputs.version }}"' 'snap/snapcraft.yaml'
