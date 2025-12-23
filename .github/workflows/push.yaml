@@ -59,12 +59,12 @@ jobs:
       - name: "Test 1"
         continue-on-error: true
         run: |
-          npm ls
+          echo test
 
       - name: "Test 2"
         continue-on-error: true
         run: |
-          npm -g ls
+          echo two
 
       # END CUSTOM
 
