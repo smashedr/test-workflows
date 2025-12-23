@@ -56,6 +56,11 @@ jobs:
           version: ${{ inputs.version }}
           initpy-files: ${{ inputs.version-file }}
 
+      - name: "Debug Version"
+        continue-on-error: true
+        run: |
+          cat ${{ inputs.version-file }}
+
       # https://documentation.ubuntu.com/snapcraft/stable/how-to/crafting/configure-package-information/#configure-package-information
       - name: "Update Snap Version"
         uses: Liam-Johnston/yaml-helper@V1
@@ -65,10 +70,10 @@ jobs:
             variables:
               - version: ${{ inputs.version }}
 
-      - name: "Debug Version"
+      - name: "Debug Snap Version"
         continue-on-error: true
         run: |
-          cat ${{ inputs.version-file }}
+          cat "snap/snapcraft.yaml"
 
 #      - name: "Snap Build"
 #        id: build
