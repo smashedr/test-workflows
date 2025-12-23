@@ -67,8 +67,7 @@ jobs:
         with:
           file-location: "snap/snapcraft.yaml"
           content: |
-            variables:
-              - version: ${{ inputs.version }}
+            - version: ${{ inputs.version }}
 
       - name: "Debug Snap Version"
         continue-on-error: true
