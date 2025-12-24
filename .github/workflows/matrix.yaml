@@ -24,7 +24,12 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [windows-latest, macos-latest, ubuntu-latest, ubuntu-24.04-arm]
+        os:
+          - windows-latest
+          - macos-latest-large
+          - macos-latest
+          - ubuntu-latest
+          - ubuntu-24.04-arm
 
     permissions:
       contents: write
@@ -66,7 +71,7 @@ jobs:
         continue-on-error: true
         shell: bash
         run: |
-          echo test
+          uname -a
 
       # END CUSTOM
 
