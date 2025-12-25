@@ -61,17 +61,17 @@ jobs:
 
       # BEGIN CUSTOM
 
-      - name: "GitHub Retarded"
-        run: |
-          git clone https://github.com/smashedr/test4 homebrew
+      #- name: "GitHub Retarded"
+      #  run: |
+      #    git clone https://github.com/smashedr/test4 homebrew
 
-      #- name: "Checkout Homebrew"
-      #  uses: actions/checkout@v6
-      #  with:
-      #    repository: ${{ env.repo }}
-      #    ref: master
-      #    path: homebrew
-      #
+      - name: "Checkout Homebrew"
+        uses: actions/checkout@v6
+        with:
+          repository: ${{ env.repo }}
+          ref: master
+          path: homebrew
+
       #- name: "Debug 1"
       #  continue-on-error: true
       #  run: |
