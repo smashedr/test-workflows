@@ -78,18 +78,34 @@ jobs:
         run: |
           line=$(grep -ni -m1 version homebrew/Formula/${{ env.formula }}.rb | cut -f1 -d:)
           echo "line: ${line}"
-          sed -i "${line}"'s/.*/${{ env.version }}/' homebrew/Formula/${{ env.formula }}.rb
+          sed -i "${line}"'s/.*/  version "${{ env.version }}"/' homebrew/Formula/${{ env.formula }}.rb
 
       - name: "Cat File"
         continue-on-error: true
         run: |
           cat homebrew/Formula/${{ env.formula }}.rb
 
-      #- name: "Commit File"
-      #  run: |
-      #    git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
-      #    git config --local user.name "github-actions[bot]"
-      #    git commit -a -m "Bump ${{ env.formula }} to ${{ env.version }}"
+      - name: "Debug 1"
+        continue-on-error: true
+        working-directory: homebrew
+        run: |
+          pwd
+          ls -lah
+          git status
+
+      - name: "Commit File"
+        working-directory: homebrew
+        run: |
+          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git commit -a -m "Bump ${{ env.formula }} to ${{ env.version }}"
+
+      - name: "Debug 2"
+        continue-on-error: true
+        working-directory: homebrew
+        run: |
+          pwd
+          git status
 
       #- name: "Push changes"
       #  uses: ad-m/github-push-action@master
