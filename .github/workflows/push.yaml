@@ -152,6 +152,8 @@ jobs:
           git remote set-url origin "https://${{ secrets.HOMEBREW_PAT }}@github.com/${{ env.repo }}"
           git remote -v
 
+          git config --unset 'http.https://github.com/.extraheader'
+
           echo "::group::config"
           git config --list
           echo "::endgroup::"
