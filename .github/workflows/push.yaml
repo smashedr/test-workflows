@@ -102,12 +102,22 @@ jobs:
         working-directory: homebrew
         run: |
           pwd
+          echo "::group::tree"
+          tree .
+          echo "::endgroup::"
+
+          echo debug 1
+
           #git clone https://github.com/smashedr/test4
           #cd test4
-          echo "retarded" >> ../README.md
+          echo "retarded" >> README.md
+
+          echo debug 2
 
           #git config safe.directory '*'
           git config --local --unset http.https://github.com/.extraheader
+
+          echo debug 3
 
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
