@@ -98,14 +98,15 @@ jobs:
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
           git commit -a -m "Bump ${{ env.formula }} to ${{ env.version }}"
+          git push -u origin master "https://${{ secrets.HOMEBREW_PAT }}@github.com/${{ env.repo }}.git"
 
-      - name: "Push changes"
-        if: ${{ env.repo }}
-        uses: ad-m/github-push-action@master
-        with:
-          github_token: ${{ secrets.HOMEBREW_PAT }}
-          repository: ${{ env.repo }}
-          branch: master
+      #- name: "Push changes"
+      #  if: ${{ env.repo }}
+      #  uses: ad-m/github-push-action@master
+      #  with:
+      #    github_token: ${{ secrets.HOMEBREW_PAT }}
+      #    repository: ${{ env.repo }}
+      #    branch: master
 
       # END CUSTOM
 
