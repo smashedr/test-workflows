@@ -71,6 +71,7 @@ jobs:
           repository: ${{ env.repo }}
           ref: master
           path: homebrew
+          persist-credentials: false
 
       #- name: "Debug 1"
       #  continue-on-error: true
