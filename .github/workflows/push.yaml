@@ -105,7 +105,8 @@ jobs:
           #cd test4
           echo "retarded" >> README.md
 
-          git config safe.directory '*'
+          #git config safe.directory '*'
+          git config --global --unset http.https://github.com/.extraheader
 
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
@@ -113,6 +114,11 @@ jobs:
           git status
           git remote set-url origin "https://${{ secrets.HOMEBREW_PAT }}@github.com/${{ env.repo }}"
           git remote -v
+
+          echo "::group::config"
+          git config --list
+          echo "::endgroup::"
+
           git push -u origin master
 
       #- name: "Push changes"
