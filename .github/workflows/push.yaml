@@ -104,7 +104,7 @@ jobs:
         if: ${{ env.repo }}
         uses: ad-m/github-push-action@master
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          github_token: ${{ secrets.HOMEBREW_PAT }}
           repository: ${{ env.repo }}
           branch: master
 
