@@ -100,6 +100,7 @@ jobs:
           git config --local user.name "github-actions[bot]"
           git commit -a -m "Bump ${{ env.formula }} to ${{ env.version }}"
           git remote set-url origin "https://${{ secrets.HOMEBREW_PAT }}@github.com/${{ env.repo }}.git"
+          git remote -v
           git push -u origin master
 
       #- name: "Push changes"
