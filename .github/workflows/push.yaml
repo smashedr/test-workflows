@@ -76,7 +76,9 @@ jobs:
       - name: "Update Formula"
         shell: bash
         run: |
-          sed -i "/version/{N; s/.*\n/  version: \"${{ env.version }}\"\n/;}" homebrew/Formula/${{ env.formula }}.rb
+          #sed -i "/version/{N; s/.*\n/  version: \"${{ env.version }}\"\n/;}" homebrew/Formula/${{ env.formula }}.rb
+          line=$(grep -ni -m1 version homebrew/Formula/${{ env.formula }}.rb | cut -f1 -d:)
+          sed "${line}"'s/.*/NIGGER/' homebrew/Formula/${{ env.formula }}.rb
 
       - name: "Cat File"
         continue-on-error: true
