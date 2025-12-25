@@ -141,6 +141,15 @@ jobs:
 
           echo debug 3
 
+
+
+          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git commit -a -m "Bump ${{ env.formula }} to ${{ env.version }}"
+          git status
+          git remote set-url origin "https://${{ secrets.HOMEBREW_PAT }}@github.com/${{ env.repo }}"
+          git remote -v
+
           set +e
           echo "::group::config"
           git config --list
@@ -158,19 +167,7 @@ jobs:
 
           echo debug 4
 
-          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git config --local user.name "github-actions[bot]"
-          git commit -a -m "Bump ${{ env.formula }} to ${{ env.version }}"
-          git status
-          git remote set-url origin "https://${{ secrets.HOMEBREW_PAT }}@github.com/${{ env.repo }}"
-          git remote -v
-
           git config --global --unset 'http.https://github.com/.extraheader'
-
-          echo "::group::config"
-          git config --list
-          echo "::endgroup::"
-
           git push -u origin master
 
       #- name: "Push changes"
