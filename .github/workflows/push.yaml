@@ -26,6 +26,7 @@ jobs:
       contents: write
 
     env:
+      repo: "smashedr/test4"
       version: "1.0.0"
       formula: "npmstat"
 
@@ -63,12 +64,11 @@ jobs:
       - name: "Checkout Homebrew"
         uses: actions/checkout@v6
         with:
-          #repository: smashedr/homebrew-test
-          repository: smashedr/test4
+          repository: ${{ env.repo }}
           ref: master
           path: homebrew
 
-      - name: "Control"
+      - name: "Debug 1"
         continue-on-error: true
         run: |
           cat homebrew/Formula/${{ env.formula }}.rb
@@ -80,12 +80,12 @@ jobs:
           echo "line: ${line}"
           sed -i "${line}"'s/.*/  version "${{ env.version }}"/' homebrew/Formula/${{ env.formula }}.rb
 
-      - name: "Cat File"
+      - name: "Debug 2"
         continue-on-error: true
         run: |
           cat homebrew/Formula/${{ env.formula }}.rb
 
-      - name: "Debug 1"
+      - name: "Debug 3"
         continue-on-error: true
         working-directory: homebrew
         run: |
@@ -105,6 +105,7 @@ jobs:
       #  with:
       #    github_token: ${{ secrets.GITHUB_TOKEN }}
       #    branch: master
+      #    repository: ${{ env.repo }}
 
       # END CUSTOM
 
