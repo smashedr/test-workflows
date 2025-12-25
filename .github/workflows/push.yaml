@@ -61,6 +61,18 @@ jobs:
         run: |
           echo test
 
+      - name: "Checkout Homebrew"
+        uses: actions/checkout@v6
+        with:
+          repository: smashedr/homebrew-test
+          ref: master
+          path: homebrew
+
+      - name: "Update Formula"
+        run: |
+          echo AI Retarded
+          ls -lah homebrew
+
       - name: "Test 2"
         continue-on-error: true
         run: |
