@@ -56,11 +56,6 @@ jobs:
 
       # BEGIN CUSTOM
 
-      - name: "Test 1"
-        continue-on-error: true
-        run: |
-          echo test
-
       - name: "Checkout Homebrew"
         uses: actions/checkout@v6
         with:
@@ -68,15 +63,22 @@ jobs:
           ref: master
           path: homebrew
 
+      - name: "Test 1"
+        continue-on-error: true
+        run: |
+          cat homebrew/Formula/npmstat.rb
+
       - name: "Update Formula"
         run: |
           echo AI Retarded
           ls -lah homebrew
+          line="version: retarded-ai"
+          sed -i '0,/version/{s/.*$/'"$line"'/}' homebrew/Formula/npmstat.rb
 
       - name: "Test 2"
         continue-on-error: true
         run: |
-          echo two
+          cat homebrew/Formula/npmstat.rb
 
       # END CUSTOM
 
