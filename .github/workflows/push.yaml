@@ -101,6 +101,9 @@ jobs:
           tree .
           echo "::endgroup::"
 
+          echo "::group::config"
+          git config --list
+          echo "::endgroup::"
           echo "::group::config --system"
           git config --system  --list
           echo "::endgroup::"
@@ -112,18 +115,35 @@ jobs:
           echo "::endgroup::"
 
       - name: "Commit File"
+        #continue-on-error: true
         working-directory: homebrew
         run: |
           pwd
+          set +e
+          echo "::group::config"
+          git config --list
+          echo "::endgroup::"
+          echo "::group::config --system"
+          git config --system  --list
+          echo "::endgroup::"
+          echo "::group::config --local"
+          git config --local  --list
+          echo "::endgroup::"
+          echo "::group::config --global"
+          git config --global  --list
+          echo "::endgroup::"
+          set -e
 
-          #git clone https://github.com/smashedr/test4
-          #cd test4
           echo "retarded" >> README.md
 
           #git config safe.directory '*'
-          git config --system --unset 'http.https://github.com/.extraheader'
+          git config --unset 'http.https://github.com/.extraheader'
 
           echo debug 3
+
+          echo "::group::config"
+          git config --list
+          echo "::endgroup::"
 
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
