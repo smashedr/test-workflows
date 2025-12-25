@@ -61,56 +61,59 @@ jobs:
 
       # BEGIN CUSTOM
 
-      - name: "Checkout Homebrew"
-        uses: actions/checkout@v6
-        with:
-          repository: ${{ env.repo }}
-          ref: master
-          path: homebrew
-
-      - name: "Debug 1"
-        continue-on-error: true
-        run: |
-          cat homebrew/Formula/${{ env.formula }}
-
-      - name: "Update Formula"
-        shell: bash
-        run: |
-          line=$(grep -ni -m1 version homebrew/Formula/${{ env.formula }} | cut -f1 -d:)
-          echo "line: ${line}"
-          sed -i "${line}"'s/.*/  version "${{ env.version }}"/' homebrew/Formula/${{ env.formula }}
-
-      - name: "Debug 2"
-        continue-on-error: true
-        run: |
-          cat homebrew/Formula/${{ env.formula }}
-
-      - name: "Debug 3"
-        continue-on-error: true
-        working-directory: homebrew
-        run: |
-          pwd
-          git status
-          git remote -v
+      #- name: "Checkout Homebrew"
+      #  uses: actions/checkout@v6
+      #  with:
+      #    repository: ${{ env.repo }}
+      #    ref: master
+      #    path: homebrew
+      #
+      #- name: "Debug 1"
+      #  continue-on-error: true
+      #  run: |
+      #    cat homebrew/Formula/${{ env.formula }}
+      #
+      #- name: "Update Formula"
+      #  shell: bash
+      #  run: |
+      #    line=$(grep -ni -m1 version homebrew/Formula/${{ env.formula }} | cut -f1 -d:)
+      #    echo "line: ${line}"
+      #    sed -i "${line}"'s/.*/  version "${{ env.version }}"/' homebrew/Formula/${{ env.formula }}
+      #
+      #- name: "Debug 2"
+      #  continue-on-error: true
+      #  run: |
+      #    cat homebrew/Formula/${{ env.formula }}
+      #
+      #- name: "Debug 3"
+      #  continue-on-error: true
+      #  working-directory: homebrew
+      #  run: |
+      #    pwd
+      #    git status
+      #    git remote -v
 
       - name: "Commit File"
-        working-directory: homebrew
-        #continue-on-error: true
+        #working-directory: homebrew
         run: |
+          git clone https://github.com/smashedr/test4
+          cd test4
+          echo "retarded" >> README.md
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
           git commit -a -m "Bump ${{ env.formula }} to ${{ env.version }}"
-          #git remote set-url origin "https://${{ secrets.GH_PAT }}@github.com/${{ env.repo }}"
-          #git push -u origin master
+          git status
+          git remote set-url origin "https://${{ secrets.GH_PAT }}@github.com/${{ env.repo }}"
+          git push -u origin master
 
-      - name: "Push changes"
-        if: ${{ env.repo }}
-        uses: ad-m/github-push-action@master
-        with:
-          directory: homebrew
-          github_token: ${{ secrets.GH_PAT }}
-          repository: ${{ env.repo }}
-          branch: master
+      #- name: "Push changes"
+      #  if: ${{ env.repo }}
+      #  uses: ad-m/github-push-action@master
+      #  with:
+      #    directory: homebrew
+      #    github_token: ${{ secrets.GH_PAT }}
+      #    repository: ${{ env.repo }}
+      #    branch: master
 
       # END CUSTOM
 
