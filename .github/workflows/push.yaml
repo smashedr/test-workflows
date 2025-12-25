@@ -90,7 +90,6 @@ jobs:
         working-directory: homebrew
         run: |
           pwd
-          ls -lah
           git status
 
       - name: "Commit File"
