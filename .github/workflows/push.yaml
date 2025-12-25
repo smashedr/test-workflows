@@ -61,6 +61,10 @@ jobs:
 
       # BEGIN CUSTOM
 
+      - name: "GitHub Retarded"
+        run: |
+          git clone https://github.com/smashedr/test4 homebrew
+
       #- name: "Checkout Homebrew"
       #  uses: actions/checkout@v6
       #  with:
@@ -94,10 +98,10 @@ jobs:
       #    git remote -v
 
       - name: "Commit File"
-        #working-directory: homebrew
+        working-directory: homebrew
         run: |
-          git clone https://github.com/smashedr/test4
-          cd test4
+          #git clone https://github.com/smashedr/test4
+          #cd test4
           echo "retarded" >> README.md
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
