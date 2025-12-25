@@ -101,6 +101,7 @@ jobs:
       - name: "Commit File"
         working-directory: homebrew
         run: |
+          pwd
           #git clone https://github.com/smashedr/test4
           #cd test4
           echo "retarded" >> README.md
