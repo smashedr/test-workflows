@@ -141,9 +141,22 @@ jobs:
 
           echo debug 3
 
+          set +e
           echo "::group::config"
           git config --list
           echo "::endgroup::"
+          echo "::group::config --system"
+          git config --system  --list
+          echo "::endgroup::"
+          echo "::group::config --local"
+          git config --local  --list
+          echo "::endgroup::"
+          echo "::group::config --global"
+          git config --global  --list
+          echo "::endgroup::"
+          set -e
+
+          echo debug 4
 
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
