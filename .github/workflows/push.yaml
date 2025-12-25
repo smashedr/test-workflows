@@ -96,26 +96,32 @@ jobs:
           pwd
           git status
           git remote -v
-          git config --list
+
+          echo "::group::tree"
+          tree .
+          echo "::endgroup::"
+
+          echo "::group::config --system"
+          git config --system  --list
+          echo "::endgroup::"
+          echo "::group::config --local"
+          git config --local  --list
+          echo "::endgroup::"
+          echo "::group::config --global"
+          git config --global  --list
+          echo "::endgroup::"
 
       - name: "Commit File"
         working-directory: homebrew
         run: |
           pwd
-          echo "::group::tree"
-          tree .
-          echo "::endgroup::"
-
-          echo debug 1
 
           #git clone https://github.com/smashedr/test4
           #cd test4
           echo "retarded" >> README.md
 
-          echo debug 2
-
           #git config safe.directory '*'
-          git config --local --unset 'http.https://github.com/.extraheader'
+          git config --system --unset 'http.https://github.com/.extraheader'
 
           echo debug 3
 
