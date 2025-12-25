@@ -104,7 +104,7 @@ jobs:
           pwd
           #git clone https://github.com/smashedr/test4
           #cd test4
-          echo "retarded" >> README.md
+          echo "retarded" >> ../README.md
 
           #git config safe.directory '*'
           git config --local --unset http.https://github.com/.extraheader
