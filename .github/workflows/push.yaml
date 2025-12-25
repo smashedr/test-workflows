@@ -28,7 +28,7 @@ jobs:
     env:
       repo: "smashedr/test4"
       version: "1.0.0"
-      formula: "npmstat"
+      formula: "npmstat.rb"
 
     steps:
       - name: "Checkout"
@@ -71,19 +71,19 @@ jobs:
       - name: "Debug 1"
         continue-on-error: true
         run: |
-          cat homebrew/Formula/${{ env.formula }}.rb
+          cat homebrew/Formula/${{ env.formula }}
 
       - name: "Update Formula"
         shell: bash
         run: |
-          line=$(grep -ni -m1 version homebrew/Formula/${{ env.formula }}.rb | cut -f1 -d:)
+          line=$(grep -ni -m1 version homebrew/Formula/${{ env.formula }} | cut -f1 -d:)
           echo "line: ${line}"
-          sed -i "${line}"'s/.*/  version "${{ env.version }}"/' homebrew/Formula/${{ env.formula }}.rb
+          sed -i "${line}"'s/.*/  version "${{ env.version }}"/' homebrew/Formula/${{ env.formula }}
 
       - name: "Debug 2"
         continue-on-error: true
         run: |
-          cat homebrew/Formula/${{ env.formula }}.rb
+          cat homebrew/Formula/${{ env.formula }}
 
       - name: "Debug 3"
         continue-on-error: true
@@ -100,12 +100,13 @@ jobs:
           git config --local user.name "github-actions[bot]"
           git commit -a -m "Bump ${{ env.formula }} to ${{ env.version }}"
 
-      #- name: "Push changes"
-      #  uses: ad-m/github-push-action@master
-      #  with:
-      #    github_token: ${{ secrets.GITHUB_TOKEN }}
-      #    branch: master
-      #    repository: ${{ env.repo }}
+      - name: "Push changes"
+        if: ${{ env.repo }}
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          repository: ${{ env.repo }}
+          branch: master
 
       # END CUSTOM
 
