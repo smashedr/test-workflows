@@ -115,7 +115,7 @@ jobs:
           echo debug 2
 
           #git config safe.directory '*'
-          git config --local --unset http.https://github.com/.extraheader
+          git config --local --unset 'http.https://github.com/.extraheader=AUTHORIZATION'
 
           echo debug 3
 
