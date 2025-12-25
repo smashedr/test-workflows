@@ -172,7 +172,7 @@ jobs:
 
           echo debug 4
 
-          git config --global --unset 'http.https://github.com/.extraheader'
+          #git config --global --unset 'http.https://github.com/.extraheader'
           git push -u origin master
 
       #- name: "Push changes"
