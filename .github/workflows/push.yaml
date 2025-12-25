@@ -114,11 +114,16 @@ jobs:
           git config --global  --list
           echo "::endgroup::"
 
+          echo "${GIT_CONFIG_PARAMETERS}"
+
       - name: "Commit File"
         #continue-on-error: true
         working-directory: homebrew
+        env:
+          GIT_CONFIG_PARAMETERS: ""
         run: |
           pwd
+          echo "${GIT_CONFIG_PARAMETERS}"
           set +e
           echo "::group::config"
           git config --list
