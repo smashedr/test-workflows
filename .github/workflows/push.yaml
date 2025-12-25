@@ -25,6 +25,10 @@ jobs:
     permissions:
       contents: write
 
+    env:
+      version: "1.0.0"
+      formula: "npmstat"
+
     steps:
       - name: "Checkout"
         uses: actions/checkout@v5
@@ -59,26 +63,37 @@ jobs:
       - name: "Checkout Homebrew"
         uses: actions/checkout@v6
         with:
-          repository: smashedr/homebrew-test
+          #repository: smashedr/homebrew-test
+          repository: smashedr/test4
           ref: master
           path: homebrew
 
-      - name: "Test 1"
+      - name: "Control"
         continue-on-error: true
         run: |
-          cat homebrew/Formula/npmstat.rb
+          cat homebrew/Formula/${{ env.formula }}.rb
 
       - name: "Update Formula"
+        shell: bash
         run: |
-          echo AI Retarded
-          ls -lah homebrew
-          version='ai-fucking-retarded-as-fuck'
-          sed -i "/version/{N; s/.*\n/  version: \"${version}\"\n/;}" homebrew/Formula/npmstat.rb
+          sed -i "/version/{N; s/.*\n/  version: \"${{ env.version }}\"\n/;}" homebrew/Formula/${{ env.formula }}.rb
 
-      - name: "Test 2"
+      - name: "Cat File"
         continue-on-error: true
         run: |
-          cat homebrew/Formula/npmstat.rb
+          cat homebrew/Formula/${{ env.formula }}.rb
+
+      - name: "Commit File"
+        run: |
+          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git commit -a -m "Bump ${{ env.formula }} to ${{ env.version }}"
+
+      #- name: "Push changes"
+      #  uses: ad-m/github-push-action@master
+      #  with:
+      #    github_token: ${{ secrets.GITHUB_TOKEN }}
+      #    branch: master
 
       # END CUSTOM
 
