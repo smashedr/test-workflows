@@ -137,7 +137,7 @@ jobs:
           echo "retarded" >> README.md
 
           #git config safe.directory '*'
-          git config --unset 'http.https://github.com/.extraheader'
+          #git config --unset 'http.https://github.com/.extraheader'
 
           echo debug 3
 
