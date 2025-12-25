@@ -73,107 +73,30 @@ jobs:
           path: homebrew
           persist-credentials: false
 
-      #- name: "Debug 1"
-      #  continue-on-error: true
-      #  run: |
-      #    cat homebrew/Formula/${{ env.formula }}
-      #
-      #- name: "Update Formula"
-      #  shell: bash
-      #  run: |
-      #    line=$(grep -ni -m1 version homebrew/Formula/${{ env.formula }} | cut -f1 -d:)
-      #    echo "line: ${line}"
-      #    sed -i "${line}"'s/.*/  version "${{ env.version }}"/' homebrew/Formula/${{ env.formula }}
-      #
-      #- name: "Debug 2"
-      #  continue-on-error: true
-      #  run: |
-      #    cat homebrew/Formula/${{ env.formula }}
-
-      - name: "Debug 3"
+      - name: "Debug 1"
         continue-on-error: true
-        working-directory: homebrew
         run: |
-          pwd
-          git status
-          git remote -v
+          cat homebrew/Formula/${{ env.formula }}
 
-          echo "::group::tree"
-          tree .
-          echo "::endgroup::"
+      - name: "Update Formula"
+        shell: bash
+        run: |
+          line=$(grep -ni -m1 version homebrew/Formula/${{ env.formula }} | cut -f1 -d:)
+          echo "line: ${line}"
+          sed -i "${line}"'s/.*/  version "${{ env.version }}"/' homebrew/Formula/${{ env.formula }}
 
-          echo "::group::config"
-          git config --list
-          echo "::endgroup::"
-          echo "::group::config --system"
-          git config --system  --list
-          echo "::endgroup::"
-          echo "::group::config --local"
-          git config --local  --list
-          echo "::endgroup::"
-          echo "::group::config --global"
-          git config --global  --list
-          echo "::endgroup::"
-
-          echo "${GIT_CONFIG_PARAMETERS}"
+      - name: "Debug 2"
+        continue-on-error: true
+        run: |
+          cat homebrew/Formula/${{ env.formula }}
 
       - name: "Commit File"
-        #continue-on-error: true
         working-directory: homebrew
-        env:
-          GIT_CONFIG_PARAMETERS: ""
         run: |
-          pwd
-          echo "${GIT_CONFIG_PARAMETERS}"
-          set +e
-          echo "::group::config"
-          git config --show-origin --list
-          echo "::endgroup::"
-          echo "::group::config --system"
-          git config --system  --list
-          echo "::endgroup::"
-          echo "::group::config --local"
-          git config --local  --list
-          echo "::endgroup::"
-          echo "::group::config --global"
-          git config --global  --list
-          echo "::endgroup::"
-          set -e
-
-          echo "retarded" >> README.md
-
-          #git config safe.directory '*'
-          #git config --unset 'http.https://github.com/.extraheader'
-
-          echo debug 3
-
-
-
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
           git commit -a -m "Bump ${{ env.formula }} to ${{ env.version }}"
-          git status
           git remote set-url origin "https://${{ secrets.HOMEBREW_PAT }}@github.com/${{ env.repo }}"
-          git remote -v
-
-          set +e
-          echo "::group::config"
-          git config --list
-          echo "::endgroup::"
-          echo "::group::config --system"
-          git config --system  --list
-          echo "::endgroup::"
-          echo "::group::config --local"
-          git config --local  --list
-          echo "::endgroup::"
-          echo "::group::config --global"
-          git config --global  --list
-          echo "::endgroup::"
-          set -e
-
-          echo debug 4
-
-          #git config --global --unset 'http.https://github.com/.extraheader'
           git push -u origin master
 
       #- name: "Push changes"
