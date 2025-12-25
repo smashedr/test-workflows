@@ -73,7 +73,7 @@ jobs:
           echo AI Retarded
           ls -lah homebrew
           line='version "ai-fucking-retarded-as-fuck"'
-          sed "/version/c\${line}" homebrew/Formula/npmstat.rb
+          sed -i "/version/c\  ${line}" homebrew/Formula/npmstat.rb
 
       - name: "Test 2"
         continue-on-error: true
