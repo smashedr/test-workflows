@@ -149,24 +149,29 @@ jobs:
           tag_name="$(echo ${release} | jq -r '.tag_name')"
           echo "::group::Download - ${tag_name}"
 
+          name="$(echo ${asset} | jq -r '.name')"
+          echo "Name: ${name}"
           url="$(echo ${asset} | jq -r '.browser_download_url')"
           echo "Downloading: ${url}"
 
-          if [[ ${url} == *.zip ]]; then
-            echo "ai is fucking retarded"
+          echo "Destination: ${{ runner.temp }}/actionlint"
+          curl -sL "$url" -o "${{ runner.temp }}/${name}"
+
+          ls -lah "${{ runner.temp }}"
+
+          if [[ ${name} == *.zip ]]; then
+            echo "ZIP"
           else
-            echo "RETARDED AI IS RETARDED"
+            echo "TAR"
           fi
 
-          exit 0
-
-          echo "Destination: ${{ runner.temp }}/actionlint"
-          curl -sL "${url}" | tar xz -C "${{ runner.temp }}" actionlint
-          file "${{ runner.temp }}/actionlint" ||:
+          #echo "Destination: ${{ runner.temp }}/actionlint"
+          #curl -sL "${url}" | tar xz -C "${{ runner.temp }}" actionlint
+          #file "${{ runner.temp }}/actionlint" ||:
           echo "::endgroup::"
 
-          echo -n "Actionlint Version: "
-          "${{ runner.temp }}/actionlint" --version
+          #echo -n "Actionlint Version: "
+          #"${{ runner.temp }}/actionlint" --version
 
       # END CUSTOM
 
