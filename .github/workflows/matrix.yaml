@@ -152,7 +152,7 @@ jobs:
           url="$(echo ${asset} | jq -r '.browser_download_url')"
           echo "Downloading: ${url}"
 
-          if [ "${url}" == "*.zip" ];then
+          if [[ ${url} == *.zip ]]; then
             echo "ai is fucking retarded"
           else
             echo "RETARDED AI IS RETARDED"
