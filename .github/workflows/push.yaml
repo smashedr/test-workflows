@@ -76,9 +76,9 @@ jobs:
           homebrew-tap: "smashedr/homebrew-test"
           create-pullrequest: false
           create-branch: false
-        #env:
-        #  # the personal access token should have "repo" & "workflow" scopes
-        #  COMMITTER_TOKEN: ${{ secrets.HOMEBREW_PAT }}
+        env:
+          # the personal access token should have "repo" & "workflow" scopes
+          COMMITTER_TOKEN: ${{ secrets.HOMEBREW_PAT }}
 
       - name: "Test 2"
         continue-on-error: true
