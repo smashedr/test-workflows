@@ -10,8 +10,8 @@ on:
       version:
         description: "Version Tag"
         type: string
-  #push:
-  #  branches: ["**"]
+  push:
+    branches: ["**"]
 
 env:
   version: ${{ github.event.workflow_run.head_branch || github.ref_name }}
@@ -67,11 +67,96 @@ jobs:
 
       # BEGIN CUSTOM
 
-      - name: "Test 1"
+      - name: "Debug 1"
         continue-on-error: true
         shell: bash
         run: |
           uname -a
+
+      - name: "Architecture"
+        id: arch
+        shell: bash
+        run: |
+          echo "::group::Parsing Architecture"
+
+          if [ -n "" ];then
+            echo "DEBUG FAILURE FIX CODE IDIOT"
+          else
+            uname -a
+
+            echo "uname -s: $(uname -s)"
+            kernel=$(uname -s)
+            case "$kernel" in
+              Darwin)   kernel="darwin"   ;;
+              FreeBSD)  kernel="freebsd"  ;;
+              MINGW*)   kernel=windows;;
+              Linux)    kernel="linux"    ;;
+              * )       kernel="linux"    ;;
+            esac
+            echo "kernel: ${kernel}"
+
+            echo "uname -m: $(uname -m)"
+            hardware=$(uname -m)
+            case "$hardware" in
+              x86)      hardware="amd386"  ;;
+              i?86)     hardware="amd386"  ;;
+              amd64)    hardware="amd64"   ;;
+              x86_64)   hardware="amd64"   ;;
+              aarch64)  hardware="arm64"   ;;
+              * )       hardware="amd64"   ;;
+            esac
+            echo "hardware: ${hardware}"
+
+            echo "arch: ${kernel}_${hardware}"
+            echo "arch=${kernel}_${hardware}" >> "$GITHUB_OUTPUT"
+          fi
+          echo "::endgroup::"
+
+      - name: "Debug 2"
+        continue-on-error: true
+        shell: bash
+        run: |
+          echo "arch: ${{ steps.arch.outputs.arch }}"
+
+      - name: "Download"
+        id: download
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          echo "Downloading Actionlint"
+
+          if [ "${{ inputs.version }}" == "latest" ];then
+            tag="latest"
+          else
+            tag="tags/${{ inputs.version }}"
+          fi
+
+          echo "::group::Release - ${tag}"
+          release="$(gh api --cache 1h /repos/rhysd/actionlint/releases/${tag})"
+          echo "release: ${release}"
+          echo "::endgroup::"
+
+          echo "::group::Asset - ${{ steps.arch.outputs.arch }}"
+          asset="$(echo ${release} |\
+            jq '[.assets[] | select(.name | contains("${{ steps.arch.outputs.arch }}"))]' |\
+            jq '.[0]')"
+          echo "asset: ${asset}"
+          echo "::endgroup::"
+
+          tag_name="$(echo ${release} | jq -r '.tag_name')"
+          echo "::group::Download - ${tag_name}"
+
+          url="$(echo ${asset} | jq -r '.browser_download_url')"
+          echo "Downloading: ${url}"
+
+          #echo "Destination: ${{ runner.temp }}/actionlint"
+          #curl -sL "${url}" | tar xz -C "${{ runner.temp }}" actionlint
+          #file "${{ runner.temp }}/actionlint" ||:
+          #echo "::endgroup::"
+          #
+          #echo -n "Actionlint Version: "
+          #"${{ runner.temp }}/actionlint" --version
 
       # END CUSTOM
 
