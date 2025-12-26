@@ -85,7 +85,7 @@ jobs:
         with:
           version: ${{ env.ref_name }}
           repo: smashedr/homebrew-test
-          #formula: toml-run.rb
+          formula: toml-run.rb
           token: ${{ secrets.HOMEBREW_PAT }}
 
       - name: "Test 2"
