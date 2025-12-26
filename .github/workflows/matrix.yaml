@@ -71,6 +71,7 @@ jobs:
         continue-on-error: true
         shell: bash
         run: |
+          echo "${SHELL}"
           uname -a
 
       - name: "Architecture"
@@ -150,6 +151,10 @@ jobs:
 
           url="$(echo ${asset} | jq -r '.browser_download_url')"
           echo "Downloading: ${url}"
+
+          if [ "${url}" == *.zip ];then
+            echo "ai is fucking retarded"
+          fi
 
           echo "Destination: ${{ runner.temp }}/actionlint"
           curl -sL "${url}" | tar xz -C "${{ runner.temp }}" actionlint
