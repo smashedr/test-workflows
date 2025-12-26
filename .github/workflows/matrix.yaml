@@ -134,7 +134,7 @@ jobs:
           tag="tags/v1.7.9"
 
           echo "::group::Release - ${tag}"
-          release="$(gh api --cache 1h /repos/rhysd/actionlint/releases/${tag})"
+          release="$(gh api --cache 1h repos/rhysd/actionlint/releases/${tag})"
           echo "release: ${release}"
           echo "::endgroup::"
 
