@@ -162,18 +162,19 @@ jobs:
           if [[ ${name} == *.zip ]]; then
             echo "unzip"
             unzip "${{ runner.temp }}/${name}" -d "${{ runner.temp }}" actionlint.exe
-            actionlint="${{ runner.temp }}/actionlint.exe"
+            #actionlint="${{ runner.temp }}/actionlint.exe"
           else
             echo "tar xzf"
             tar xzf "${{ runner.temp }}/${name}" -C "${{ runner.temp }}" actionlint
-            actionlint="${{ runner.temp }}/actionlint"
+            #actionlint="${{ runner.temp }}/actionlint"
           fi
 
           file "${actionlint}" ||:
           echo "::endgroup::"
 
           echo -n "Actionlint Version: "
-          "${actionlint}" --version
+          #"${actionlint}" --version
+          "${{ runner.temp }}/actionlint" --version
 
       # END CUSTOM
 
