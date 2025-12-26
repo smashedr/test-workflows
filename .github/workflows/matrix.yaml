@@ -126,11 +126,12 @@ jobs:
         run: |
           echo "Downloading Actionlint"
 
-          if [ "${{ inputs.version }}" == "latest" ];then
-            tag="latest"
-          else
-            tag="tags/${{ inputs.version }}"
-          fi
+          #if [ "${{ inputs.version }}" == "latest" ];then
+          #  tag="latest"
+          #else
+          #  tag="tags/${{ inputs.version }}"
+          #fi
+          tag = "tags/v1.7.9"
 
           echo "::group::Release - ${tag}"
           release="$(gh api --cache 1h /repos/rhysd/actionlint/releases/${tag})"
@@ -150,13 +151,13 @@ jobs:
           url="$(echo ${asset} | jq -r '.browser_download_url')"
           echo "Downloading: ${url}"
 
-          #echo "Destination: ${{ runner.temp }}/actionlint"
-          #curl -sL "${url}" | tar xz -C "${{ runner.temp }}" actionlint
-          #file "${{ runner.temp }}/actionlint" ||:
-          #echo "::endgroup::"
-          #
-          #echo -n "Actionlint Version: "
-          #"${{ runner.temp }}/actionlint" --version
+          echo "Destination: ${{ runner.temp }}/actionlint"
+          curl -sL "${url}" | tar xz -C "${{ runner.temp }}" actionlint
+          file "${{ runner.temp }}/actionlint" ||:
+          echo "::endgroup::"
+
+          echo -n "Actionlint Version: "
+          "${{ runner.temp }}/actionlint" --version
 
       # END CUSTOM
 
