@@ -71,13 +71,14 @@ jobs:
           formula-path: .
           tag-name: ${{ env.ref_name }}
           download-url: "https://github.com/${{ github.repository }}/releases/download/${{ env.ref_name }}/toml_run-${{ env.ref_name }}.tar.gz"
+          download-sha256: f94ef95267c2aee45c12121993b0a85cdd614c60a54e90542753226ed41d8b86
 
           homebrew-tap: "smashedr/homebrew-test"
           create-pullrequest: false
           create-branch: false
-        env:
-          # the personal access token should have "repo" & "workflow" scopes
-          COMMITTER_TOKEN: ${{ secrets.HOMEBREW_PAT }}
+        #env:
+        #  # the personal access token should have "repo" & "workflow" scopes
+        #  COMMITTER_TOKEN: ${{ secrets.HOMEBREW_PAT }}
 
       - name: "Test 2"
         continue-on-error: true
