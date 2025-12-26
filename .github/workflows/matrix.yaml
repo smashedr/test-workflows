@@ -131,7 +131,7 @@ jobs:
           #else
           #  tag="tags/${{ inputs.version }}"
           #fi
-          tag = "tags/v1.7.9"
+          tag="tags/v1.7.9"
 
           echo "::group::Release - ${tag}"
           release="$(gh api --cache 1h /repos/rhysd/actionlint/releases/${tag})"
