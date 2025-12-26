@@ -81,7 +81,7 @@ jobs:
       #    COMMITTER_TOKEN: ${{ secrets.HOMEBREW_PAT }}
 
       - name: "Fuck GitHub"
-        uses: cssnr/homebrew-action@master
+        uses: cssnr/homebrew-action@test
         with:
           version: ${{ env.ref_name }}
           repo: smashedr/homebrew-test
