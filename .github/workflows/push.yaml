@@ -25,6 +25,9 @@ jobs:
     permissions:
       contents: write
 
+    env:
+      ref_name: "1.0.0"
+
     steps:
       - name: "Checkout"
         uses: actions/checkout@v5
@@ -60,6 +63,21 @@ jobs:
         continue-on-error: true
         run: |
           echo test
+
+      - name: "Use a Fucking Name Retard"
+        uses: mislav/bump-homebrew-formula-action@v3
+        with:
+          formula-name: Formula/toml-run.rb
+          formula-path: .
+          tag-name: ${{ env.ref_name }}
+          download-url: "https://github.com/${{ github.repository }}/releases/download/${{ env.ref_name }}/toml_run-${{ env.ref_name }}.tar.gz"
+
+          homebrew-tap: "smashedr/homebrew-test"
+          create-pullrequest: false
+          create-branch: false
+        #env:
+        #  # the personal access token should have "repo" & "workflow" scopes
+        #  COMMITTER_TOKEN: ${{ secrets.COMMITTER_TOKEN }}
 
       - name: "Test 2"
         continue-on-error: true
