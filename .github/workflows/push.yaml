@@ -56,18 +56,23 @@ jobs:
 
       # BEGIN CUSTOM
 
+      - name: "Test 0"
+        run: |
+          cat -n "Formula/sharex-cli.rb"
+
       - name: "Test 1"
         continue-on-error: true
         env:
           url: "https://github.com/cssnr/vitepress-plugin-contributors/releases/download/0.0.5/dist.zip"
           formula: "Formula/sharex-cli.rb"
+          line: 5
         run: |
-          sed -i "${line}"'s,.*,  url "${{ env.url }}",' "${{ env.formula }}"
+          sed "${line}"'s/.*/  url "${{ env.url }}"/' "${{ env.formula }}"
 
       - name: "Test 2"
         continue-on-error: true
         run: |
-          cat "Formula/sharex-cli.rb"
+          cat -n "Formula/sharex-cli.rb"
 
       # END CUSTOM
 
