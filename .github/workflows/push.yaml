@@ -10,8 +10,8 @@ on:
       version:
         description: "Version Tag"
         type: string
-  push:
-    branches: ["**"]
+  #push:
+  #  branches: ["**"]
 
 env:
   version: ${{ github.event.workflow_run.head_branch || github.ref_name }}
@@ -55,16 +55,6 @@ jobs:
           echo env.version: ${{ env.version }}
 
       # BEGIN CUSTOM
-
-      - name: "Commit and Push"
-        working-directory: homebrew-tap
-        env:
-          formula: "homebrew-tap/Formula/sharex-cli.rb"
-        shell: bash
-        run: |
-          file="basename ${{ env.formula }}"
-          echo "file: ${file}"
-          git diff Formula
 
       - name: "Test 1"
         continue-on-error: true

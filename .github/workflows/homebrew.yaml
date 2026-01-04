@@ -92,7 +92,7 @@ jobs:
         run: |
           file="basename ${{ env.formula }}"
           echo "file: ${file}"
-          git diff Formula
+          git diff -U Formula
 
       #- name: "Commit and Push"
       #  working-directory: homebrew-tap
