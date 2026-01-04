@@ -41,6 +41,17 @@ jobs:
       contents: write
 
     steps:
+      - name: "Set Formula File"
+        env:
+          path: homebrew-tap/Formula
+        shell: bash
+        run: |
+          echo "inputs.version: ${{ inputs.version }}"
+          echo "inputs.url: ${{ inputs.url }}"
+          echo "inputs.message: ${{ inputs.message }}"
+          echo "inputs.formula: ${{ inputs.formula }}"
+          echo "inputs.branch: ${{ inputs.branch }}"
+
       - name: "Get Default Branch"
         id: branch
         env:
