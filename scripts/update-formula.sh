@@ -7,6 +7,7 @@ value="${2}"
 
 if [ -z "${value}" ];then
     echo "Skipping: ${key} - not provided."
+    exit 0
 fi
 
 echo "::group::Processing: ${key}"
