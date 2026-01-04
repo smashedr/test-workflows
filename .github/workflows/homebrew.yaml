@@ -44,7 +44,7 @@ jobs:
       - name: "Get Default Branch"
         id: branch
         env:
-          GH_TOKEN: ${{ inputs.token }}
+          GH_TOKEN: ${{ github.token }} # inputs.token
         shell: bash
         run: |
           if [ -n "${{ inputs.branch }}" ];then
