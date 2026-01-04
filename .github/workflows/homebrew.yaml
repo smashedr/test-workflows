@@ -15,7 +15,7 @@ on:
         default: "smashedr/homebrew-test"
       formula:
         description: "Formula file relative to the Formula directory."
-        default: ""
+        default: "sharex-cli.rb"
       branch:
         description: "Branch to Checkout and Push too."
         default: "master"
