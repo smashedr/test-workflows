@@ -90,7 +90,7 @@ jobs:
         working-directory: homebrew-tap
         shell: bash
         run: |
-          file="${{ env.formula }}"
+          file="basename ${{ env.formula }}"
           echo "file: ${file}"
           git diff Formula
 
