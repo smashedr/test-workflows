@@ -57,7 +57,13 @@ jobs:
         shell: bash
         run: |
           if [ -n "${{ inputs.formula }}" ];then
-            echo "formula=${{ inputs.formula }}" >> "$GITHUB_ENV"
+            if [ -f "${{ env.path }}/${{ inputs.formula }}" ];then
+              echo "formula=${{ inputs.formula }}" >> "$GITHUB_ENV"
+            else if [ -f "${{ env.path }}/${{ inputs.formula }}.rb" ];then
+              echo "formula=${{ inputs.formula }}.rb" >> "$GITHUB_ENV"
+            else
+              echo "Not a File: Formula/${{ env.formula }}(.rb)"
+            fi
           else
             echo "formula=${GITHUB_REPOSITORY#*/}.rb" >> "$GITHUB_ENV"
           fi
