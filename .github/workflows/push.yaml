@@ -74,6 +74,27 @@ jobs:
         run: |
           cat -n "Formula/sharex-cli.rb"
 
+      #- name: Get default branch
+      #  id: get
+      #  run: |
+      #    resp=$(curl -s -H "Accept: application/vnd.github+json" \
+      #      -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+      #      "https://api.github.com/repos/smashedr/homebrew-test")
+      #    branch=$(echo "$resp" | jq -r .default_branch)
+      #    echo "default_branch=$branch" >> $GITHUB_OUTPUT
+
+      - name: "Get Default Branch"
+        id: branch
+        run: |
+          branch=$(gh repo view smashedr/homebrew-test --json defaultBranchRef --jq .defaultBranchRef.name)
+          echo "default=$branch" >> $GITHUB_OUTPUT
+
+      - name: "Test 3"
+        continue-on-error: true
+        run: |
+          echo ${{ steps.branch.outputs.default }}
+          echo AI RETARDED
+
       # END CUSTOM
 
       ## Optional Fail Job for Debugging
