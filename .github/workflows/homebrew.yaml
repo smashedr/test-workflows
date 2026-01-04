@@ -9,7 +9,7 @@ on:
         default: false
       version:
         description: "Version to update."
-        default: ""
+        default: "RALF BROKE IT"
       url:
         description: "URL to update."
         default: "https://github.com/cssnr/vitepress-plugin-contributors/releases/download/0.0.5/dist.zip"
@@ -44,7 +44,7 @@ jobs:
       - name: "Get Default Branch"
         id: branch
         env:
-          GH_TOKEN: ${{ github.token }} # inputs.token
+          GH_TOKEN: ${{ inputs.token }}
         shell: bash
         run: |
           if [ -n "${{ inputs.branch }}" ];then
@@ -92,7 +92,7 @@ jobs:
         if: ${{ inputs.url }}
         shell: bash
         run: |
-          line=$(grep -n -m1 url "${{ env.formula }}" | cut -f1 -d:)
+          line=$(grep -n -m1 "url " "${{ env.formula }}" | cut -f1 -d:)
           echo "line: ${line}"
           sed -i "${line}"'s,.*,  url "${{ inputs.url }}",' "${{ env.formula }}"
 
@@ -100,7 +100,7 @@ jobs:
         if: ${{ inputs.version }}
         shell: bash
         run: |
-          line=$(grep -n -m1 version "${{ env.formula }}" | cut -f1 -d:)
+          line=$(grep -n -m1 "version " "${{ env.formula }}" | cut -f1 -d:)
           echo "line: ${line}"
           sed -i "${line}"'s/.*/  version "${{ inputs.version }}"/' "${{ env.formula }}"
 
@@ -117,13 +117,18 @@ jobs:
         shell: bash
         run: |
           file="$(basename ${{ env.formula }})"
+          echo "file: ${file}"
+
           if [ -n "${{ inputs.message }}" ];then
-            echo "message=${{ inputs.message }}" >> "$GITHUB_OUTPUT"
+            message="${{ inputs.message }}" >> "$GITHUB_OUTPUT"
           elif [ -n "${{ inputs.version }}" ];then
-            echo "message=Bump ${file} to ${{ inputs.version }}" >> "$GITHUB_OUTPUT"
+            message="Bump ${file} to ${{ inputs.version }}" >> "$GITHUB_OUTPUT"
           else
-            echo "message=Bump ${file}" >> "$GITHUB_OUTPUT"
+            message="Bump ${file}" >> "$GITHUB_OUTPUT"
           fi
+
+          echo "message: ${message}"
+          echo "message=${message}" >> "$GITHUB_OUTPUT"
 
           diff="$(git diff -U0 Formula)"
           echo "::group::diff"
