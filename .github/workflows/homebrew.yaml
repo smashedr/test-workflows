@@ -86,6 +86,14 @@ jobs:
         run: |
           cat -n "${{ env.formula }}"
 
+      - name: "Commit and Push"
+        working-directory: homebrew-tap
+        shell: bash
+        run: |
+          file="${{ env.formula }}"
+          echo "file: ${file}"
+          git diff Formula
+
       #- name: "Commit and Push"
       #  working-directory: homebrew-tap
       #  shell: bash
