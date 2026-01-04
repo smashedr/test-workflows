@@ -21,7 +21,7 @@ on:
         default: "master"
       token:
         description: "Fine Grained or Personal Access Token with permissions contents: write"
-        required: true
+        default: "1"
   #push:
   #  branches: ["**"]
 
