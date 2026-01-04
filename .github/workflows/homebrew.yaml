@@ -97,7 +97,7 @@ jobs:
           echo "::group::results"
           echo "${results}"
           echo "::endgroup::"
-          md="\`Formula/${file}\`:\n\`\`\`text\n${results}\n\`\`\`"
+          md="Version: \`${{ inputs.version }}\`\nFormula: \`Formula/${file}\`\nDiff:\n\`\`\`text\n${results}\n\`\`\`"
           echo -e "${md}" >> "$GITHUB_STEP_SUMMARY"
 
       #- name: "Commit and Push"
