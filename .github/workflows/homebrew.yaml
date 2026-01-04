@@ -92,7 +92,7 @@ jobs:
         if: ${{ inputs.url }}
         shell: bash
         run: |
-          line=$(grep -n -m1 "url " "${{ env.formula }}" | cut -f1 -d:)
+          line=$(grep -n -m1 '^[[:space:]]*url ' "${{ env.formula }}" | cut -f1 -d:)
           echo "line: ${line}"
           sed -i "${line}"'s,.*,  url "${{ inputs.url }}",' "${{ env.formula }}"
 
@@ -100,7 +100,7 @@ jobs:
         if: ${{ inputs.version }}
         shell: bash
         run: |
-          line=$(grep -n -m1 "version " "${{ env.formula }}" | cut -f1 -d:)
+          line=$(grep -n -m1 '^[[:space:]]*version ' "${{ env.formula }}" | cut -f1 -d:)
           echo "line: ${line}"
           sed -i "${line}"'s/.*/  version "${{ inputs.version }}"/' "${{ env.formula }}"
 
