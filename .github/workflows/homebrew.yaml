@@ -18,10 +18,10 @@ on:
         default: "smashedr/homebrew-test"
       formula:
         description: "Formula file relative to the Formula directory."
-        default: "sharex-cli.rb"
+        default: "toml-run.rb"
       branch:
         description: "Branch to Checkout and Push too."
-        default: "master"
+        default: ""
       token:
         description: "Fine Grained or Personal Access Token with permissions contents: write"
         default: "1"
@@ -41,7 +41,7 @@ jobs:
       - name: "Get Default Branch"
         id: branch
         env:
-          GH_TOKEN: ${{ inputs.token }}
+          GH_TOKEN: ${{ github.token }} # inputs.token
         shell: bash
         run: |
           if [ -n "${{ inputs.branch }}" ];then
@@ -122,7 +122,7 @@ jobs:
           md="Formula: \`Formula/${file}\`\n"
           md+="URL: \`${{ inputs.url || 'not provided' }}\`\n"
           md+="Version: \`${{ inputs.version || 'not provided' }}\`\n"
-          md+="git diff:\n\`\`\`text\n${results}\n\`\`\`\n"
+          md+="git diff:\n\`\`\`text\n${diff}\n\`\`\`\n"
           echo -e "${md}" >> "$GITHUB_STEP_SUMMARY"
 
       - name: "Commit and Push"
