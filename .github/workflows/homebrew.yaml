@@ -1,0 +1,91 @@
+name: "Homebrew"
+
+on:
+  workflow_dispatch:
+    inputs:
+      fail:
+        description: "Fail Job"
+        type: boolean
+        default: false
+      version:
+        description: "Version to update. You probably want: github.ref_name"
+        default: "1.0.0"
+      repo:
+        description: "Repository owner/name of the homebrew tap."
+        default: "smashedr/homebrew-test"
+      formula:
+        description: "Formula file relative to the Formula directory."
+        default: "sharex-cli.rb"
+      branch:
+        description: "Branch to Checkout and Push too."
+        default: "master"
+      token:
+        description: "Fine Grained or Personal Access Token with permissions contents: write"
+        required: true
+  push:
+    branches: ["**"]
+
+jobs:
+  homebrew:
+    name: "Homebrew"
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    permissions:
+      contents: write
+
+    steps:
+      - name: "Checkout Homebrew"
+        uses: actions/checkout@v6
+        with:
+          path: homebrew-tap
+          persist-credentials: false
+          ref: ${{ inputs.branch }}
+          repository: ${{ inputs.repo }}
+
+      - name: "Debug"
+        shell: bash
+        run: |
+          echo "repo: ${GITHUB_REPOSITORY}" 
+          echo "repo name: ${GITHUB_REPOSITORY#*/}" 
+          echo "formula: ${GITHUB_REPOSITORY#*/}.rb"
+
+      - name: "Formula File"
+        shell: bash
+        run: |
+          if [ -n "${{ inputs.formula }}" ];then
+            echo "formula=${{ inputs.formula }}" >> "$GITHUB_ENV"
+          else
+            echo "formula=${GITHUB_REPOSITORY#*/}.rb" >> "$GITHUB_ENV"
+          fi
+
+      - name: "Verify Formula File"
+        shell: bash
+        run: |
+          echo "formula: homebrew-tap/Formula/${{ env.formula }}"
+          if [ ! -f "homebrew-tap/Formula/${{ env.formula }}" ];then
+            echo "Not a File: Formula/${{ env.formula }}"
+            exit 1
+          fi
+
+      - name: "Update Version"
+        shell: bash
+        run: |
+          line=$(grep -n -m1 version "homebrew-tap/Formula/${{ env.formula }}" | cut -f1 -d:)
+          echo "line: ${line}"
+          sed -i "${line}"'s/.*/  version "${{ inputs.version }}"/' "homebrew-tap/Formula/${{ env.formula }}"
+
+      - name: "Debug Formula"
+        shell: bash
+        run: |
+          cat "homebrew-tap/Formula/${{ env.formula }}"
+
+      #- name: "Commit and Push"
+      #  working-directory: homebrew-tap
+      #  shell: bash
+      #  run: |
+      #    git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+      #    git config --local user.name "github-actions[bot]"
+      #    git commit -a -m "Bump ${{ inputs.formula }} to ${{ inputs.version }}"
+      #    git remote set-url origin "https://${{ inputs.token }}@github.com/${{ inputs.repo }}"
+      #    git push -u origin ${{ inputs.branch }}
