@@ -106,17 +106,21 @@ jobs:
         if: ${{ inputs.url }}
         shell: bash
         run: |
-          line=$(grep -n -m1 '^[[:space:]]*url ' "${{ env.formula }}" | cut -f1 -d:)
-          echo "line: ${line}"
-          sed -i "${line}"'s,.*,  url "${{ inputs.url }}",' "${{ env.formula }}"
+          bash "scripts/update-formula.sh" url "${{ inputs.url }}" "${{ env.formula }}"
+          #bash "${{ github.action_path }}/update-formula.sh"
+          #line=$(grep -n -m1 '^[[:space:]]*url ' "${{ env.formula }}" | cut -f1 -d:)
+          #echo "line: ${line}"
+          #sed -i "${line}"'s,.*,  url "${{ inputs.url }}",' "${{ env.formula }}"
 
       - name: "Update Version"
         if: ${{ inputs.version }}
         shell: bash
         run: |
-          line=$(grep -n -m1 '^[[:space:]]*version ' "${{ env.formula }}" | cut -f1 -d:)
-          echo "line: ${line}"
-          sed -i "${line}"'s/.*/  version "${{ inputs.version }}"/' "${{ env.formula }}"
+          bash "scripts/update-formula.sh" version "${{ inputs.version }}" "${{ env.formula }}"
+          #bash "${{ github.action_path }}/update-formula.sh"
+          #line=$(grep -n -m1 '^[[:space:]]*version ' "${{ env.formula }}" | cut -f1 -d:)
+          #echo "line: ${line}"
+          #sed -i "${line}"'s/.*/  version "${{ inputs.version }}"/' "${{ env.formula }}"
 
       - name: "Debug Formula"
         shell: bash
