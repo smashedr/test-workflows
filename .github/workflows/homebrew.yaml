@@ -78,7 +78,7 @@ jobs:
       - name: "Debug Formula"
         shell: bash
         run: |
-          cat "homebrew-tap/Formula/${{ env.formula }}"
+          cat -n "homebrew-tap/Formula/${{ env.formula }}"
 
       #- name: "Commit and Push"
       #  working-directory: homebrew-tap
