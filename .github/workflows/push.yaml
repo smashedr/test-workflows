@@ -85,6 +85,8 @@ jobs:
 
       - name: "Get Default Branch"
         id: branch
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
           branch=$(gh repo view smashedr/homebrew-test --json defaultBranchRef --jq .defaultBranchRef.name)
           echo "default=$branch" >> $GITHUB_OUTPUT
