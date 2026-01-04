@@ -10,8 +10,8 @@ on:
       version:
         description: "Version Tag"
         type: string
-  #push:
-  #  branches: ["**"]
+  push:
+    branches: ["**"]
 
 env:
   version: ${{ github.event.workflow_run.head_branch || github.ref_name }}
