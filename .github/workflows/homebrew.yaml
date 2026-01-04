@@ -15,7 +15,7 @@ on:
         default: ""
       sha256:
         description: "SHA256 hash to update."
-        default: ""
+        default: "RALF256"
       message:
         description: "Commit message."
         default: "Bump ralf to -99"
