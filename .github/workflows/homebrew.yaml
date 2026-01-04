@@ -34,9 +34,6 @@ jobs:
     permissions:
       contents: write
 
-    env:
-      path: homebrew-tap/Formula
-
     steps:
       - name: "Checkout Homebrew"
         uses: actions/checkout@v6
@@ -54,15 +51,15 @@ jobs:
           echo "formula: ${GITHUB_REPOSITORY#*/}.rb"
 
       - name: "Formula File"
+        env:
+          path: homebrew-tap/Formula
         shell: bash
         run: |
           if [ -n "${{ inputs.formula }}" ];then
             if [ -f "${{ env.path }}/${{ inputs.formula }}" ];then
-              echo "formula=${{ inputs.formula }}" >> "$GITHUB_ENV"
+              echo "formula=${{ env.path }}/${{ inputs.formula }}" >> "$GITHUB_ENV"
             elif [ -f "${{ env.path }}/${{ inputs.formula }}.rb" ];then
-              echo "formula=${{ inputs.formula }}.rb" >> "$GITHUB_ENV"
-            else
-              echo "Not a File: Formula/${{ env.formula }}(.rb)"
+              echo "formula=${{ env.path }}/${{ inputs.formula }}.rb" >> "$GITHUB_ENV"
             fi
           else
             echo "formula=${GITHUB_REPOSITORY#*/}.rb" >> "$GITHUB_ENV"
@@ -71,8 +68,8 @@ jobs:
       - name: "Verify Formula File"
         shell: bash
         run: |
-          echo "formula: ${{ env.path }}/${{ env.formula }}"
-          if [ ! -f "${{ env.path }}/${{ env.formula }}" ];then
+          echo "formula: ${{ env.formula }}"
+          if [ ! -f "${{ env.formula }}" ];then
             echo "Not a File: Formula/${{ env.formula }}"
             exit 1
           fi
@@ -80,14 +77,14 @@ jobs:
       - name: "Update Version"
         shell: bash
         run: |
-          line=$(grep -n -m1 version "${{ env.path }}/${{ env.formula }}" | cut -f1 -d:)
+          line=$(grep -n -m1 version "${{ env.formula }}" | cut -f1 -d:)
           echo "line: ${line}"
-          sed -i "${line}"'s/.*/  version "${{ inputs.version }}"/' "${{ env.path }}/${{ env.formula }}"
+          sed -i "${line}"'s/.*/  version "${{ inputs.version }}"/' "${{ env.formula }}"
 
       - name: "Debug Formula"
         shell: bash
         run: |
-          cat -n "${{ env.path }}/${{ env.formula }}"
+          cat -n "${{ env.formula }}"
 
       #- name: "Commit and Push"
       #  working-directory: homebrew-tap
