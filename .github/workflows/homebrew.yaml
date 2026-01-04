@@ -41,6 +41,9 @@ jobs:
       contents: write
 
     steps:
+      - name: "Checkout" # DEBUGGING ONLY
+        uses: actions/checkout@v6
+
       - name: "Set Formula File"
         env:
           path: homebrew-tap/Formula
