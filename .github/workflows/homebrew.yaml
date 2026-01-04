@@ -90,9 +90,15 @@ jobs:
         working-directory: homebrew-tap
         shell: bash
         run: |
-          file="basename ${{ env.formula }}"
+          file="$(basename ${{ env.formula }})"
           echo "file: ${file}"
-          git diff -U Formula
+          echo "message: Bump ${file} to ${{ inputs.version }}"
+          results="$(git diff -U0 Formula)"
+          echo "::group::results"
+          echo "${results}"
+          echo "::endgroup::"
+          md="\`Formula/${file}\`:\n\`\`\`text\n${results}\n\`\`\`"
+          echo -e "${md}" >> "$GITHUB_STEP_SUMMARY"
 
       #- name: "Commit and Push"
       #  working-directory: homebrew-tap
