@@ -7,12 +7,12 @@ on:
         description: "Fail Job"
         type: boolean
         default: false
-      version:
-        description: "Version to update."
-        default: ""
       url:
         description: "URL to update."
         default: "https://github.com/cssnr/vitepress-plugin-contributors/releases/download/0.0.5/dist.zip"
+      version:
+        description: "Version to update."
+        default: ""
       message:
         description: "Commit message."
         default: "Bump ralf to -99"
@@ -46,8 +46,8 @@ jobs:
           path: homebrew-tap/Formula
         shell: bash
         run: |
-          echo "inputs.version: ${{ inputs.version }}"
           echo "inputs.url: ${{ inputs.url }}"
+          echo "inputs.version: ${{ inputs.version }}"
           echo "inputs.message: ${{ inputs.message }}"
           echo "inputs.formula: ${{ inputs.formula }}"
           echo "inputs.branch: ${{ inputs.branch }}"
@@ -79,6 +79,9 @@ jobs:
           path: homebrew-tap/Formula
         shell: bash
         run: |
+          echo "::group::ls ${{ env.path }}"
+          ls -lah "${{ env.path }}"
+          echo "::endgroup::"
           if [ -n "${{ inputs.formula }}" ];then
             if [ -f "${{ env.path }}/${{ inputs.formula }}" ];then
               echo "formula=${{ env.path }}/${{ inputs.formula }}" >> "$GITHUB_ENV"
