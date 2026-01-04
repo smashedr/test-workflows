@@ -67,7 +67,7 @@ jobs:
       - name: "Test 2"
         continue-on-error: true
         run: |
-          echo two
+          cat "Formula/sharex-cli.rb"
 
       # END CUSTOM
 
