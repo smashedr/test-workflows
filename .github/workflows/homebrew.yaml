@@ -22,8 +22,8 @@ on:
       token:
         description: "Fine Grained or Personal Access Token with permissions contents: write"
         required: true
-  push:
-    branches: ["**"]
+  #push:
+  #  branches: ["**"]
 
 jobs:
   homebrew:
@@ -59,7 +59,7 @@ jobs:
           if [ -n "${{ inputs.formula }}" ];then
             if [ -f "${{ env.path }}/${{ inputs.formula }}" ];then
               echo "formula=${{ inputs.formula }}" >> "$GITHUB_ENV"
-            else if [ -f "${{ env.path }}/${{ inputs.formula }}.rb" ];then
+            elif [ -f "${{ env.path }}/${{ inputs.formula }}.rb" ];then
               echo "formula=${{ inputs.formula }}.rb" >> "$GITHUB_ENV"
             else
               echo "Not a File: Formula/${{ env.formula }}(.rb)"
