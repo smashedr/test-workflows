@@ -8,11 +8,14 @@ on:
         type: boolean
         default: false
       version:
-        description: "Version to update. Tip: github.ref_name"
-        default: "1.0.0"
+        description: "Version to update."
+        default: ""
       url:
         description: "URL to update."
         default: "https://github.com/cssnr/vitepress-plugin-contributors/releases/download/0.0.5/dist.zip"
+      message:
+        description: "Commit message."
+        default: "Bump ralf to -99"
       repo:
         description: "Repository owner/name of the homebrew tap."
         default: "smashedr/homebrew-test"
