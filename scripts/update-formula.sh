@@ -10,6 +10,8 @@ echo "key: '${key}'"
 echo "value: '${value}'"
 echo "file: '${file}'"
 
+echo "formula: '${formula}'"
+
 line=$(grep -n -m1 '^[[:space:]]*'"${key} " "${file}" | cut -f1 -d:)
 echo "line: ${line}"
 sed -i "${line}"'s,.*,'"  url \"${value}\"," "${file}"

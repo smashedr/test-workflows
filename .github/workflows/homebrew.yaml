@@ -13,6 +13,9 @@ on:
       version:
         description: "Version to update."
         default: ""
+      sha256:
+        description: "SHA256 hash to update."
+        default: ""
       message:
         description: "Commit message."
         default: "Bump ralf to -99"
@@ -105,25 +108,33 @@ jobs:
             exit 1
           fi
 
-      - name: "Update URL"
+      - name: "Update Formula"
         if: ${{ inputs.url }}
         shell: bash
         run: |
-          bash "scripts/update-formula.sh" url "${{ inputs.url }}" "${{ env.formula }}"
+          if [ -n "${{ inputs.url }}" ];then
+            bash "scripts/update-formula.sh" url "${{ inputs.url }}" "${{ env.formula }}"
+          fi
+          if [ -n "${{ inputs.version }}" ];then
+            bash "scripts/update-formula.sh" version "${{ inputs.version }}" "${{ env.formula }}"
+          fi
+          if [ -n "${{ inputs.sha256 }}" ];then
+            bash "scripts/update-formula.sh" sha256 "${{ inputs.sha256 }}" "${{ env.formula }}"
+          fi
           #bash "${{ github.action_path }}/update-formula.sh"
           #line=$(grep -n -m1 '^[[:space:]]*url ' "${{ env.formula }}" | cut -f1 -d:)
           #echo "line: ${line}"
           #sed -i "${line}"'s,.*,  url "${{ inputs.url }}",' "${{ env.formula }}"
 
-      - name: "Update Version"
-        if: ${{ inputs.version }}
-        shell: bash
-        run: |
-          bash "scripts/update-formula.sh" version "${{ inputs.version }}" "${{ env.formula }}"
-          #bash "${{ github.action_path }}/update-formula.sh"
-          #line=$(grep -n -m1 '^[[:space:]]*version ' "${{ env.formula }}" | cut -f1 -d:)
-          #echo "line: ${line}"
-          #sed -i "${line}"'s/.*/  version "${{ inputs.version }}"/' "${{ env.formula }}"
+      #- name: "Update Version"
+      #  if: ${{ inputs.version }}
+      #  shell: bash
+      #  run: |
+      #    bash "scripts/update-formula.sh" version "${{ inputs.version }}" "${{ env.formula }}"
+      #    #bash "${{ github.action_path }}/update-formula.sh"
+      #    #line=$(grep -n -m1 '^[[:space:]]*version ' "${{ env.formula }}" | cut -f1 -d:)
+      #    #echo "line: ${line}"
+      #    #sed -i "${line}"'s/.*/  version "${{ inputs.version }}"/' "${{ env.formula }}"
 
       - name: "Debug Formula"
         shell: bash
