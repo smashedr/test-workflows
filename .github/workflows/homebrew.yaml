@@ -104,7 +104,6 @@ jobs:
           echo "formula: ${{ env.formula }}"
           if [ ! -f "${{ env.formula }}" ];then
             echo "::error::Not a File: ${{ env.formula }}"
-            ls -lah homebrew-tap/Formula
             exit 1
           fi
 
@@ -112,15 +111,9 @@ jobs:
         if: ${{ inputs.url }}
         shell: bash
         run: |
-          if [ -n "${{ inputs.url }}" ];then
-            bash "scripts/update-formula.sh" url "${{ inputs.url }}"
-          fi
-          if [ -n "${{ inputs.version }}" ];then
-            bash "scripts/update-formula.sh" version "${{ inputs.version }}"
-          fi
-          if [ -n "${{ inputs.sha256 }}" ];then
-            bash "scripts/update-formula.sh" sha256 "${{ inputs.sha256 }}"
-          fi
+          bash "scripts/update-formula.sh" url "${{ inputs.url }}"
+          bash "scripts/update-formula.sh" version "${{ inputs.version }}"
+          bash "scripts/update-formula.sh" sha256 "${{ inputs.sha256 }}"
 
       - name: "Debug Formula"
         shell: bash
