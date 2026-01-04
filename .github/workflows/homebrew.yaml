@@ -8,8 +8,11 @@ on:
         type: boolean
         default: false
       version:
-        description: "Version to update. You probably want: github.ref_name"
+        description: "Version to update. Tip: github.ref_name"
         default: "1.0.0"
+      url:
+        description: "URL to update."
+        default: "https://github.com/cssnr/vitepress-plugin-contributors/releases/download/0.0.5/dist.zip"
       repo:
         description: "Repository owner/name of the homebrew tap."
         default: "smashedr/homebrew-test"
@@ -75,11 +78,20 @@ jobs:
           fi
 
       - name: "Update Version"
+        if: ${{ inputs.version }}
         shell: bash
         run: |
           line=$(grep -n -m1 version "${{ env.formula }}" | cut -f1 -d:)
           echo "line: ${line}"
           sed -i "${line}"'s/.*/  version "${{ inputs.version }}"/' "${{ env.formula }}"
+
+      - name: "Update URL"
+        if: ${{ inputs.url }}
+        shell: bash
+        run: |
+          line=$(grep -n -m1 url "${{ env.formula }}" | cut -f1 -d:)
+          echo "line: ${line}"
+          sed -i "${line}"'s/.*/  url "${{ inputs.url }}"/' "${{ env.formula }}"
 
       - name: "Debug Formula"
         shell: bash
