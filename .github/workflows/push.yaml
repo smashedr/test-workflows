@@ -58,8 +58,11 @@ jobs:
 
       - name: "Test 1"
         continue-on-error: true
+        env:
+          url: "https://github.com/cssnr/vitepress-plugin-contributors/releases/download/0.0.5/dist.zip"
+          formula: "Formula/sharex-cli.rb"
         run: |
-          echo test
+          sed -i "${line}"'s,.*/  url "${{ env.url }}",' "${{ env.formula }}"
 
       - name: "Test 2"
         continue-on-error: true

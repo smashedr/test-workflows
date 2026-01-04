@@ -91,7 +91,7 @@ jobs:
         run: |
           line=$(grep -n -m1 url "${{ env.formula }}" | cut -f1 -d:)
           echo "line: ${line}"
-          sed -i "${line}"'s/.*/  url "${{ inputs.url }}"/' "${{ env.formula }}"
+          sed -i "${line}"'s,.*/  url "${{ inputs.url }}",' "${{ env.formula }}"
 
       - name: "Debug Formula"
         shell: bash
