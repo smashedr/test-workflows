@@ -109,12 +109,18 @@ jobs:
           echo "::endgroup::"
 
       - name: "Job Summary"
+        id: summary
         working-directory: homebrew-tap
         shell: bash
         run: |
           file="$(basename ${{ env.formula }})"
-          diff="$(git diff -U0 Formula)"
+          if [ -n "${{ inputs.version }}" ];then
+            echo "message=Bump ${file} to ${{ inputs.version }}" >> "$GITHUB_OUTPUT"
+          else
+            echo "message=Bump ${file}" >> "$GITHUB_OUTPUT"
+          fi
 
+          diff="$(git diff -U0 Formula)"
           echo "::group::diff"
           echo "${diff}"
           echo "::endgroup::"
@@ -129,11 +135,12 @@ jobs:
         working-directory: homebrew-tap
         shell: bash
         run: |
-          file="$(basename ${{ env.formula }})"
-          echo "Bump ${file} to ${{ inputs.version }}"
+          echo "message: ${{ steps.summary.outputs.message }}"
+          echo "name: github-actions[bot]"
+          echo "email: 41898282+github-actions[bot]@users.noreply.github.com"
 
           #git config --local user.name "github-actions[bot]"
           #git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          #git commit -a -m "Bump ${file} to ${{ inputs.version }}"
+          #git commit -a -m "${{ steps.summary.outputs.message }}"
           #git remote set-url origin "https://${{ inputs.token }}@github.com/${{ inputs.repo }}"
           #git push -u origin ${{ steps.branch.outputs.default }}
