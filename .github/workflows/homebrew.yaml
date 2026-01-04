@@ -9,7 +9,7 @@ on:
         default: false
       version:
         description: "Version to update."
-        default: "RALF BROKE IT"
+        default: ""
       url:
         description: "URL to update."
         default: "https://github.com/cssnr/vitepress-plugin-contributors/releases/download/0.0.5/dist.zip"
