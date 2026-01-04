@@ -67,7 +67,7 @@ jobs:
           formula: "Formula/sharex-cli.rb"
           line: 5
         run: |
-          sed "${line}"'s/.*/  url "${{ env.url }}"/' "${{ env.formula }}"
+          sed -i "${line}"'s,.*,  url "${{ env.url }}",' "${{ env.formula }}"
 
       - name: "Test 2"
         continue-on-error: true
