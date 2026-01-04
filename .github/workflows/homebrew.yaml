@@ -1,4 +1,4 @@
-name: "Push"
+name: "Homebrew"
 
 on:
   workflow_dispatch:
@@ -26,8 +26,8 @@ on:
     branches: ["**"]
 
 jobs:
-  push:
-    name: "Push"
+  homebrew:
+    name: "Homebrew"
     runs-on: ubuntu-latest
     timeout-minutes: 5
 
@@ -58,6 +58,10 @@ jobs:
           else
             echo "formula=${GITHUB_REPOSITORY#*/}.rb" >> "$GITHUB_ENV"
           fi
+
+      - name: "Verify Formula File"
+        shell: bash
+        run: |
           echo "formula: homebrew-tap/Formula/${{ env.formula }}"
           if [ ! -f "homebrew-tap/Formula/${{ env.formula }}" ];then
             echo "Not a File: Formula/${{ env.formula }}"
