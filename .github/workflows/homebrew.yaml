@@ -117,7 +117,9 @@ jobs:
         shell: bash
         run: |
           file="$(basename ${{ env.formula }})"
-          if [ -n "${{ inputs.version }}" ];then
+          if [ -n "${{ inputs.message }}" ];then
+            echo "message=${{ inputs.message }}" >> "$GITHUB_OUTPUT"
+          elif [ -n "${{ inputs.version }}" ];then
             echo "message=Bump ${file} to ${{ inputs.version }}" >> "$GITHUB_OUTPUT"
           else
             echo "message=Bump ${file}" >> "$GITHUB_OUTPUT"
@@ -129,8 +131,8 @@ jobs:
           echo "::endgroup::"
 
           md="Formula: \`Formula/${file}\`\n"
-          md+="URL: \`${{ inputs.url || 'not provided' }}\`\n"
-          md+="Version: \`${{ inputs.version || 'not provided' }}\`\n"
+          md+="URL: \`${{ inputs.url || 'not updated' }}\`\n"
+          md+="Version: \`${{ inputs.version || 'not updated' }}\`\n"
           md+="git diff:\n\`\`\`text\n${diff}\n\`\`\`\n"
           echo -e "${md}" >> "$GITHUB_STEP_SUMMARY"
 
