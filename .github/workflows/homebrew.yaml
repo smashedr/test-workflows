@@ -22,8 +22,8 @@ on:
       token:
         description: "Fine Grained or Personal Access Token with permissions contents: write"
         required: true
-  push:
-    branches: ["**"]
+  #push:
+  #  branches: ["**"]
 
 jobs:
   homebrew:
