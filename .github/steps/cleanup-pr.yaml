@@ -1,0 +1,18 @@
+- name: "Cleanup PR"
+  continue-on-error: true
+  env:
+    GH_TOKEN: ${{ secrets.TEST_PULL_TOKEN }}
+  run: |
+    pull="$(gh api /repos/${{ env.repository }}/pulls \
+      -H "Accept: application/vnd.github+json" \
+      -H "X-GitHub-Api-Version: 2022-11-28" \
+      --jq '.[0].number'
+    )"
+    [ -z "${pull}" ] && exit 0
+    echo "Closing PR: ${pull}"
+    gh api --method PATCH "/repos/${{ env.repository }}/pulls/${pull}" \
+      -H "Accept: application/vnd.github+json" \
+      -H "X-GitHub-Api-Version: 2022-11-28" \
+      -f "state=closed" --silent
+    echo "Waiting 3 Seconds..."
+    sleep 3
