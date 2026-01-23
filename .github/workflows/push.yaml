@@ -16,6 +16,10 @@ on:
 env:
   version: ${{ github.event.workflow_run.head_branch || github.ref_name }}
 
+defaults:
+  run:
+    shell: bash
+
 jobs:
   push:
     name: "Push"

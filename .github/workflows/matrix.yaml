@@ -16,6 +16,10 @@ on:
 env:
   version: ${{ github.event.workflow_run.head_branch || github.ref_name }}
 
+#defaults:
+#  run:
+#    shell: bash
+
 jobs:
   matrix:
     name: "Matrix - ${{ matrix.os }}"
@@ -25,11 +29,11 @@ jobs:
       fail-fast: false
       matrix:
         os:
-          - windows-latest
-          - macos-15-intel
           - macos-latest
+          #- macos-15-intel
           - ubuntu-latest
-          - ubuntu-24.04-arm
+          #- ubuntu-24.04-arm
+          - windows-latest
 
     permissions:
       contents: write
