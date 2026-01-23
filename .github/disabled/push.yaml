@@ -151,7 +151,7 @@ jobs:
   #    node-version: 22
 
   #- name: "Checkout highlight.js"
-  #  uses: actions/checkout@v4
+  #  uses: actions/checkout@v6
   #  with:
   #    repository: "highlightjs/highlight.js"
   #    ref: "11.11.1"
