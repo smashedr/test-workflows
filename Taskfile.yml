@@ -1,0 +1,45 @@
+# yaml-language-server: $schema=https://taskfile.dev/schema.json
+version: "3"
+
+#vars:
+#  NAME: bup
+#  PATH: dist
+#  ARGS: "-ldflags='-s -w'"
+
+env:
+  CGO_ENABLED: 0
+
+tasks:
+  test:
+    cmd: |
+      echo this is a task
+      uname -a
+
+  lint:
+    desc: Lint
+    cmd: |
+      prettier --check .
+      yamllint -c .github/yamllint.yaml .
+      golangci-lint run
+      actionlint
+
+  icon:
+    cmd: convert assets/logo.png -define icon:auto-resize=256,128,96,64,48,32,16 -compress None dist/favicon.ico
+
+  docs:
+    desc: Zensical Docs
+    cmd: |
+      rm -rf .cache
+      zensical serve --open
+
+  clean:
+    desc: Clean
+    cmd: rm -rf {{.PATH}}
+
+  build:
+    desc: GoReleaser Build
+    cmd: goreleaser build --snapshot --clean
+
+  release:
+    desc: GoReleaser Release
+    cmd: goreleaser release --snapshot --clean
