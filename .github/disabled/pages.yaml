@@ -1,0 +1,82 @@
+name: "Pages"
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [master]
+    paths:
+      - ".github/workflows/pages.yaml"
+      - "src/**"
+
+env:
+  crawler-id: ""
+  purge-domain: ""
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: "Build"
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: "Checkout"
+        uses: actions/checkout@v6
+
+      - name: "Debug event.json"
+        continue-on-error: true
+        run: cat "${GITHUB_EVENT_PATH}"
+      - name: "Debug CTX github"
+        continue-on-error: true
+        env:
+          GITHUB_CTX: ${{ toJSON(github) }}
+        run: echo "$GITHUB_CTX"
+
+      - name: "Build Site"
+        run: |
+          echo will broke it
+
+      - name: "Upload Artifact"
+        uses: actions/upload-artifact@v5
+        with:
+          path: dist
+          name: github-pages
+          if-no-files-found: error
+          include-hidden-files: true
+
+  deploy:
+    name: "Deploy"
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    permissions:
+      pages: write
+      id-token: write
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: "Deploy Pages"
+        id: deployment
+        uses: actions/deploy-pages@v4
+
+      - name: "Purge Cache"
+        if: ${{ env.purge-domain != '' }}
+        continue-on-error: true
+        uses: cssnr/cloudflare-purge-cache-action@v2
+        with:
+          zones: ${{ env.purge-domain }}
+          token: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+
+      - name: "Send Notification"
+        if: ${{ !cancelled() }}
+        continue-on-error: true
+        uses: sarisia/actions-status-discord@b8381b25576cb341b2af39926ab42c5056cc44ed # v1.15.5
+        with:
+          webhook: ${{ secrets.DISCORD_WEBHOOK }}
+          description: ${{ steps.deployment.outputs.page_url }}
