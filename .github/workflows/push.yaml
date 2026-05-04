@@ -58,29 +58,57 @@ jobs:
 
       # BEGIN CUSTOM
 
-      #- name: "Generate Release Notes"
-      #  continue-on-error: true
-      #  id: summary1
-      #  env:
-      #    RELEASE_BODY: ${{ github.event.release.body }}
-      #  run: |
-      #    #text=$(echo "${RELEASE_BODY}" | sed '/^#/Q')
-      #    text="$(cat temp.md)"
-      #    echo "text<<EOF" >> $GITHUB_OUTPUT
-      #    echo "$text" >> $GITHUB_OUTPUT
-      #    echo "EOF" >> $GITHUB_OUTPUT
-
-      - name: "Test 1"
+      - name: "Generate Release Notes"
         continue-on-error: true
-        #env:
-        #  OUTPUT: ${{ steps.summary1.outputs.text }}
+        id: summary1
+        env:
+          RELEASE_BODY: ${{ github.event.release.body }}
         run: |
-          output="$(cat temp.md)"
-          echo '{
-            "model": "gpt-4.1-mini-2025-04-14",
-            "instructions": "Translate the text to language: Spanish (Mexico)",
-            "input": "${output}"
-          }' | jq -c
+          #text=$(echo "${RELEASE_BODY}" | sed '/^#/Q')
+          text="$(cat temp.md)"
+          echo "text<<EOF" >> $GITHUB_OUTPUT
+          echo "$text" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+      - name: "Debug 1"
+        continue-on-error: true
+        env:
+          OUTPUT: ${{ steps.summary1.outputs.text }}
+        run: |
+          output="$OUTPUT"
+
+      #- name: "Test 1"
+      #  continue-on-error: true
+      #  #env:
+      #  #  OUTPUT: ${{ steps.summary1.outputs.text }}
+      #  run: |
+      #    output="$(cat temp.md)"
+      #    echo '{
+      #      "model": "gpt-4.1-mini-2025-04-14",
+      #      "instructions": "Translate the text to language: Spanish (Mexico)",
+      #      "input": "${output}"
+      #    }' | jq -c
+
+      - name: "Web Request"
+        uses: cssnr/web-request-action@v2
+        env:
+          OUTPUT: ${{ steps.summary1.outputs.text }}
+        with:
+          url: https://httpbin.org/post
+          method: "POST"
+          #data: |
+          #  model: gpt-4.1-mini-2025-04-14
+          #  instructions: Translate the text to language: Spanish (Mexico)
+          #  input:
+          data: |
+            {
+              "model": "gpt-4.1-mini-2025-04-14",
+              "instructions": "Translate the text to language: Spanish (Mexico)",
+              "input": "${{ env.OUTPUT }}"
+            }
+          headers: |
+            Authorization: Bearer ralf
+            Content-Type: application/json
 
       #- name: "Test 2"
       #  continue-on-error: true
