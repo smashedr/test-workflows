@@ -40,7 +40,7 @@ jobs:
           RELEASE_BODY: ${{ github.event.release.body }}
         run: |
           text=$(echo "${RELEASE_BODY}" | sed '/^#/Q')
-          echo "body<<EOF" >> $GITHUB_OUTPUT
+          echo "text<<EOF" >> $GITHUB_OUTPUT
           echo "text" >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
 
@@ -64,7 +64,7 @@ jobs:
           echo "${text}"
           echo "::endgroup::"
 
-          echo "summary<<EOF" >> $GITHUB_OUTPUT
+          echo "text<<EOF" >> $GITHUB_OUTPUT
           echo "text" >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
 
