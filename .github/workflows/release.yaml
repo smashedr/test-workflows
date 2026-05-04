@@ -22,9 +22,6 @@ jobs:
     permissions:
       contents: write
 
-    outputs:
-      tags: ${{ steps.version.outputs.tags }}
-
     steps:
       - name: "Checkout"
         uses: actions/checkout@v6
@@ -48,68 +45,6 @@ jobs:
           echo github.event_name: ${{ github.event_name }}
           echo github.ref_name: ${{ github.ref_name }}
           echo inputs.tags: ${{ inputs.tags }}
-
-      - name: "Generate Version Tags"
-        if: ${{ !(github.event.release.prerelease || inputs.fail) }} # TODO: delete
-        id: version
-        uses: cssnr/update-version-tags-action@v1
-        with:
-          tags: ${{ inputs.tags }}
-          release: true
-          dry_run: true
-          prefix: ""
-
-      - name: "Debug Version Tags"
-        continue-on-error: true
-        run: |
-          echo "github.ref_name: ${{ github.ref_name }}"
-          echo "steps.version.outputs.tags: ${{ steps.version.outputs.tags }}"
-
-      - name: "Generate Docker Tags"
-        id: tags
-        uses: smashedr/docker-tags-action@v1
-        with:
-          images: "ghcr.io/${{ github.repository }}"
-          tags: ${{ steps.version.outputs.tags }}
-
-      - name: "Debug Docker Tags"
-        continue-on-error: true
-        run: |
-          echo "github.ref_name: ${{ github.ref_name }}"
-          echo "tags: ${{ steps.tags.outputs.tags }}"
-          echo "labels: ${{ steps.tags.outputs.labels }}"
-          echo "annotations: ${{ steps.tags.outputs.annotations }}"
-
-      - name: "Docker Metadata"
-        id: meta
-        uses: docker/metadata-action@v5
-        with:
-          images: "ghcr.io/${{ github.repository }}"
-          tags: ${{ steps.version.outputs.tags }}
-          #flavor: |
-          #  latest=auto
-          #  prefix=v,onlatest=false
-
-      - name: "Debug Docker Metadata"
-        run: |
-          echo "github.ref_name: ${{ github.ref_name }}"
-          echo "tags: ${{ steps.meta.outputs.tags }}"
-          echo "labels: ${{ steps.meta.outputs.labels }}"
-          echo "annotations: ${{ steps.meta.outputs.annotations }}"
-
-      #- name: "Update Version Tags"
-      #  id: tags
-      #  uses: cssnr/update-version-tags-action@master
-      #- name: "Echo Tags"
-      #  run: |
-      #    echo "tags: ${{ steps.tags.outputs.tags }}"
-      #- name: "Update Release Notes Action"
-      #  uses: smashedr/update-release-notes-action@master
-      #  with:
-      #    tags: "v1,v1.0"
-      #    #delimiter: "--"
-      #    #remove: true
-      #    location: tail
 
       #- name: "Update Release Notes"
       #  env:
@@ -135,44 +70,47 @@ jobs:
       #    echo "tail:"
       #    echo "${tail}"
 
-      - name: "Upload to Release"
+      - name: Retard 1
+        env:
+          RELEASE_BODY: ${{ github.event.release.body }}
+        run: |
+          echo "${RELEASE_BODY}" > release_body.txt
+
+      - name: Retard 2
+        id: release_notes
+        env:
+          RELEASE_BODY: ${{ github.event.release.body }}
+        run: |
+          PRE_HEADING=$(echo "${RELEASE_BODY}" | sed '/^#/Q')
+          echo "pre_heading<<EOF" >> $GITHUB_OUTPUT
+          echo "$PRE_HEADING" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+      - name: Retard 3
+        run: echo "${{ steps.release_notes.outputs.pre_heading }}"
+
+      - name: "Get release body"
+        continue-on-error: true
+        id: notes
+        run: |
+          body="$(jq -r .release.body "$GITHUB_EVENT_PATH")"
+          summary="$(printf '%s\n' "$body" | awk 'NF==0{exit} /^\-/')"
+          echo "summary<<EOF" >> $GITHUB_OUTPUT
+          echo "$summary" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+      - name: "Use summary"
+        run: echo "${{ steps.notes.outputs.summary }}"
+
+      - name: "Generate Whats New"
         if: ${{ github.event_name == 'release' }}
-        uses: svenstaro/upload-release-action@v2
-        with:
-          overwrite: true
-          #file_glob: true
-          #file: .github/workflows/*
-          file: README.md
-
-      #- name: "VirusTotal"
-      #  uses: cssnr/virustotal-action@updates
-      #  with:
-      #    vt_api_key: ${{ secrets.VT_API_KEY }}
-      #    #release_heading: "### Scan Results"
-      #    #collapsed: "true"
-      #    file_name: "id"
-
-      #- name: "Get release body"
-      #  id: notes
-      #  run: |
-      #    body="$(jq -r .release.body "$GITHUB_EVENT_PATH")"
-      #    summary="$(printf '%s\n' "$body" | awk 'NF==0{exit} /^\-/')"
-      #    echo "summary<<EOF" >> $GITHUB_OUTPUT
-      #    echo "$summary" >> $GITHUB_OUTPUT
-      #    echo "EOF" >> $GITHUB_OUTPUT
-      #
-      #- name: "Use summary"
-      #  run: echo "${{ steps.notes.outputs.summary }}"
-      #
-      #- name: "Generate Whats New"
-      #  if: ${{ github.event_name == 'release' }}
-      #  env:
-      #    SUMMARY: ${{ steps.notes.outputs.summary != '' && steps.notes.outputs.summary || 'GitHub Actions' }}
-      #  run: |
-      #    echo "${{ env.SUMMARY }}"
-      #    mkdir -p whatsNew
-      #    echo "${{ steps.notes.outputs.summary }}" > whatsNew/whatsnew-en-US
-      #    cat whatsNew/whatsnew-en-US
+        env:
+          SUMMARY: ${{ steps.notes.outputs.summary != '' && steps.notes.outputs.summary || 'GitHub Actions' }}
+        run: |
+          echo "${{ env.SUMMARY }}"
+          mkdir -p whatsNew
+          echo "${{ steps.notes.outputs.summary }}" > whatsNew/whatsnew-en-US
+          cat whatsNew/whatsnew-en-US
 
       - name: "Fail"
         if: ${{ inputs.fail }}
