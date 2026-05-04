@@ -41,7 +41,7 @@ jobs:
         run: |
           text=$(echo "${RELEASE_BODY}" | sed '/^#/Q')
           echo "text<<EOF" >> $GITHUB_OUTPUT
-          echo "text" >> $GITHUB_OUTPUT
+          echo "$text" >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
 
       - name: "Echo Summary 1"
@@ -65,7 +65,7 @@ jobs:
           echo "::endgroup::"
 
           echo "text<<EOF" >> $GITHUB_OUTPUT
-          echo "text" >> $GITHUB_OUTPUT
+          echo "$text" >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
 
       - name: "Echo Summary 2"
