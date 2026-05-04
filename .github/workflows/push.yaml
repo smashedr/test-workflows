@@ -58,15 +58,64 @@ jobs:
 
       # BEGIN CUSTOM
 
+      - name: "Generate Release Notes"
+        continue-on-error: true
+        id: summary1
+        env:
+          RELEASE_BODY: ${{ github.event.release.body }}
+        run: |
+          #text=$(echo "${RELEASE_BODY}" | sed '/^#/Q')
+          text="$(cat temp.md)"
+          echo "text<<EOF" >> $GITHUB_OUTPUT
+          echo "$text" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+      - name: "Debug 1"
+        continue-on-error: true
+        env:
+          OUTPUT: ${{ steps.summary1.outputs.text }}
+        run: |
+          echo "${OUTPUT}"
+
       - name: "Test 1"
         continue-on-error: true
+        env:
+          OUTPUT: ${{ steps.summary1.outputs.text }}
         run: |
-          echo test
+          echo '{
+            "model": "gpt-4.1-mini-2025-04-14",
+            "instructions": "Translate the text to language: Spanish (Mexico)",
+            "input": "${OUTPUT}"
+          }' | jq -c
 
-      - name: "Test 2"
-        continue-on-error: true
-        run: |
-          echo two
+      #- name: "Test 2"
+      #  continue-on-error: true
+      #  env:
+      #    OUTPUT: ${{ steps.summary1.outputs.text }}
+      #  run: |
+      #    echo "${OUTPUT}"
+      #    cat > amo-metadata.json << EOF
+      #    {
+      #      "model": "gpt-4.1-mini-2025-04-14",
+      #      "instructions": "Translate the text to language: Spanish (Mexico)",
+      #      "input": "${OUTPUT}"
+      #    }
+      #    EOF
+
+      #- name: "Open API Call"
+      #  env:
+      #    OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+      #    OUTPUT: ${{ steps.summary1.outputs.text }}
+      #  run: |
+      #    curl https://api.openai.com/v1/responses \
+      #      -H "Content-Type: application/json" \
+      #      -H "Authorization: Bearer ${OPENAI_API_KEY}" \
+      #      -d ""
+
+      #- name: "Test 2"
+      #  continue-on-error: true
+      #  run: |
+      #    echo two
 
       # END CUSTOM
 
