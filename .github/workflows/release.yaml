@@ -89,12 +89,25 @@ jobs:
       - name: Retard 3
         run: echo "${{ steps.release_notes.outputs.pre_heading }}"
 
-      - name: "Get release body"
+      - name: "Parse Body"
+        continue-on-error: true
+        run: |
+          jq -r .release.body "${GITHUB_EVENT_PATH}"
+
+      - name: "Parse Summary"
         continue-on-error: true
         id: notes
         run: |
-          body="$(jq -r .release.body "$GITHUB_EVENT_PATH")"
+          body="$(jq -r .release.body "${GITHUB_EVENT_PATH}")"
+          echo "::group::body"
+          echo "${body}"
+          echo "::endgroup::"
+
           summary="$(printf '%s\n' "$body" | awk 'NF==0{exit} /^\-/')"
+          echo "::group::summary"
+          echo "${summary}"
+          echo "::endgroup::"
+
           echo "summary<<EOF" >> $GITHUB_OUTPUT
           echo "$summary" >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
