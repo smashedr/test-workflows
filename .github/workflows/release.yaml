@@ -1,16 +1,6 @@
 name: "Release"
 
 on:
-  workflow_dispatch:
-    inputs:
-      tags:
-        description: "Extra Tags: comma,separated"
-        required: false
-      fail:
-        description: "Fail Job"
-        required: false
-        type: boolean
-        default: false
   release:
     types: [published]
 
@@ -37,113 +27,49 @@ jobs:
       - name: "Debug Environment"
         continue-on-error: true
         run: env
-
       - name: "Debug"
         if: ${{ !github.event.act }}
         continue-on-error: true
         run: |
           ls -lAh .
 
-      - name: Retard 1
+      - name: "Parse Summary 1"
+        continue-on-error: true
+        id: summary1
         env:
           RELEASE_BODY: ${{ github.event.release.body }}
         run: |
-          echo "${RELEASE_BODY}" > release_body.txt
-
-      - name: Retard 2
-        id: release_notes
-        env:
-          RELEASE_BODY: ${{ github.event.release.body }}
-        run: |
-          PRE_HEADING=$(echo "${RELEASE_BODY}" | sed '/^#/Q')
-          echo "pre_heading<<EOF" >> $GITHUB_OUTPUT
-          echo "$PRE_HEADING" >> $GITHUB_OUTPUT
+          text=$(echo "${RELEASE_BODY}" | sed '/^#/Q')
+          echo "body<<EOF" >> $GITHUB_OUTPUT
+          echo "text" >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
 
-      - name: Retard 3
+      - name: "Echo Summary 1"
+        continue-on-error: true
         env:
-          OUTPUT: ${{ steps.release_notes.outputs.pre_heading }}
+          OUTPUT: ${{ steps.summary1.outputs.text }}
         run: echo "${OUTPUT}"
 
-      - name: "Path jq"
+      - name: "Parse Summary 2"
         continue-on-error: true
-        env:
-          RELEASE_BODY: ${{ github.event.release.body }}
-        run: |
-          jq -r .release.body "${GITHUB_EVENT_PATH}"
-
-      - name: "Body jq"
-        continue-on-error: true
-        env:
-          RELEASE_BODY: ${{ github.event.release.body }}
-        run: |
-          echo "${RELEASE_BODY}" | jq -r .release.body
-
-      - name: "Body echo"
-        continue-on-error: true
-        env:
-          RELEASE_BODY: ${{ github.event.release.body }}
-        run: |
-          echo "${RELEASE_BODY}"
-
-      - name: "Body echo -e"
-        continue-on-error: true
-        env:
-          RELEASE_BODY: ${{ github.event.release.body }}
-        run: |
-          echo -e "${RELEASE_BODY}"
-
-      - name: "Body printf"
-        continue-on-error: true
-        env:
-          RELEASE_BODY: ${{ github.event.release.body }}
-        run: |
-          printf '%s\n' "${RELEASE_BODY}"
-
-      - name: "Parse Summary"
-        continue-on-error: true
-        id: notes
+        id: summary2
         run: |
           body="$(jq -r .release.body "${GITHUB_EVENT_PATH}")"
           echo "::group::body"
           echo "${body}"
           echo "::endgroup::"
 
-          summary="$(printf '%s\n' "$body" | awk 'NF==0{exit} /^\-/')"
-          echo "::group::summary"
-          echo "${summary}"
+          text="$(printf '%s\n' "$body" | awk 'NF==0{exit} /^\-/')"
+          echo "::group::text"
+          echo "${text}"
           echo "::endgroup::"
 
           echo "summary<<EOF" >> $GITHUB_OUTPUT
-          echo "$summary" >> $GITHUB_OUTPUT
+          echo "text" >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
 
-      - name: "Use summary"
-        run: echo "${{ steps.notes.outputs.summary }}"
-
-      - name: "Generate Whats New"
-        if: ${{ github.event_name == 'release' }}
+      - name: "Echo Summary 2"
+        continue-on-error: true
         env:
-          SUMMARY: ${{ steps.notes.outputs.summary != '' && steps.notes.outputs.summary || 'GitHub Actions' }}
-        run: |
-          echo "${{ env.SUMMARY }}"
-          mkdir -p whatsNew
-          echo "${{ steps.notes.outputs.summary }}" > whatsNew/whatsnew-en-US
-          cat whatsNew/whatsnew-en-US
-
-      - name: "Fail"
-        if: ${{ inputs.fail }}
-        run: |
-          exit 1
-
-  build:
-    name: "Build"
-    if: ${{ !contains(github.event.head_commit.message, '#nodev') }}
-    uses: ./.github/workflows/build.yaml
-    needs: release
-    permissions:
-      contents: write
-      packages: write
-    #with:
-    #  tags: ${{ needs.release.outputs.tags }}
-    secrets: inherit
+          OUTPUT: ${{ steps.summary2.outputs.text }}
+        run: echo "${OUTPUT}"
