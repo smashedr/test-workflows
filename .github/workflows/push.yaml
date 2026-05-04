@@ -89,26 +89,45 @@ jobs:
       #      "input": "${output}"
       #    }' | jq -c
 
-      - name: "Web Request"
-        uses: cssnr/web-request-action@v2
-        env:
-          OUTPUT: ${{ steps.summary1.outputs.text }}
-        with:
-          url: https://httpbin.org/post
-          method: "POST"
-          #data: |
-          #  model: gpt-4.1-mini-2025-04-14
-          #  instructions: Translate the text to language: Spanish (Mexico)
-          #  input:
-          data: |
-            {
-              "model": "gpt-4.1-mini-2025-04-14",
-              "instructions": "Translate the text to language: Spanish (Mexico)",
-              "input": "${{ env.OUTPUT }}"
-            }
-          headers: |
-            Authorization: Bearer ralf
-            Content-Type: application/json
+      - name: "Test 2"
+        id: test2
+        continue-on-error: true
+        run: |
+          output="$(cat temp.md)"
+          payload=$(jq -cn \
+            --arg text "$output" \
+            '{
+              model: "gpt-4.1-mini-2025-04-14",
+              instructions: "Translate the text to language: Spanish (Mexico)",
+              input: $text
+            }')
+          echo "payload=$payload" >> "$GITHUB_OUTPUT"
+
+      - name: "Debug 2"
+        continue-on-error: true
+        run: |
+          echo "${{ steps.test2.outputs.payload }}"
+
+      #- name: "Web Request"
+      #  uses: cssnr/web-request-action@v2
+      #  env:
+      #    OUTPUT: ${{ steps.summary1.outputs.text }}
+      #  with:
+      #    url: https://httpbin.org/post
+      #    method: "POST"
+      #    #data: |
+      #    #  model: gpt-4.1-mini-2025-04-14
+      #    #  instructions: Translate the text to language: Spanish (Mexico)
+      #    #  input:
+      #    data: |
+      #      {
+      #        "model": "gpt-4.1-mini-2025-04-14",
+      #        "instructions": "Translate the text to language: Spanish (Mexico)",
+      #        "input": "${{ env.OUTPUT }}"
+      #      }
+      #    headers: |
+      #      Authorization: Bearer ralf
+      #      Content-Type: application/json
 
       #- name: "Test 2"
       #  continue-on-error: true
