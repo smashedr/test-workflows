@@ -75,7 +75,7 @@ jobs:
         env:
           OUTPUT: ${{ steps.summary1.outputs.text }}
         run: |
-          output="$OUTPUT"
+          echo "$OUTPUT"
 
       #- name: "Test 1"
       #  continue-on-error: true
@@ -105,8 +105,10 @@ jobs:
 
       - name: "Debug 2"
         continue-on-error: true
+        env:
+          OUTPUT: ${{ steps.test2.outputs.payload }}
         run: |
-          echo "${{ steps.test2.outputs.payload }}"
+          echo "$OUTPUT"
 
       #- name: "Web Request"
       #  uses: cssnr/web-request-action@v2
