@@ -58,15 +58,57 @@ jobs:
 
       # BEGIN CUSTOM
 
+      - name: "Parse Summary"
+        id: summary
+        run: |
+          text=$(cat notes.md | sed '/^#/Q')
+          echo "${text}"
+
+          echo "text<<EOF" >> "$GITHUB_OUTPUT"
+          echo "$text" >> "$GITHUB_OUTPUT"
+          echo "EOF" >> "$GITHUB_OUTPUT"
+
+      - name: "Debug 1"
+        env:
+          text: ${{ steps.summary.outputs.text }}
+        run: |
+          echo "${text}""
+
+      - name: "Translate Summary"
+        id: translate
+        uses: smashedr/openai-translate-action@master
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        with:
+          text: ${{ steps.summary.outputs.text }}
+          #file: text.txt  # or a file
+          languages: "es-MX,fr"
+
+      - name: "Debug Translation"
+        continue-on-error: true
+        env:
+          items: ${{ steps.translate.outputs.items }}
+          results: ${{ steps.translate.outputs.results }}
+          spanish: ${{ steps.translate.outputs.es-MX }}
+          french: ${{ steps.translate.outputs.fr }}
+        run: |
+          echo "input_tokens: ${{ steps.translate.outputs.input_tokens }}"
+          echo "output_tokens: ${{ steps.translate.outputs.output_tokens }}"
+          echo "total_tokens: ${{ steps.translate.outputs.total_tokens }}"
+          echo "es-MX: ${spanish}"
+          echo "fr: ${french}"
+          echo "results: ${results}"
+          echo "${items}" | jq
+
       - name: "Test 1"
         continue-on-error: true
         run: |
-          echo test
+          echo "${{ fromJSON(steps.translate.outputs.items).es-mx }}"
 
       - name: "Test 2"
         continue-on-error: true
         run: |
-          echo two
+          echo "${{ fromJSON(steps.translate.outputs.items).fr }}"
 
       # END CUSTOM
 
