@@ -75,7 +75,7 @@ jobs:
           echo "${text}"
 
       - name: "Translate Summary"
-        id: translate
+        id: trans
         uses: smashedr/openai-translate-action@master
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
@@ -87,28 +87,51 @@ jobs:
       - name: "Debug Translation"
         continue-on-error: true
         env:
-          items: ${{ steps.translate.outputs.items }}
-          results: ${{ steps.translate.outputs.results }}
-          spanish: ${{ steps.translate.outputs.es-MX }}
-          french: ${{ steps.translate.outputs.fr }}
+          items: ${{ steps.trans.outputs.items }}
+          results: ${{ steps.trans.outputs.results }}
+          spanish: ${{ steps.trans.outputs.es-MX }}
+          french: ${{ steps.trans.outputs.fr }}
         run: |
-          echo "input_tokens: ${{ steps.translate.outputs.input_tokens }}"
-          echo "output_tokens: ${{ steps.translate.outputs.output_tokens }}"
-          echo "total_tokens: ${{ steps.translate.outputs.total_tokens }}"
+          echo "input_tokens: ${{ steps.trans.outputs.input_tokens }}"
+          echo "output_tokens: ${{ steps.trans.outputs.output_tokens }}"
+          echo "total_tokens: ${{ steps.trans.outputs.total_tokens }}"
           echo "es-MX: ${spanish}"
           echo "fr: ${french}"
           echo "results: ${results}"
           echo "${items}" | jq
 
-      - name: "Test 1"
+      - name: "Debug es-mx"
         continue-on-error: true
         run: |
-          echo "${{ fromJSON(steps.translate.outputs.items).es-mx }}"
+          echo "${{ fromJSON(steps.trans.outputs.items).es-mx }}"
 
-      - name: "Test 2"
+      - name: "Debug fr"
         continue-on-error: true
         run: |
-          echo "${{ fromJSON(steps.translate.outputs.items).fr }}"
+          echo "${{ fromJSON(steps.trans.outputs.items).fr }}"
+
+      - name: "Generate Release Notes"
+        env:
+          RELEASE_NOTES: ${{ github.server_url }}/${{ github.repository }}/releases/tag/${{ github.event.release.tag_name }}
+        run: |
+          cat > amo-metadata.json << EOF
+          {"version": {"release_notes": {
+            "de":    "Vollständige Versionshinweise: $RELEASE_NOTES",
+            "en-US": "Full Release Notes: $RELEASE_NOTES",
+            "es-MX": "${{ fromJSON(steps.trans.outputs.items).es-MX }}\n\nNotas de versión completas: $RELEASE_NOTES",
+            "fr":    "${{ fromJSON(steps.trans.outputs.items).fr }}\n\nNotes de version complètes : $RELEASE_NOTES",
+            "ja":    "完全なリリースノート: $RELEASE_NOTES",
+            "ko":    "전체 릴리스 노트: $RELEASE_NOTES",
+            "pt-BR": "Notas de versão completas: $RELEASE_NOTES",
+            "ru":    "Полные примечания к выпуску: $RELEASE_NOTES",
+            "zh-CN": "完整发行说明：$RELEASE_NOTES"
+          }}}
+          EOF
+
+      - name: "Validate"
+        run: |
+          cat amo-metadata.json
+          jq . amo-metadata.json
 
       # END CUSTOM
 
