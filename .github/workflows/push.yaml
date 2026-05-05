@@ -113,13 +113,15 @@ jobs:
       - name: "Generate Release Notes"
         env:
           RELEASE_NOTES: ${{ github.server_url }}/${{ github.repository }}/releases/tag/${{ github.event.release.tag_name }}
+          esMX: ${{ fromJSON(steps.trans.outputs.items).es-MX }}
+          fr: ${{ fromJSON(steps.trans.outputs.items).fr }}
         run: |
           cat > amo-metadata.json << EOF
           {"version": {"release_notes": {
             "de":    "Vollständige Versionshinweise: $RELEASE_NOTES",
             "en-US": "Full Release Notes: $RELEASE_NOTES",
-            "es-MX": "${{ fromJSON(steps.trans.outputs.items).es-MX }}\n\nNotas de versión completas: $RELEASE_NOTES",
-            "fr":    "${{ fromJSON(steps.trans.outputs.items).fr }}\n\nNotes de version complètes : $RELEASE_NOTES",
+            "es-MX": "${esMX}\n\nNotas de versión completas: $RELEASE_NOTES",
+            "fr":    "${fr}\n\nNotes de version complètes : $RELEASE_NOTES",
             "ja":    "完全なリリースノート: $RELEASE_NOTES",
             "ko":    "전체 릴리스 노트: $RELEASE_NOTES",
             "pt-BR": "Notas de versão completas: $RELEASE_NOTES",
@@ -131,6 +133,7 @@ jobs:
       - name: "Validate"
         run: |
           cat amo-metadata.json
+          cat amo-metadata.json | od -c
           jq . amo-metadata.json
 
       # END CUSTOM
