@@ -72,7 +72,7 @@ jobs:
         env:
           text: ${{ steps.summary.outputs.text }}
         run: |
-          echo "${text}""
+          echo "${text}"
 
       - name: "Translate Summary"
         id: translate
